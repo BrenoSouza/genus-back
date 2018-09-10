@@ -8,6 +8,9 @@ public class DummyQueries implements GraphQLQueryResolver{
 	public String getHello() {
 		return "Hello";
 	}
-	
+
+	public String getP1() {
+		return "Projeto 1 - 2018.2";
+	}
 
 }

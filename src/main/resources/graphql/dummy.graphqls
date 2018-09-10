@@ -1,4 +1,5 @@
 
 type Query {
     getHello : String
+    getP1 : String
 }
