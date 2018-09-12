@@ -1,23 +1,37 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.beans.AuthenticationBean;
 import br.edu.ufcg.genus.beans.UserBean;
+import br.edu.ufcg.genus.models.Role;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.UserRepository;
+import br.edu.ufcg.genus.security.JwtTokenProvider;
 
 @Service
 public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 	
 	@Autowired
     private Validator validator;
@@ -36,15 +50,17 @@ public class UserService {
 		return this.userRepository.save(newUser);
 	}
 	
-	public User login (AuthenticationBean authBean) {
-		User user = userRepository.findByUsername(authBean.getUsername());
-		//improve this part
-		if (user == null) throw new RuntimeException("Error on login");
-		if (user.getPassword().equals(authBean.getPassword())) {
-			return user;
-		} else {
-			throw new RuntimeException("Error on login");
-		}
+	public String login (AuthenticationBean authBean) {
+		try {
+            //authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
+            User user = userRepository.findByUsername(authBean.getUsername());
+            if (user == null) throw new RuntimeException("Invalid username");
+            if (! user.getPassword().equals(authBean.getPassword())) throw new RuntimeException("Invalid password");
+            
+            return jwtTokenProvider.createToken(authBean.getUsername());
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid username or password", e);
+        }
 		
 	}
 

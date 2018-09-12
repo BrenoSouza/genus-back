@@ -31,7 +31,6 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String email;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the password has to be between 6 and 50")
 	@Column(nullable = false)
 	private String password;
 	

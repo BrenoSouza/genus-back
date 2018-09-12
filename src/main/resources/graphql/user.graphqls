@@ -17,7 +17,7 @@ input AuthenticationBean {
 
 
 type Query {
-  login(auth: AuthenticationBean!) : User
+  login(auth: AuthenticationBean!) : String!
 }
 
 type Mutation {
