@@ -3,17 +3,19 @@ package br.edu.ufcg.genus.beans;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import br.edu.ufcg.genus.utils.ServerConstants;
+
 public class UserBean {
 	
 	//@Pattern( regexp = "^[a-zA-Z0-9._]", message = "Invalid username")
-	@Size(min = 6, max = 50,  message = "The size of the username has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the username has to be between 6 and 50")
 	private String username;
 	
-	@Pattern( regexp = "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$",message = "Invalid email")
-	@Size(min = 6, max = 70,  message = "The size of the email has to be between 6 and 70")
+	@Pattern( regexp = ServerConstants.EMAIL_REGEX, message = "Invalid email")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the email has to be between 6 and 70")
 	private String email;
 	
-	@Size(min = 6, max = 50,  message="The size of the password has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the password has to be between 6 and 50")
 	private String password;
 	
 	public UserBean () {
