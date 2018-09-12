@@ -1,0 +1,25 @@
+type User {
+  id: ID!
+  username: String!
+  email: String!
+}
+
+input UserBean {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input AuthenticationBean {
+  username: String!
+  password: String!
+}
+
+
+type Query {
+  login(auth: AuthenticationBean!) : User
+}
+
+type Mutation {
+  createUser(userBean: UserBean!) : User
+}
