@@ -1,7 +1,5 @@
 package br.edu.ufcg.genus.services;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.beans.AuthenticationBean;
 import br.edu.ufcg.genus.beans.UserBean;
-import br.edu.ufcg.genus.models.Role;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
@@ -53,8 +50,8 @@ public class UserService {
 	public String login (AuthenticationBean authBean) {
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
-            User user = userRepository.findByUsername(authBean.getUsername());
-            if (user == null) throw new RuntimeException("Invalid username");
+            User user = userRepository.findByUsername(authBean.getUsername())
+            		.orElseThrow(() -> new RuntimeException("Invalid username"));
             
             return jwtTokenProvider.createToken(authBean.getUsername(), user.getRoles());
         } catch (Exception e) {
