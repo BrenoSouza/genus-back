@@ -46,18 +46,17 @@ public class UserService {
         	}
             throw new RuntimeException("Invalid attributes passed to creation of an user" + errorString);
         }
-		User newUser = new User(userBean.getUsername(), userBean.getEmail(), userBean.getPassword());
+		User newUser = new User(userBean.getUsername(), userBean.getEmail(), passwordEncoder.encode(userBean.getPassword()));
 		return this.userRepository.save(newUser);
 	}
 	
 	public String login (AuthenticationBean authBean) {
 		try {
-            //authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
             User user = userRepository.findByUsername(authBean.getUsername());
             if (user == null) throw new RuntimeException("Invalid username");
-            if (! user.getPassword().equals(authBean.getPassword())) throw new RuntimeException("Invalid password");
             
-            return jwtTokenProvider.createToken(authBean.getUsername());
+            return jwtTokenProvider.createToken(authBean.getUsername(), user.getRoles());
         } catch (Exception e) {
             throw new RuntimeException("Invalid username or password", e);
         }

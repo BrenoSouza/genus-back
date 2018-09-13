@@ -1,7 +1,11 @@
 package br.edu.ufcg.genus.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,6 +38,9 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 	
+	@ElementCollection(fetch=FetchType.EAGER)
+	List<Role> roles;
+	
 	
 	public User() {
 		
@@ -59,6 +66,14 @@ public class User {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override
