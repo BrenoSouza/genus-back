@@ -1,10 +1,12 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,7 @@ import br.edu.ufcg.genus.utils.ServerConstants;
  * Add Student, Teacher, ADM and Notification to this class
  */
 @Entity
+@Table(name="User_Sys")
 public class User {
 	
 	@Id
@@ -50,6 +53,7 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.roles = new ArrayList<Role>();
 	}
 
 	public long getId() {

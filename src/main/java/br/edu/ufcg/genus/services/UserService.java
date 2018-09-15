@@ -43,7 +43,9 @@ public class UserService {
         	}
             throw new RuntimeException("Invalid attributes passed to creation of an user" + errorString);
         }
+		System.out.println("ok");
 		User newUser = new User(userBean.getUsername(), userBean.getEmail(), passwordEncoder.encode(userBean.getPassword()));
+		System.out.println(newUser.toString());
 		return this.userRepository.save(newUser);
 	}
 	
