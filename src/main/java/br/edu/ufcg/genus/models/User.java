@@ -33,7 +33,6 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String username;
 	
-	@Pattern( regexp = ServerConstants.EMAIL_REGEX,message="Invalid email")
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the email has to be between 6 and 70")
 	@Column(unique = true, nullable = false)
 	private String email;

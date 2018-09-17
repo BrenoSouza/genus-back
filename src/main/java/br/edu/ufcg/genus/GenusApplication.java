@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Bean;
 
 import br.edu.ufcg.genus.dummy.DummyQueries;
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
+import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
+import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import graphql.servlet.GraphQLErrorHandler;
 import graphql.ExceptionWhileDataFetching;
@@ -60,6 +62,16 @@ public class GenusApplication {
 	@Bean
 	public UserQueries userQuieries() {
 		return new UserQueries();
+	}
+
+	@Bean
+	public InstitutionQueries institutionQuieries() {
+		return new InstitutionQueries();
+	}
+
+	@Bean
+	public InstitutionMutations institutionMutations() {
+		return new InstitutionMutations();
 	}
 	
 	@Bean

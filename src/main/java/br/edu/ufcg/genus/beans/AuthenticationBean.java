@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.beans;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
@@ -12,6 +13,9 @@ public class AuthenticationBean {
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the password has to be between 6 and 50")
 	private String password;
 	
+	@NotBlank(message="User email cannot be empty")
+    private String email;
+
 	public AuthenticationBean() {
 		
 	}
@@ -27,6 +31,10 @@ public class AuthenticationBean {
 	public String getPassword() {
 		return password;
 	}
+
+	public String getEmail() {
+        return email;
+    }
 
 	public void setPassword(String password) {
 		this.password = password;

@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -10,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import br.edu.ufcg.genus.beans.AuthenticationBean;
 import br.edu.ufcg.genus.beans.UserBean;
@@ -35,24 +38,22 @@ public class UserService {
 	
 	public User createUser (UserBean userBean) {
 		Set<ConstraintViolation<UserBean>> violations = validator.validate(userBean);
-		//TODO Use the error messages on the exception
-        if (violations.size() > 0) {
+
+		if (violations.size() > 0) {
         	String errorString = "";
         	for (ConstraintViolation<UserBean> v : violations) {
         		errorString = " " + errorString + v.getMessage();
         	}
             throw new RuntimeException("Invalid attributes passed to creation of an user" + errorString);
         }
-		System.out.println("ok");
 		User newUser = new User(userBean.getUsername(), userBean.getEmail(), passwordEncoder.encode(userBean.getPassword()));
-		System.out.println(newUser.toString());
 		return this.userRepository.save(newUser);
 	}
-	
+
 	public String login (AuthenticationBean authBean) {
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
-            User user = userRepository.findByUsername(authBean.getUsername())
+            User user = userRepository.findByEmail(authBean.getEmail())
             		.orElseThrow(() -> new RuntimeException("Invalid username"));
             
             return jwtTokenProvider.createToken(authBean.getUsername(), user.getRoles());
@@ -62,4 +63,11 @@ public class UserService {
 		
 	}
 
+	public Optional<User> findUserById(long id) {
+        return userRepository.findById(id);
+    }
+
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+	}
 }
