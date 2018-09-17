@@ -43,7 +43,6 @@ public class User {
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
-	
 	public User() {
 		
 	}

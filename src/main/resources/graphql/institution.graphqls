@@ -4,7 +4,6 @@ type Institution {
   email: String!
   phone: String!
   address: String!
-  users: [ User! ]!
 }
 
 input CreateInstitutionInput {

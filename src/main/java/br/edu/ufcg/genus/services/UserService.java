@@ -53,14 +53,13 @@ public class UserService {
 	public String login (AuthenticationBean authBean) {
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
-            User user = userRepository.findByEmail(authBean.getEmail())
+            User user = userRepository.findByUsername(authBean.getUsername())
             		.orElseThrow(() -> new RuntimeException("Invalid username"));
             
             return jwtTokenProvider.createToken(authBean.getUsername(), user.getRoles());
         } catch (Exception e) {
             throw new RuntimeException("Invalid username or password", e);
-        }
-		
+		}		
 	}
 
 	public Optional<User> findUserById(long id) {

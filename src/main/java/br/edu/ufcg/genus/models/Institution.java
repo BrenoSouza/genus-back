@@ -30,11 +30,6 @@ public class Institution {
 	
 	@Column(nullable = false)
 	private String phone;
-
-	@ManyToMany
-    @JoinColumn(name="users_id", nullable=false)
-	private List<User> users;
-	
 	
 	public Institution() {
 		
@@ -45,7 +40,6 @@ public class Institution {
 		this.address = address;
 		this.phone = phone;
         this.email = email;
-		this.users = new ArrayList<User>();
 	}
 
 	public long getId() {
@@ -82,18 +76,6 @@ public class Institution {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public List<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
-
-	public void addUser(User user) {
-		this.users.add(user);
 	}
 
 	@Override
