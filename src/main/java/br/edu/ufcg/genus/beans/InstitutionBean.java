@@ -7,7 +7,7 @@ import br.edu.ufcg.genus.utils.ServerConstants;
 
 public class InstitutionBean {
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the username has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the institution has to be between 6 and 50")
 	private String name;
 	
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the email has to be between 6 and 70")

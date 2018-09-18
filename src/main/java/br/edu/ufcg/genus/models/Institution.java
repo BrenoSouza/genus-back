@@ -31,6 +31,10 @@ public class Institution {
 	@Column(nullable = false)
 	private String phone;
 	
+	@ManyToOne
+    @JoinColumn(name="owner_id", nullable=false)
+    private User owner;
+
 	public Institution() {
 		
 	}
@@ -39,7 +43,7 @@ public class Institution {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
-        this.email = email;
+		this.email = email;
 	}
 
 	public long getId() {
@@ -78,6 +82,14 @@ public class Institution {
 		this.email = email;
 	}
 
+	public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -99,14 +111,4 @@ public class Institution {
 			return false;
 		return true;
 	}
-	
-	
-
-	
-	
-	
-	
-	
-	
-
 }

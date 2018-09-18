@@ -15,4 +15,8 @@ public class InstitutionQueries implements GraphQLQueryResolver {
     public Institution findInstitution(Long institutionId) {
         return institutionService.findById(institutionId).orElse(null);
     }
+
+    public Iterable<Institution> findInstitutionsByOwner(Long ownerId) {
+        return institutionService.findInstitutionsByOwner(ownerId);
+    }
 }

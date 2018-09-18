@@ -4,6 +4,7 @@ type Institution {
   email: String!
   phone: String!
   address: String!
+  owner: User!
 }
 
 input CreateInstitutionInput {
@@ -15,6 +16,7 @@ input CreateInstitutionInput {
 
 extend type Query {
     findInstitution(id: ID!): Institution
+    findInstitutionsByOwner(ownerId: ID!): [ Institution! ]!
 }
 
 extend type Mutation {

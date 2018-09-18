@@ -9,13 +9,13 @@ import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import br.edu.ufcg.genus.beans.AuthenticationBean;
 import br.edu.ufcg.genus.beans.UserBean;
+import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
@@ -61,6 +61,17 @@ public class UserService {
             throw new RuntimeException("Invalid username or password", e);
 		}		
 	}
+
+    public User findLoggedUser() {
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = findUserByEmail(email)
+            .orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+
+        return user;
+    }
 
 	public Optional<User> findUserById(long id) {
         return userRepository.findById(id);

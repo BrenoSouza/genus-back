@@ -15,9 +15,10 @@ input AuthenticationBean {
   password: String!
 }
 
-
 type Query {
   login(auth: AuthenticationBean!) : String!
+  findUser(id: ID!): User
+  findLoggedUser: User!
 }
 
 type Mutation {

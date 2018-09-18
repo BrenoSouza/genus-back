@@ -12,6 +12,6 @@ public interface InstitutionRepository extends CrudRepository<Institution, Long>
 
 	public Optional<Institution> findById(int institutionId);
 
-	//public Iterable<Institution> findByUserId(Long userId);
+	public Iterable<Institution> findByOwnerId(Long ownerId);
 
 }
