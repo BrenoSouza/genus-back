@@ -51,20 +51,21 @@ public class UserService {
 	}
 
 	public String login (AuthenticationBean authBean) {
+        String email = authBean.getEmail();
+        String password = authBean.getPassword();
+
 		try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
-            User user = userRepository.findByUsername(authBean.getUsername())
-            		.orElseThrow(() -> new RuntimeException("Invalid username"));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            User user = userRepository.findByEmail(email)
+            		.orElseThrow(() -> new RuntimeException("Invalid email or password", null));
             
-            return jwtTokenProvider.createToken(authBean.getUsername(), user.getRoles());
+            return jwtTokenProvider.createToken(email, user.getRoles());
         } catch (Exception e) {
-            throw new RuntimeException("Invalid username or password", e);
+            throw new RuntimeException("Invalid email or password", e);
 		}		
-	}
-
+    }
+    
     public User findLoggedUser() {
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = findUserByEmail(email)
