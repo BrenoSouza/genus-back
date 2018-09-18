@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -8,11 +9,13 @@ import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.beans.AuthenticationBean;
 import br.edu.ufcg.genus.beans.UserBean;
+import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
@@ -35,8 +38,8 @@ public class UserService {
 	
 	public User createUser (UserBean userBean) {
 		Set<ConstraintViolation<UserBean>> violations = validator.validate(userBean);
-		//TODO Use the error messages on the exception
-        if (violations.size() > 0) {
+
+		if (violations.size() > 0) {
         	String errorString = "";
         	for (ConstraintViolation<UserBean> v : violations) {
         		errorString = " " + errorString + v.getMessage();
@@ -46,18 +49,36 @@ public class UserService {
 		User newUser = new User(userBean.getUsername(), userBean.getEmail(), passwordEncoder.encode(userBean.getPassword()));
 		return this.userRepository.save(newUser);
 	}
-	
-	public String login (AuthenticationBean authBean) {
-		try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBean.getUsername(), authBean.getPassword()));
-            User user = userRepository.findByUsername(authBean.getUsername())
-            		.orElseThrow(() -> new RuntimeException("Invalid username"));
-            
-            return jwtTokenProvider.createToken(authBean.getUsername(), user.getRoles());
-        } catch (Exception e) {
-            throw new RuntimeException("Invalid username or password", e);
-        }
-		
-	}
 
+	public String login (AuthenticationBean authBean) {
+        String email = authBean.getEmail();
+        String password = authBean.getPassword();
+
+		try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            User user = userRepository.findByEmail(email)
+            		.orElseThrow(() -> new RuntimeException("Invalid email or password", null));
+            
+            return jwtTokenProvider.createToken(email, user.getRoles());
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid email or password", e);
+		}		
+    }
+    
+    public User findLoggedUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = findUserByEmail(email)
+            .orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+
+        return user;
+    }
+
+	public Optional<User> findUserById(long id) {
+        return userRepository.findById(id);
+    }
+
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+	}
 }

@@ -1,15 +1,16 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
@@ -19,6 +20,7 @@ import br.edu.ufcg.genus.utils.ServerConstants;
  * Add Student, Teacher, ADM and Notification to this class
  */
 @Entity
+@Table(name="User_Sys")
 public class User {
 	
 	@Id
@@ -30,7 +32,6 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String username;
 	
-	@Pattern( regexp = ServerConstants.EMAIL_REGEX,message="Invalid email")
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the email has to be between 6 and 70")
 	@Column(unique = true, nullable = false)
 	private String email;
@@ -41,7 +42,6 @@ public class User {
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
-	
 	public User() {
 		
 	}
@@ -50,6 +50,7 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.roles = new ArrayList<Role>();
 	}
 
 	public long getId() {
@@ -97,14 +98,4 @@ public class User {
 			return false;
 		return true;
 	}
-	
-	
-
-	
-	
-	
-	
-	
-	
-
 }

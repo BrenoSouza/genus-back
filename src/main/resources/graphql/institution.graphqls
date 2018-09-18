@@ -1,0 +1,24 @@
+type Institution {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String!
+  address: String!
+  owner: User!
+}
+
+input CreateInstitutionInput {
+  name: String!
+  email: String!
+  phone: String!
+  address: String!
+}
+
+extend type Query {
+    findInstitution(id: ID!): Institution
+    findInstitutionsByOwner(ownerId: ID!): [ Institution! ]!
+}
+
+extend type Mutation {
+    createInstitution(input: CreateInstitutionInput!): Institution
+}

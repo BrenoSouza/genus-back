@@ -19,7 +19,7 @@ mvn spring-boot:run
 
 ### Deploy 
 - [Genus Back](https://genuss.herokuapp.com/)
-
+- [Genus Client](https://genus-app.herokuapp.com/)
 
 ### Client Repository
 - [Genus Client](https://github.com/Klynger/genus-client)
