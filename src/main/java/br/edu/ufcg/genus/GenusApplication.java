@@ -8,9 +8,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import br.edu.ufcg.genus.dummy.DummyQueries;
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
+import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
+import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
@@ -55,11 +56,6 @@ public class GenusApplication {
 	}
 	
 	@Bean
-	public DummyQueries dummyQueries() {
-		return new DummyQueries();
-	}
-	
-	@Bean
 	public UserQueries userQuieries() {
 		return new UserQueries();
 	}
@@ -77,5 +73,15 @@ public class GenusApplication {
 	@Bean
 	public UserMutations userMutations() {
 		return new UserMutations();
+	}
+	
+	@Bean
+	public GradeMutations gradeMutations() {
+		return new GradeMutations();		
+	}
+	
+	@Bean
+	public SubjectMutations subjectMutations() {
+		return new SubjectMutations();
 	}
 }

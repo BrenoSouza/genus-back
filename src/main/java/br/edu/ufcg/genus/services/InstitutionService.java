@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import br.edu.ufcg.genus.beans.InstitutionBean;
+import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
@@ -46,4 +47,9 @@ public class InstitutionService {
 
         return institutionRepository.save(institution);
     }
+
+	public void addGradeToInstitution(Institution institution, Grade newGrade) {
+		institution.addGrade(newGrade);
+		institutionRepository.save(institution);
+	}
 }

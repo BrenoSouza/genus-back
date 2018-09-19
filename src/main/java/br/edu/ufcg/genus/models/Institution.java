@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
@@ -34,16 +38,25 @@ public class Institution {
 	@ManyToOne
     @JoinColumn(name="owner_id", nullable=false)
     private User owner;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Grade> grades;
 
 	public Institution() {
-		
+		this.grades = new ArrayList<>();		
 	}
 	
 	public Institution(String name, String address, String phone, String email) {
+		this();
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
 		this.email = email;
+	}
+	
+	public boolean addGrade(Grade grade) {
+		return this.grades.add(grade);
 	}
 
 	public long getId() {
@@ -89,6 +102,14 @@ public class Institution {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
+	public List<Grade> getGrades() {
+		return grades;
+	}
+
+	public void setGrades(List<Grade> grades) {
+		this.grades = grades;
+	}
 
 	@Override
 	public int hashCode() {
