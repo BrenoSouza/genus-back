@@ -1,7 +1,9 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -42,15 +44,27 @@ public class User {
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
+	@ElementCollection(fetch=FetchType.EAGER)
+	private Map<Long, UserRole> institutionRoleMap; 
+	
 	public User() {
-		
+		this.institutionRoleMap = new HashMap<>();
 	}
 	
 	public User(String username, String email, String password) {
+		this();
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.roles = new ArrayList<Role>();
+	}
+	
+	public void addRole(Long institutionID, UserRole role) {
+		this.institutionRoleMap.put(institutionID, role);
+	}
+	
+	public UserRole getRole(Long institutionID) {
+		return this.institutionRoleMap.get(institutionID);
 	}
 
 	public long getId() {

@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
+import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.GradeRepository;
+import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
 public class GradeService {
@@ -29,7 +32,10 @@ public class GradeService {
 		User user = this.userService.findLoggedUser();
 		Institution institution = this.institutionService.findById(input.getInstitutionId())
 				.orElseThrow(() -> new InvalidIDException());
-		if (!institution.getOwner().equals(user)) throw new RuntimeException("Only owners can do this action"); // CRIAR UMA EXCEPTION
+		//if (!institution.getOwner().equals(user)) throw new RuntimeException("Only owners can dArrayList<E>tion"); // CRIAR UMA EXCEPTION
+		ArrayList<UserRole> permitedRoles = new ArrayList<>();
+		permitedRoles.add(UserRole.ADMIN);
+		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
 		Grade newGrade = new Grade(input.getName(), input.getInstitutionId());
 		this.gradeRepository.save(newGrade);
 		institutionService.addGradeToInstitution(institution, newGrade);

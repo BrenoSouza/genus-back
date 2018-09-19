@@ -12,6 +12,7 @@ import br.edu.ufcg.genus.beans.InstitutionBean;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
+import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 
 @Service
@@ -27,12 +28,8 @@ public class InstitutionService {
         return institutionRepository.findById(id);
     }
 
-    public Iterable<Institution> findInstitutionsByOwner(Long ownerId) {
-        return institutionRepository.findByOwnerId(ownerId);
-    }
-
     public Institution createInstitution(InstitutionBean input) {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+        //System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User owner = userService.findUserByEmail(email)
@@ -43,9 +40,10 @@ public class InstitutionService {
         institution.setEmail(input.getEmail());
         institution.setPhone(input.getPhone());
         institution.setAddress(input.getAddress());
-        institution.setOwner(owner);
-
-        return institutionRepository.save(institution);
+        //institution.setOwner(owner);
+        institutionRepository.save(institution);
+        userService.addRole(owner, institution, UserRole.ADMIN);
+        return institution;
     }
 
 	public void addGradeToInstitution(Institution institution, Grade newGrade) {

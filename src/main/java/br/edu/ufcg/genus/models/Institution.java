@@ -35,9 +35,9 @@ public class Institution {
 	@Column(nullable = false)
 	private String phone;
 	
-	@ManyToOne
-    @JoinColumn(name="owner_id", nullable=false)
-    private User owner;
+	//@ManyToOne
+    //@JoinColumn(name="owner_id", nullable=false)
+    //private User owner;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
@@ -94,7 +94,7 @@ public class Institution {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+/*
 	public User getOwner() {
         return owner;
     }
@@ -102,7 +102,7 @@ public class Institution {
     public void setOwner(User owner) {
         this.owner = owner;
     }
-
+*/
 	public List<Grade> getGrades() {
 		return grades;
 	}

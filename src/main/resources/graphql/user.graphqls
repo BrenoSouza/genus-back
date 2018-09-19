@@ -15,10 +15,17 @@ input AuthenticationBean {
   password: String!
 }
 
+enum UserRole{
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
 type Query {
   login(auth: AuthenticationBean!) : String!
   findUser(id: ID!): User
   findLoggedUser: User!
+  findRole(institutionId: ID!) : UserRole!
 }
 
 type Mutation {

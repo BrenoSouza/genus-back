@@ -6,6 +6,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
 import br.edu.ufcg.genus.beans.AuthenticationBean;
 import br.edu.ufcg.genus.models.User;
+import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.services.UserService;
 
 public class UserQueries implements GraphQLQueryResolver {
@@ -23,6 +24,10 @@ public class UserQueries implements GraphQLQueryResolver {
 
     public User findLoggedUser() {
         return userService.findLoggedUser();
+    }
+    
+    public UserRole findRole(Long institutionId) {
+    	return userService.findRole(institutionId);
     }
 
 }
