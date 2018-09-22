@@ -1,6 +1,5 @@
 package br.edu.ufcg.genus.beans;
 
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
