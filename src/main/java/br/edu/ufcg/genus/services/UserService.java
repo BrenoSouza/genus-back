@@ -13,8 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.edu.ufcg.genus.beans.AuthenticationBean;
-import br.edu.ufcg.genus.beans.UserBean;
+import br.edu.ufcg.genus.beans.AuthenticationInput;
+import br.edu.ufcg.genus.beans.CreateUserInput;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
@@ -38,23 +38,23 @@ public class UserService {
 	@Autowired
     private Validator validator;
 	
-	public User createUser (UserBean userBean) {
-		Set<ConstraintViolation<UserBean>> violations = validator.validate(userBean);
+	public User createUser (CreateUserInput input) {
+		Set<ConstraintViolation<CreateUserInput>> violations = validator.validate(input);
 
 		if (violations.size() > 0) {
         	String errorString = "";
-        	for (ConstraintViolation<UserBean> v : violations) {
+        	for (ConstraintViolation<CreateUserInput> v : violations) {
         		errorString = " " + errorString + v.getMessage();
         	}
             throw new RuntimeException("Invalid attributes passed to creation of an user" + errorString);
         }
-		User newUser = new User(userBean.getUsername(), userBean.getEmail(), passwordEncoder.encode(userBean.getPassword()));
+		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		return this.userRepository.save(newUser);
 	}
 
-	public String login (AuthenticationBean authBean) {
-        String email = authBean.getEmail();
-        String password = authBean.getPassword();
+	public String login (AuthenticationInput input) {
+        String email = input.getEmail();
+        String password = input.getPassword();
 
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));

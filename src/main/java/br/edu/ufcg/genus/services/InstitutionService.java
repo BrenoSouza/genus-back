@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import br.edu.ufcg.genus.beans.InstitutionBean;
+import br.edu.ufcg.genus.beans.CreateInstitutionInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
@@ -28,7 +28,7 @@ public class InstitutionService {
         return institutionRepository.findById(id);
     }
 
-    public Institution createInstitution(InstitutionBean input) {
+    public Institution createInstitution(CreateInstitutionInput input) {
         //System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
