@@ -12,7 +12,7 @@ public class InvalidPermissionException extends RuntimeException implements Grap
 	private static final long serialVersionUID = 1L;
 
 	public InvalidPermissionException(List<UserRole> roles) {
-		super("You do not have the necessary role for this action.\nRoles that can execute this action: " + roles);		
+		super("Você não tem permissão para executar essa ação.\nAcesso permitidos para usuários: " + roles);		
 	}
 	
 	@Override

@@ -24,7 +24,7 @@ public class Grade {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the name has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_SUBJECT_NAME_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="O nome da série deve ter entre 4 and 50 dígitos.")
 	@Column(unique = true, nullable = false)
 	private String name;
 	

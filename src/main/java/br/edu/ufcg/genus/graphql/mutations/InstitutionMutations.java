@@ -12,7 +12,7 @@ import java.util.Map;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import br.edu.ufcg.genus.beans.CreateInstitutionInput;
+import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.services.InstitutionService;
@@ -32,7 +32,7 @@ public class InstitutionMutations implements GraphQLMutationResolver {
             violations.forEach((ConstraintViolation<CreateInstitutionInput> v) -> {
                 extensions.put(v.getMessage(), v.getInvalidValue());
             });
-            throw new InvalidAttributesException("Invalid attributes passed to creation of an institution", extensions);
+            throw new InvalidAttributesException("Atributos passados na criação de institução são inválidos.", extensions);
 		}
 		return institutionService.createInstitution(input);
 	}

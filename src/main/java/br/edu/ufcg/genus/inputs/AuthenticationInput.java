@@ -1,22 +1,22 @@
-package br.edu.ufcg.genus.beans;
+package br.edu.ufcg.genus.inputs;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 
-public class CreateUserInput {
+public class AuthenticationInput {
 	
-	//@Pattern( regexp = "^[a-zA-Z0-9._]", message = "Invalid username")
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the username has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do username deve ser entre 6 e 50 dígitos.")
 	private String username;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the email has to be between 6 and 70")
-	private String email;
-	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the password has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do password deve ser entre 6 e 50 dígitos).")
 	private String password;
 	
-	public CreateUserInput () {
+	@NotBlank(message="Email do usuário não pode ser vazio.")
+    private String email;
+
+	public AuthenticationInput() {
 		
 	}
 
@@ -28,17 +28,13 @@ public class CreateUserInput {
 		this.username = username;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getPassword() {
 		return password;
 	}
+
+	public String getEmail() {
+        return email;
+    }
 
 	public void setPassword(String password) {
 		this.password = password;
@@ -48,7 +44,6 @@ public class CreateUserInput {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -62,12 +57,7 @@ public class CreateUserInput {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CreateUserInput other = (CreateUserInput) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
+		AuthenticationInput other = (AuthenticationInput) obj;
 		if (password == null) {
 			if (other.password != null)
 				return false;
@@ -80,10 +70,6 @@ public class CreateUserInput {
 			return false;
 		return true;
 	}
-	
-	
-
-	
 	
 	
 

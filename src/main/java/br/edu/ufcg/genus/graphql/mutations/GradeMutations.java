@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 
-import br.edu.ufcg.genus.beans.GradeCreationInput;
+import br.edu.ufcg.genus.inputs.GradeCreationInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.services.GradeService;
 

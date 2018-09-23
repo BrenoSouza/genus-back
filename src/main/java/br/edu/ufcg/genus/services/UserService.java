@@ -13,8 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.edu.ufcg.genus.beans.AuthenticationInput;
-import br.edu.ufcg.genus.beans.CreateUserInput;
+import br.edu.ufcg.genus.inputs.AuthenticationInput;
+import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
@@ -46,7 +46,7 @@ public class UserService {
         	for (ConstraintViolation<CreateUserInput> v : violations) {
         		errorString = " " + errorString + v.getMessage();
         	}
-            throw new RuntimeException("Invalid attributes passed to creation of an user" + errorString);
+            throw new RuntimeException("Atributos passados na criação do usuário são inválidos." + errorString);
         }
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		return this.userRepository.save(newUser);
@@ -59,11 +59,11 @@ public class UserService {
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             User user = userRepository.findByEmail(email)
-            		.orElseThrow(() -> new RuntimeException("Invalid email or password", null));
+            		.orElseThrow(() -> new RuntimeException("Email ou senha inválido.", null));
             
             return jwtTokenProvider.createToken(email, user.getRoles());
         } catch (Exception e) {
-            throw new RuntimeException("Invalid email or password", e);
+            throw new RuntimeException("Email ou senha inválido.", e);
 		}		
     }
     

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 
-import br.edu.ufcg.genus.beans.CreateUserInput;
+import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.services.UserService;
 

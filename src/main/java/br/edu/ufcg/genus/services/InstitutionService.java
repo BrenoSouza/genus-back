@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import br.edu.ufcg.genus.beans.CreateInstitutionInput;
+import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
@@ -33,7 +33,7 @@ public class InstitutionService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User owner = userService.findUserByEmail(email)
-        .orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+        .orElseThrow(() -> new InvalidTokenException("Token inválido."));
 
         Institution institution = new Institution();
         institution.setName(input.getName());
