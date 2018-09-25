@@ -1,0 +1,13 @@
+type Subject {
+  id: ID!
+  name: String!
+}
+
+input SubjectCreationInput {
+  gradeId: ID!
+  name: String!
+}
+
+extend type Mutation {
+  createSubject (input: SubjectCreationInput!) : Subject
+}
