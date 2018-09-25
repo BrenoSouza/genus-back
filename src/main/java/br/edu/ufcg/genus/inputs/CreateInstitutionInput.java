@@ -1,24 +1,25 @@
-package br.edu.ufcg.genus.beans;
+package br.edu.ufcg.genus.inputs;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 
-public class InstitutionBean {
+public class CreateInstitutionInput {
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the institution has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do nome da instituição deve ter entre 6 e 50 dígitos.")
 	private String name;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the email has to be between 6 and 70")
+	@NotBlank(message="Email do usuário não pode ser vazio.")
 	private String email;
 
-    @Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the address has to be between 6 and 70")
+    @Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do endereço da instituição deve ter entre 6 e 50 dígitos.")
 	private String address;
 
-    @Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "The size of the phone has to be between 8 and 15")
+    @Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do telefone da instituição deve ser entre 8 e 50 dígitos.")
 	private String phone;
 
-	public InstitutionBean () {
+	public CreateInstitutionInput () {
 		
 	}
 
@@ -47,7 +48,7 @@ public class InstitutionBean {
 	}
 
     public String getPhone() {
-		return email;
+		return phone;
 	}
 
 	public void setPhone(String phone) {
@@ -71,7 +72,7 @@ public class InstitutionBean {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		InstitutionBean other = (InstitutionBean) obj;
+		CreateInstitutionInput other = (CreateInstitutionInput) obj;
 		if (email == null) {
 			if (other.email != null)
 				return false;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.edu.ufcg.genus.beans.SubjectCreationInput;
+import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;

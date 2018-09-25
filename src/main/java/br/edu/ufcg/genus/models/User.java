@@ -2,6 +2,7 @@ package br.edu.ufcg.genus.models;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,11 +31,11 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the username has to be between 6 and 50")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="O tamanho do username deve ter entre 6 e 50 dígitos.")
 	@Column(unique = true, nullable = false)
 	private String username;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="The size of the email has to be between 6 and 70")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="O tamanho do email deve ter entre 6 e 50 dígitos.")
 	@Column(unique = true, nullable = false)
 	private String email;
 	
@@ -89,6 +90,10 @@ public class User {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+	
+	public Set<Long> getInstitutionsIDs() {
+		return this.institutionRoleMap.keySet();
 	}
 
 	@Override

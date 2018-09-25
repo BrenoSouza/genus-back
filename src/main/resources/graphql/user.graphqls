@@ -4,13 +4,13 @@ type User {
   email: String!
 }
 
-input UserBean {
+input CreateUserInput {
   username: String!
   email: String!
   password: String!
 }
 
-input AuthenticationBean {
+input AuthenticationInput {
   email: String!
   password: String!
 }
@@ -22,12 +22,12 @@ enum UserRole{
 }
 
 type Query {
-  login(auth: AuthenticationBean!) : String!
+  login(input: AuthenticationInput!) : String!
   findUser(id: ID!): User
   findLoggedUser: User!
   findRole(institutionId: ID!) : UserRole!
 }
 
 type Mutation {
-  createUser(userBean: UserBean!) : User
+  createUser(input: CreateUserInput!) : User
 }

@@ -11,7 +11,7 @@ public class InvalidIDException extends RuntimeException implements GraphQLError
 	private static final long serialVersionUID = 5413804438252363375L;
 	
 	public InvalidIDException() {
-		super("Invalid ID");
+		super("ID inválido.");
 	}
 
 	@Override
