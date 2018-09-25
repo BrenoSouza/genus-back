@@ -16,7 +16,7 @@ input CreateInstitutionInput {
 
 extend type Query {
     findInstitution(id: ID!): Institution
-    getInstitutionsFromLoggedUser(): [Institution!]
+    getInstitutionsFromLoggedUser: [Institution!]
 }
 
 extend type Mutation {
