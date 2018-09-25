@@ -2,6 +2,7 @@ package br.edu.ufcg.genus.models;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -89,6 +90,10 @@ public class User {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+	
+	public Set<Long> getInstitutionsIDs() {
+		return this.institutionRoleMap.keySet();
 	}
 
 	@Override

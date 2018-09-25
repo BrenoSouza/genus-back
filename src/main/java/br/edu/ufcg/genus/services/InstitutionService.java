@@ -1,7 +1,12 @@
 package br.edu.ufcg.genus.services;
 
+import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +54,17 @@ public class InstitutionService {
 	public void addGradeToInstitution(Institution institution, Grade newGrade) {
 		institution.addGrade(newGrade);
 		institutionRepository.save(institution);
+	}
+	
+	public List<Institution> getInstitutionsFromLoggedUser() {
+		User user = this.userService.findLoggedUser();
+		Set<Long> institutionsIds = user.getInstitutionsIDs();
+		List<Institution> institutions = new ArrayList<>();
+		for (Long id : institutionsIds) {
+			Institution institution = findById(id)
+					.orElseThrow(() -> new InvalidIDException());
+			institutions.add(institution);
+		}
+		return institutions;
 	}
 }
