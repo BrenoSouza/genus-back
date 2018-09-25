@@ -1,0 +1,14 @@
+type Grade {
+  id: ID!
+  name: String!
+  subjects: [Subject!]!
+}
+
+input GradeCreationInput {
+  institutionId: ID!
+  name: String!
+}
+
+extend type Mutation {
+  createGrade (input : GradeCreationInput!) : Grade
+}

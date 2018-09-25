@@ -1,0 +1,33 @@
+type User {
+  id: ID!
+  username: String!
+  email: String!
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input AuthenticationInput {
+  email: String!
+  password: String!
+}
+
+enum UserRole{
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+type Query {
+  login(input: AuthenticationInput!) : String!
+  findUser(id: ID!): User
+  findLoggedUser: User!
+  findRole(institutionId: ID!) : UserRole!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!) : User
+}
