@@ -9,6 +9,10 @@ input GradeCreationInput {
   name: String!
 }
 
+extend type Query {
+  findGrade (input: ID!) : Grade
+}
+
 extend type Mutation {
   createGrade (input : GradeCreationInput!) : Grade
 }
