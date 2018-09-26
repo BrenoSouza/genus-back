@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
+import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
@@ -95,5 +96,10 @@ public class GenusApplication {
 	@Bean
 	public SubjectMutations subjectMutations() {
 		return new SubjectMutations();
+	}
+	
+	@Bean
+	public EntryCodeMutations entryCodeMutations() {
+		return new EntryCodeMutations();
 	}
 }
