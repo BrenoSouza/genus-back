@@ -5,4 +5,5 @@ input CreateEntryCodeInput {
 
 extend type Mutation {
   createEntryCode (input: CreateEntryCodeInput!) : String
+  joinInstitution (code: String!) : Institution!
 }

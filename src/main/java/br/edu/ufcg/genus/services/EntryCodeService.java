@@ -8,8 +8,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ufcg.genus.exception.ExpiredEntryCodeException;
+import br.edu.ufcg.genus.exception.InvalidEntryCodeException;
+import br.edu.ufcg.genus.exception.InvalidIDException;
+import br.edu.ufcg.genus.exception.UserAlreadyInInstitutionException;
 import br.edu.ufcg.genus.inputs.CreateEntryCodeInput;
 import br.edu.ufcg.genus.models.EntryCode;
+import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.EntryCodeRepository;
@@ -40,6 +45,28 @@ public class EntryCodeService {
 		EntryCode entryCode = new EntryCode(generateRandomCode(), input.getRole(), input.getInstitutionId());
 		this.entryCodeRepository.save(entryCode);
 		return entryCode.getCode();
+	}
+	
+	public Institution joinInstitution(String code) {
+		EntryCode entryCode = findEntryCode(code).orElseThrow(() -> new InvalidEntryCodeException());
+		
+		//Checks expiration
+		Date now = new Date();
+		if (now.after(entryCode.getExpirationDate())) {
+			this.entryCodeRepository.delete(entryCode);
+			throw new ExpiredEntryCodeException();
+		}
+		
+		//Checks if this User is already in the institution
+		User user = this.userService.findLoggedUser();
+		if (user.getRole(entryCode.getInstitutionId()) != null) {
+			throw new UserAlreadyInInstitutionException();
+		}
+		
+		this.userService.addRole(user, entryCode.getInstitutionId(), entryCode.getRole());
+		this.entryCodeRepository.delete(entryCode);
+		return this.institutionService.findById(entryCode.getInstitutionId()).orElseThrow(() -> new InvalidIDException());
+		
 	}
 	
 	

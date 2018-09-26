@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
-import br.edu.ufcg.genus.models.EntryCode;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
@@ -48,7 +47,7 @@ public class InstitutionService {
         institution.setAddress(input.getAddress());
         //institution.setOwner(owner);
         institutionRepository.save(institution);
-        userService.addRole(owner, institution, UserRole.ADMIN);
+        userService.addRole(owner, institution.getId(), UserRole.ADMIN);
         return institution;
     }
 
