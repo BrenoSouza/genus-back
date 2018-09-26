@@ -11,7 +11,7 @@ import br.edu.ufcg.genus.services.UserService;
 public class UserMutations implements GraphQLMutationResolver {
 	
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	public User createUser(CreateUserInput input) {
 		return userService.createUser(input);
