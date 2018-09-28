@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
-import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.UserRepository;
@@ -84,8 +83,8 @@ public class UserService {
         return userRepository.findByEmail(email);
 	}
 
-	public void addRole(User user, Institution institution, UserRole role) {
-		user.addRole(institution.getId(), role);	
+	public void addRole(User user, long institutionId, UserRole role) {
+		user.addRole(institutionId, role);	
 		userRepository.save(user);
 	}
 	
