@@ -14,7 +14,7 @@ git clone https://github.com/BrenoSouza/genus-back
 Execute the `main` method in the `br.edu.ufcg.genus.GenusApplication` class from your IDE. Or,
 
 ```shell
-mvn spring-boot:run
+mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
 ### Deploy 
