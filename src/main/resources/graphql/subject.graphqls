@@ -8,6 +8,10 @@ input SubjectCreationInput {
   name: String!
 }
 
+extend type Query {
+  findSubject (input: ID!) : Subject
+}
+
 extend type Mutation {
   createSubject (input: SubjectCreationInput!) : Subject
 }

@@ -9,11 +9,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
+import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
+import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
+import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import graphql.servlet.GraphQLErrorHandler;
 import graphql.ExceptionWhileDataFetching;
@@ -76,12 +79,27 @@ public class GenusApplication {
 	}
 	
 	@Bean
+	public GradeQueries gradeQueries() {
+		return new GradeQueries();
+	}
+	
+	@Bean
 	public GradeMutations gradeMutations() {
 		return new GradeMutations();		
 	}
 	
 	@Bean
+	public SubjectQueries subjectQueries() {
+		return new SubjectQueries();
+	}
+	
+	@Bean
 	public SubjectMutations subjectMutations() {
 		return new SubjectMutations();
+	}
+	
+	@Bean
+	public EntryCodeMutations entryCodeMutations() {
+		return new EntryCodeMutations();
 	}
 }

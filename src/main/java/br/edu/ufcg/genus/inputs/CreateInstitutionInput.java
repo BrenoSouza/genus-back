@@ -48,7 +48,7 @@ public class CreateInstitutionInput {
 	}
 
     public String getPhone() {
-		return email;
+		return phone;
 	}
 
 	public void setPhone(String phone) {

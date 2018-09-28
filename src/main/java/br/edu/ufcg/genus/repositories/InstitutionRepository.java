@@ -10,7 +10,7 @@ public interface InstitutionRepository extends CrudRepository<Institution, Long>
 	
 	public Iterable<Institution> findByEmail(String email);
 
-	public Optional<Institution> findById(int institutionId);
+	public Optional<Institution> findById(long institutionId);
 
 
 }

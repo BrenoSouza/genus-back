@@ -1,6 +1,7 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,10 @@ public class SubjectService {
 		subjectRepository.save(newSubject);
 		this.gradeService.addSubjectToGrade(grade, newSubject);
 		return newSubject;
+	}
+	
+	public Optional<Subject> findSubjectById(long id) {
+		return this.subjectRepository.findById(id);
 	}
 
 }

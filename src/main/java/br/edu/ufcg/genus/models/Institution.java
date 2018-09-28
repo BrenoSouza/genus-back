@@ -35,10 +35,6 @@ public class Institution {
 	@Column(nullable = false)
 	private String phone;
 	
-	//@ManyToOne
-    //@JoinColumn(name="owner_id", nullable=false)
-    //private User owner;
-	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Grade> grades;
