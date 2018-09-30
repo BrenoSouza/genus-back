@@ -36,9 +36,8 @@ public class GradeService {
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
-		Grade newGrade = new Grade(input.getName(), input.getInstitutionId());
+		Grade newGrade = new Grade(input.getName(), institution);
 		this.gradeRepository.save(newGrade);
-		institutionService.addGradeToInstitution(institution, newGrade);
 		return newGrade;		
 	}
 	
@@ -50,5 +49,8 @@ public class GradeService {
 		grade.addSubject(newSubject);
 		this.gradeRepository.save(grade);
 	}
-
+	
+    public Iterable<Grade> findGradesByInstitution(Long institutionId) {
+        return gradeRepository.findByInstitutionId(institutionId);
+	}
 }

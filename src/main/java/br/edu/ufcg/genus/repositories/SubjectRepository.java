@@ -10,4 +10,6 @@ public interface SubjectRepository extends CrudRepository<Subject, Long>{
 	
 	public Optional<Subject> findById(Long id);
 
+	public Iterable<Subject> findByGradeId(Long gradeId);
+
 }

@@ -1,6 +1,7 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,10 @@ public class SubjectService {
 	@Autowired
 	private GradeService gradeService;
 	
-	
-	
 	public Subject createSubject(SubjectCreationInput input) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId())
 				.orElseThrow(() -> new InvalidIDException());
-		Institution institution = this.institutionService.findById(grade.getInstitutionId())
+		Institution institution = this.institutionService.findById(grade.getInstitution().getId())
 				.orElseThrow(() -> new InvalidIDException());
 		User user = this.userService.findLoggedUser();
 		//if (!institution.getOwner().equals(user)) throw new RuntimeException("Only owners can do this action"); // CRIAR UMA EXCEPTION
@@ -44,8 +43,15 @@ public class SubjectService {
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
 		Subject newSubject = new Subject(grade, input.getName());
 		subjectRepository.save(newSubject);
-		this.gradeService.addSubjectToGrade(grade, newSubject);
 		return newSubject;
 	}
+	
+	public Optional<Subject> findSubjectById(long id) {
+		return this.subjectRepository.findById(id);
+	}
+
+	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
+        return subjectRepository.findByGradeId(gradeId);
+    }
 
 }

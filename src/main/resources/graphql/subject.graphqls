@@ -1,11 +1,17 @@
 type Subject {
   id: ID!
+  grade: Grade!
   name: String!
 }
 
 input SubjectCreationInput {
   gradeId: ID!
   name: String!
+}
+
+extend type Query {
+  findSubject (input: ID!) : Subject
+  findSubjectsByGrade(gradeId: ID!): [ Subject! ]!
 }
 
 extend type Mutation {

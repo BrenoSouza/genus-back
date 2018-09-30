@@ -1,0 +1,9 @@
+input CreateEntryCodeInput {
+  institutionId: ID!
+  role: UserRole
+}
+
+extend type Mutation {
+  createEntryCode (input: CreateEntryCodeInput!) : String
+  joinInstitution (code: String!) : Institution!
+}

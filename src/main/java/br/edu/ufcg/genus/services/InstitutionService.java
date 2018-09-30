@@ -47,7 +47,7 @@ public class InstitutionService {
         institution.setAddress(input.getAddress());
         //institution.setOwner(owner);
         institutionRepository.save(institution);
-        userService.addRole(owner, institution, UserRole.ADMIN);
+        userService.addRole(owner, institution.getId(), UserRole.ADMIN);
         return institution;
     }
 
