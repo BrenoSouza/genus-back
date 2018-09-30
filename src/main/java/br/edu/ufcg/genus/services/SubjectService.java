@@ -31,8 +31,6 @@ public class SubjectService {
 	@Autowired
 	private GradeService gradeService;
 	
-	
-	
 	public Subject createSubject(SubjectCreationInput input) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId())
 				.orElseThrow(() -> new InvalidIDException());
@@ -51,5 +49,9 @@ public class SubjectService {
 	public Optional<Subject> findSubjectById(long id) {
 		return this.subjectRepository.findById(id);
 	}
+
+	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
+        return subjectRepository.findByGradeId(gradeId);
+    }
 
 }

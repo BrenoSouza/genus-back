@@ -49,5 +49,8 @@ public class GradeService {
 		grade.addSubject(newSubject);
 		this.gradeRepository.save(grade);
 	}
-
+	
+    public Iterable<Grade> findGradesByInstitution(Long institutionId) {
+        return gradeRepository.findByInstitutionId(institutionId);
+	}
 }
