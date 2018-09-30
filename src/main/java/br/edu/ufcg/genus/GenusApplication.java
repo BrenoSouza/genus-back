@@ -18,6 +18,9 @@ import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
 import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
+import br.edu.ufcg.genus.graphql.resolvers.GradeResolver;
+import br.edu.ufcg.genus.graphql.resolvers.InstitutionResolver;
+import br.edu.ufcg.genus.graphql.resolvers.SubjectResolver;
 import graphql.servlet.GraphQLErrorHandler;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
@@ -59,12 +62,22 @@ public class GenusApplication {
 	}
 	
 	@Bean
-	public UserQueries userQuieries() {
+	public UserQueries userQueries() {
 		return new UserQueries();
+	}
+		
+	@Bean
+	public UserMutations userMutations() {
+		return new UserMutations();
+	}
+	
+	@Bean
+	public InstitutionResolver institutionResolver() {
+		return new InstitutionResolver();
 	}
 
 	@Bean
-	public InstitutionQueries institutionQuieries() {
+	public InstitutionQueries institutionQueries() {
 		return new InstitutionQueries();
 	}
 
@@ -74,10 +87,10 @@ public class GenusApplication {
 	}
 	
 	@Bean
-	public UserMutations userMutations() {
-		return new UserMutations();
+	public GradeResolver gradeResolver() {
+		return new GradeResolver();
 	}
-	
+
 	@Bean
 	public GradeQueries gradeQueries() {
 		return new GradeQueries();
@@ -86,6 +99,11 @@ public class GenusApplication {
 	@Bean
 	public GradeMutations gradeMutations() {
 		return new GradeMutations();		
+	}
+
+	@Bean
+	public SubjectResolver subjectResolver() {
+		return new SubjectResolver();
 	}
 	
 	@Bean

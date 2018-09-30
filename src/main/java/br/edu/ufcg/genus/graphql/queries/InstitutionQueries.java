@@ -21,5 +21,5 @@ public class InstitutionQueries implements GraphQLQueryResolver {
     
     public List<Institution> getInstitutionsFromLoggedUser() {
 		return this.institutionService.getInstitutionsFromLoggedUser();
-	}
+    }
 }

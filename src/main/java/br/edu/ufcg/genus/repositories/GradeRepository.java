@@ -10,5 +10,6 @@ public interface GradeRepository extends CrudRepository<Grade, Long>{
 	
 	public Optional<Grade> findById(Long id);
 	
+    public Iterable<Grade> findByInstitutionId(Long institutionId);
 
 }

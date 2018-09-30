@@ -5,9 +5,6 @@ import java.util.ArrayList;
 
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
@@ -35,8 +32,8 @@ public class Institution {
 	@Column(nullable = false)
 	private String phone;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="institution")
+	@Column(name="grades", nullable=false)
 	private List<Grade> grades;
 
 	public Institution() {
@@ -49,6 +46,7 @@ public class Institution {
 		this.address = address;
 		this.phone = phone;
 		this.email = email;
+		this.grades = new ArrayList<Grade>();
 	}
 	
 	public boolean addGrade(Grade grade) {

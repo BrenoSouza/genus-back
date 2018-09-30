@@ -16,4 +16,8 @@ public class GradeQueries implements GraphQLQueryResolver {
 	public Grade findGrade(long id) {
 		return this.gradeService.findGradeById(id).orElseThrow(() -> new InvalidIDException());
 	}
+
+	public Iterable<Grade> findGradesByInstitution(Long institutionId) {
+        return gradeService.findGradesByInstitution(institutionId);
+    }
 }

@@ -17,4 +17,7 @@ public class SubjectQueries implements GraphQLQueryResolver {
 		return this.subjectService.findSubjectById(id).orElseThrow(() -> new InvalidIDException());
 	}
 
+	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
+        return subjectService.findSubjectsByGrade(gradeId);
+    }
 }

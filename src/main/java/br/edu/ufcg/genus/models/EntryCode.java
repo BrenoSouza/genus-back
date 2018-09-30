@@ -90,8 +90,5 @@ public class EntryCode {
 		} else if (!code.equals(other.code))
 			return false;
 		return true;
-	}
-	
-	
-	
+	}	
 }

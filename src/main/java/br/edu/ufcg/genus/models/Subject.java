@@ -16,11 +16,11 @@ public class Subject {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String name;
 	
 	@ManyToOne
-    @JoinColumn(name="owner_grade", nullable=false)
+    @JoinColumn(name="grade_id", nullable=false)
 	private Grade grade;
 	
 	//list of students/ StudentSubject
