@@ -20,7 +20,7 @@ public class Subject {
 	private String name;
 	
 	@ManyToOne
-    @JoinColumn(name="owner_grade", nullable=false)
+    @JoinColumn(name="grade_id", nullable=false)
 	private Grade grade;
 	
 	//list of students/ StudentSubject

@@ -3,13 +3,13 @@ package br.edu.ufcg.genus.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
@@ -26,20 +26,23 @@ public class Grade {
 	@Size(min = ServerConstants.MIN_SUBJECT_NAME_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="O nome da série deve ter entre 4 and 50 dígitos.")
 	@Column(unique = true, nullable = false)
 	private String name;
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy="grade")
+	@Column(name="subjects", nullable=false)
 	private List<Subject> subjects;
 	
-	private Long institutionId;
+	@ManyToOne
+    @JoinColumn(name="institution_id", nullable=false)
+	private Institution institution;
 	
 	public Grade() {
 		this.subjects = new ArrayList<>();
 	}
 	
-	public Grade(String name, Long institutionId) {
+	public Grade(String name, Institution institution) {
 		this();
-		this.institutionId = institutionId;
 		this.name = name;
+		this.institution = institution;
 	}
 	
 	public boolean addSubject(Subject subject) {
@@ -66,12 +69,12 @@ public class Grade {
 		this.subjects = subjects;
 	}
 
-	public Long getInstitutionId() {
-		return institutionId;
+	public Institution getInstitution() {
+		return institution;
 	}
 
-	public void setInstitutionId(Long institutionId) {
-		this.institutionId = institutionId;
+	public void setInstitution(Institution institution) {
+		this.institution = institution;
 	}
 
 	@Override
