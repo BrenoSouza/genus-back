@@ -1,7 +1,8 @@
 type Grade {
   id: ID!
   name: String!
-  subjects: [Subject!]!
+  institution: Institution!
+  subjects: [ Subject! ]!
 }
 
 input GradeCreationInput {
@@ -11,6 +12,7 @@ input GradeCreationInput {
 
 extend type Query {
   findGrade (input: ID!) : Grade
+  findGradesByInstitution(institutionId: ID!): [ Grade! ]!
 }
 
 extend type Mutation {
