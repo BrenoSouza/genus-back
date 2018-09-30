@@ -24,7 +24,7 @@ public class Grade {
 	private Long id;
 	
 	@Size(min = ServerConstants.MIN_SUBJECT_NAME_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="O nome da série deve ter entre 4 and 50 dígitos.")
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String name;
 
 	@OneToMany(mappedBy="grade")

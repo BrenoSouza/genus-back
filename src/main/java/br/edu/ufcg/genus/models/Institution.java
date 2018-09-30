@@ -46,6 +46,7 @@ public class Institution {
 		this.address = address;
 		this.phone = phone;
 		this.email = email;
+		this.grades = new ArrayList<Grade>();
 	}
 	
 	public boolean addGrade(Grade grade) {
