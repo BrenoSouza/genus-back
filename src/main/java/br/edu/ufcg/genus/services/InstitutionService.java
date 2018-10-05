@@ -14,9 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
+import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
+import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 
@@ -64,5 +66,27 @@ public class InstitutionService {
 		institution.addUser(user, role);
 		institutionRepository.save(institution);
 		this.userService.saveUserInRepository(user);
+	}
+	
+	public List<User> getAllUsersFromInstitution(Long institutionId) {
+		Institution institution = findById(institutionId).orElseThrow(() -> new InvalidIDException());
+		List<User> result = new ArrayList<>();
+		for (UserInstitution userInstitution : institution.getUsers()) {
+			if (userInstitution.getInstitution().equals(institution)) {
+				result.add(userInstitution.getUser());
+			}
+		}
+		return result;
+	}
+	
+	public List<User> getUsersFromInstitutionByRole(GetUsersFromInstitutionByRoleInput input) {
+		Institution institution = findById(input.getInstitutionId()).orElseThrow(() -> new InvalidIDException());
+		List<User> result = new ArrayList<>();
+		for (UserInstitution userInstitution : institution.getUsers()) {
+			if (userInstitution.getInstitution().equals(institution) && userInstitution.getRole().equals(input.getRole())) {
+				result.add(userInstitution.getUser());
+			}
+		}
+		return result;
 	}
 }
