@@ -45,9 +45,8 @@ public class InstitutionService {
         institution.setEmail(input.getEmail());
         institution.setPhone(input.getPhone());
         institution.setAddress(input.getAddress());
-        //institution.setOwner(owner);
         institutionRepository.save(institution);
-        userService.addRole(owner, institution.getId(), UserRole.ADMIN);
+        addUserToInstitution(owner, institution, UserRole.ADMIN); // calls save
         return institution;
     }
 
@@ -58,13 +57,12 @@ public class InstitutionService {
 	
 	public List<Institution> getInstitutionsFromLoggedUser() {
 		User user = this.userService.findLoggedUser();
-		Set<Long> institutionsIds = user.getInstitutionsIDs();
-		List<Institution> institutions = new ArrayList<>();
-		for (Long id : institutionsIds) {
-			Institution institution = findById(id)
-					.orElseThrow(() -> new InvalidIDException());
-			institutions.add(institution);
-		}
-		return institutions;
+		return user.findInstitutions();
+	}
+	
+	public void addUserToInstitution(User user, Institution institution, UserRole role) {
+		institution.addUser(user, role);
+		institutionRepository.save(institution);
+		this.userService.saveUserInRepository(user);
 	}
 }

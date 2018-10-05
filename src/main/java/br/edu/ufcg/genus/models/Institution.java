@@ -1,9 +1,13 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.validation.constraints.Size;
+
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 
@@ -35,9 +39,13 @@ public class Institution {
 	@OneToMany(mappedBy="institution")
 	@Column(name="grades", nullable=false)
 	private List<Grade> grades;
+	
+	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private Set<UserInstitution> users;
 
 	public Institution() {
-		this.grades = new ArrayList<>();		
+		this.grades = new ArrayList<>();
+		this.users = new HashSet<>();
 	}
 	
 	public Institution(String name, String address, String phone, String email) {
@@ -52,6 +60,25 @@ public class Institution {
 	public boolean addGrade(Grade grade) {
 		return this.grades.add(grade);
 	}
+	
+	public void addUser(User user, UserRole role) {
+		UserInstitution userInstitution = new UserInstitution(user, this, role);
+		this.users.add(userInstitution);
+		user.getInstitutions().add(userInstitution);
+	}
+	
+	public void removeUser(User user) {
+		for (UserInstitution userInstitution : this.users) {
+			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(this)) {
+				this.users.remove(userInstitution);
+				userInstitution.getUser().getInstitutions().remove(userInstitution);
+				userInstitution.setInstitution(null);
+				userInstitution.setUser(null);
+			}
+		}
+	}
+	
+	//Getters and Setters
 
 	public long getId() {
 		return id;
@@ -88,21 +115,21 @@ public class Institution {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-/*
-	public User getOwner() {
-        return owner;
-    }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-*/
 	public List<Grade> getGrades() {
 		return grades;
 	}
 
 	public void setGrades(List<Grade> grades) {
 		this.grades = grades;
+	}
+
+	public Set<UserInstitution> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<UserInstitution> users) {
+		this.users = users;
 	}
 
 	@Override

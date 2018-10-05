@@ -82,11 +82,16 @@ public class UserService {
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
 	}
-
+    
+    public void saveUserInRepository(User user) {
+    	userRepository.save(user);
+    }
+    
+    /*
 	public void addRole(User user, long institutionId, UserRole role) {
 		user.addRole(institutionId, role);	
 		userRepository.save(user);
-	}
+	}*/
 	
 	public UserRole findRole(Long institutionId) {
 		User user = findLoggedUser();
