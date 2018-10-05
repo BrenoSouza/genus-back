@@ -19,6 +19,14 @@ input GetUsersFromInstitutionByRoleInput {
   role: UserRole!
 }
 
+input RemoveUserFromInstitutionInput {
+  institutionId: ID!
+  toBeRemovedId: ID!
+  institutionName: String
+  password: String
+  
+}
+
 extend type Query {
     findInstitution(id: ID!): Institution
     getInstitutionsFromLoggedUser: [Institution!]
@@ -28,4 +36,5 @@ extend type Query {
 
 extend type Mutation {
     createInstitution(input: CreateInstitutionInput!): Institution
+    removeUserFromInstitution(input: RemoveUserFromInstitutionInput!) : Boolean
 }

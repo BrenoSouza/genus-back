@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
+import br.edu.ufcg.genus.exception.AttributeDoNotMatchException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
@@ -58,7 +59,7 @@ public class UserService {
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             User user = userRepository.findByEmail(email)
-            		.orElseThrow(() -> new RuntimeException("Email ou senha inválido.", null));
+            		.orElseThrow(() -> new AttributeDoNotMatchException("Email ou senha inválido."));
             
             return jwtTokenProvider.createToken(email, user.getRoles());
         } catch (Exception e) {
@@ -87,11 +88,9 @@ public class UserService {
     	userRepository.save(user);
     }
     
-    /*
-	public void addRole(User user, long institutionId, UserRole role) {
-		user.addRole(institutionId, role);	
-		userRepository.save(user);
-	}*/
+    public boolean passwordMatch(User user, String password) {
+    	return passwordEncoder.matches(password, user.getPassword());
+    }
 	
 	public UserRole findRole(Long institutionId) {
 		User user = findLoggedUser();

@@ -4,10 +4,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import javax.validation.constraints.Size;
-
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 
@@ -67,15 +66,18 @@ public class Institution {
 		user.getInstitutions().add(userInstitution);
 	}
 	
-	public void removeUser(User user) {
-		for (UserInstitution userInstitution : this.users) {
+	public boolean removeUser(User user) {
+		boolean result = true;
+		for(Iterator<UserInstitution> iterator = users.iterator(); iterator.hasNext();) {
+			UserInstitution userInstitution = iterator.next();
 			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(this)) {
-				this.users.remove(userInstitution);
+				iterator.remove();
 				userInstitution.getUser().getInstitutions().remove(userInstitution);
 				userInstitution.setInstitution(null);
 				userInstitution.setUser(null);
 			}
 		}
+		return result;
 	}
 	
 	//Getters and Setters

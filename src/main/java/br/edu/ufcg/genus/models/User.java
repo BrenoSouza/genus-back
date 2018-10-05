@@ -1,10 +1,8 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.persistence.CascadeType;
@@ -18,8 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
-
-import org.hibernate.Hibernate;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 

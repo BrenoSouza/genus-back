@@ -10,7 +10,6 @@ import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
-import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.services.InstitutionService;
 
 public class InstitutionQueries implements GraphQLQueryResolver {

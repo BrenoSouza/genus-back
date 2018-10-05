@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
+import br.edu.ufcg.genus.inputs.RemoveUserFromInstitutionInput;
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.services.InstitutionService;
@@ -35,5 +36,9 @@ public class InstitutionMutations implements GraphQLMutationResolver {
             throw new InvalidAttributesException("Atributos passados na criação de institução são inválidos.", extensions);
 		}
 		return institutionService.createInstitution(input);
+	}
+	
+	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input) {
+		return this.institutionService.removeUserFromInstitution(input);
 	}
 }
