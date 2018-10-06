@@ -63,9 +63,10 @@ public class EntryCodeService {
 			throw new UserAlreadyInInstitutionException();
 		}
 		
-		this.userService.addRole(user, entryCode.getInstitutionId(), entryCode.getRole());
+		Institution institution = this.institutionService.findById(entryCode.getInstitutionId()).orElseThrow(() -> new InvalidIDException());
+		this.institutionService.addUserToInstitution(user, institution, entryCode.getRole());
 		this.entryCodeRepository.delete(entryCode);
-		return this.institutionService.findById(entryCode.getInstitutionId()).orElseThrow(() -> new InvalidIDException());
+		return institution;
 		
 	}
 	

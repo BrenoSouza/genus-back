@@ -18,6 +18,7 @@ import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
 import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
+import br.edu.ufcg.genus.graphql.queries.UserRoleQueries;
 import br.edu.ufcg.genus.graphql.resolvers.GradeResolver;
 import br.edu.ufcg.genus.graphql.resolvers.InstitutionResolver;
 import br.edu.ufcg.genus.graphql.resolvers.SubjectResolver;
@@ -119,5 +120,10 @@ public class GenusApplication {
 	@Bean
 	public EntryCodeMutations entryCodeMutations() {
 		return new EntryCodeMutations();
+	}
+	
+	@Bean
+	public UserRoleQueries userRoleQueries() {
+		return new UserRoleQueries();
 	}
 }

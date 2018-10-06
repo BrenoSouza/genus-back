@@ -1,11 +1,11 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
@@ -45,11 +46,11 @@ public class User {
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
-	@ElementCollection(fetch=FetchType.EAGER)
-	private Map<Long, UserRole> institutionRoleMap; 
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private Set<UserInstitution> institutions;
 	
 	public User() {
-		this.institutionRoleMap = new HashMap<>();
+		this.institutions = new HashSet<>();
 	}
 	
 	public User(String username, String email, String password) {
@@ -60,12 +61,25 @@ public class User {
 		this.roles = new ArrayList<Role>();
 	}
 	
-	public void addRole(Long institutionID, UserRole role) {
-		this.institutionRoleMap.put(institutionID, role);
+	public List<Institution> findInstitutions() {
+		List<Institution> result = new ArrayList<>();
+		for (UserInstitution userInstitution : institutions) {
+			if (userInstitution.getUser().equals(this)) {
+				result.add(userInstitution.getInstitution());
+			}
+		}
+		return result;
 	}
 	
 	public UserRole getRole(Long institutionID) {
-		return this.institutionRoleMap.get(institutionID);
+		UserRole result = null;
+		for (UserInstitution userInstitution : institutions) {
+			if (userInstitution.getInstitution().getId() == institutionID && userInstitution.getUser().equals(this)) {
+				result = userInstitution.getRole();
+				break;
+			}
+		}
+		return result;
 	}
 
 	public long getId() {
@@ -91,9 +105,13 @@ public class User {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-	
-	public Set<Long> getInstitutionsIDs() {
-		return this.institutionRoleMap.keySet();
+
+	public Set<UserInstitution> getInstitutions() {
+		return institutions;
+	}
+
+	public void setInstitutions(Set<UserInstitution> institutions) {
+		this.institutions = institutions;
 	}
 
 	@Override
