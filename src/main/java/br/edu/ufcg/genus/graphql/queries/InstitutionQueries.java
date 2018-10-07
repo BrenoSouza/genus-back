@@ -18,7 +18,7 @@ public class InstitutionQueries implements GraphQLQueryResolver {
 	private InstitutionService institutionService;
 
     public Institution findInstitution(Long institutionId) {
-        return institutionService.findById(institutionId).orElseThrow(() -> new InvalidIDException());
+        return institutionService.findById(institutionId).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", institutionId));
     }
     
     public List<Institution> getInstitutionsFromLoggedUser() {

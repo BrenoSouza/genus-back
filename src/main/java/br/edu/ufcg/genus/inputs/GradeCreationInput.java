@@ -1,11 +1,14 @@
 package br.edu.ufcg.genus.inputs;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class GradeCreationInput {
 	
-	@NotBlank(message="O nome da série não pode ser vazio.")
+	@NotNull(message="NAME_INVALID_MISSING")
+	@NotBlank(message="NAME_INVALID_BLANK")
 	private String name;
+	
 	private Long institutionId;
 	
 	public GradeCreationInput() {
