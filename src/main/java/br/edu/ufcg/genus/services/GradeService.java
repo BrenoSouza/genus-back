@@ -31,8 +31,8 @@ public class GradeService {
 	public Grade createGrade(GradeCreationInput input) {
 		User user = this.userService.findLoggedUser();
 		Institution institution = this.institutionService.findById(input.getInstitutionId())
-				.orElseThrow(() -> new InvalidIDException());
-		//if (!institution.getOwner().equals(user)) throw new RuntimeException("Only owners can dArrayList<E>tion"); // CRIAR UMA EXCEPTION
+				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
+
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);

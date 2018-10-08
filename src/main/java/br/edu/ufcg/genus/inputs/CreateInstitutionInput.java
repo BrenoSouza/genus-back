@@ -1,22 +1,34 @@
 package br.edu.ufcg.genus.inputs;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 
 public class CreateInstitutionInput {
-	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do nome da instituição deve ter entre 6 e 50 dígitos.")
+
+	@NotNull(message="NAME_INVALID_MISSING")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "NAME_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "NAME_INVALID_MAX_LENGTH")
+	@NotBlank(message="NAME_INVALID_BLANK")
 	private String name;
 	
-	@NotBlank(message="Email do usuário não pode ser vazio.")
+		
+	@NotNull(message="EMAIL_MISSING")
+	@NotBlank(message="EMAIL_INVALIDBLANK")
 	private String email;
 
-    @Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do endereço da instituição deve ter entre 6 e 50 dígitos.")
+	@NotNull(message="ADDRESS_INVALID_MISSING")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "ADDRESS_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "ADDRESS_INVALID_MAX_LENGTH")
+	@NotBlank(message="ADDRESS_INVALID_BLANK")
 	private String address;
 
-    @Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do telefone da instituição deve ser entre 8 e 50 dígitos.")
+	@NotNull(message="PHONE_INVALID_MISSING")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "PHONE_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "PHONE_INVALID_MAX_LENGTH")
+	@NotBlank(message="PHONE_INVALID_BLANK")
 	private String phone;
 
 	public CreateInstitutionInput () {

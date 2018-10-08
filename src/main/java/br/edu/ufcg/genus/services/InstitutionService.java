@@ -1,9 +1,10 @@
 package br.edu.ufcg.genus.services;
 
-import br.edu.ufcg.genus.exception.AttributeDoNotMatchException;
+import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+import br.edu.ufcg.genus.exception.NotAuthorizedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class InstitutionService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User owner = userService.findUserByEmail(email)
-        .orElseThrow(() -> new InvalidTokenException("Token inválido."));
+        .orElseThrow(() -> new InvalidTokenException("Token is not valid."));
 
         Institution institution = new Institution();
         institution.setName(input.getName());
@@ -71,7 +72,7 @@ public class InstitutionService {
 	}
 	
 	public List<User> getAllUsersFromInstitution(Long institutionId) {
-		Institution institution = findById(institutionId).orElseThrow(() -> new InvalidIDException());
+		Institution institution = findById(institutionId).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", institutionId));
 		List<User> result = new ArrayList<>();
 		for (UserInstitution userInstitution : institution.getUsers()) {
 			if (userInstitution.getInstitution().equals(institution)) {
@@ -82,7 +83,7 @@ public class InstitutionService {
 	}
 	
 	public List<User> getUsersFromInstitutionByRole(GetUsersFromInstitutionByRoleInput input) {
-		Institution institution = findById(input.getInstitutionId()).orElseThrow(() -> new InvalidIDException());
+		Institution institution = findById(input.getInstitutionId()).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
 		List<User> result = new ArrayList<>();
 		for (UserInstitution userInstitution : institution.getUsers()) {
 			if (userInstitution.getInstitution().equals(institution) && userInstitution.getRole().equals(input.getRole())) {
@@ -95,14 +96,15 @@ public class InstitutionService {
 	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input) {
 		User user = this.userService.findLoggedUser();
 		if (!this.userService.passwordMatch(user, input.getPassword())) {
-			throw new AttributeDoNotMatchException("Senha invalida.");
+			throw new InvalidCredentialsException("Invalid email or password", null);
+
 		}
-		Institution institution = findById(input.getInstitutionId()).orElseThrow(() -> new InvalidIDException());
+		Institution institution = findById(input.getInstitutionId()).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
 		if (!institution.getName().equals(input.getInstitutionName())) {
-			throw new AttributeDoNotMatchException("Nome de instituicao invalido");
+            throw new NotAuthorizedException("You don't have permission to do this");
 		}
 		
-		User toBeRemoved = userService.findUserById(input.getToBeRemovedId()).orElseThrow(() -> new InvalidIDException());
+		User toBeRemoved = userService.findUserById(input.getToBeRemovedId()).orElseThrow(() -> new InvalidIDException("User with passed ID was not found", input.getToBeRemovedId()));
 		
 		boolean result;
 		if (user.equals(toBeRemoved)) {
@@ -129,14 +131,10 @@ public class InstitutionService {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
-		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new RuntimeException("Nao pode remover ADMIN");
+		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new RuntimeException("Cannot remove ADMIN");
 		result = institution.removeUser(toBeRemoved);
 		this.userService.saveUserInRepository(toBeRemoved);
 		this.institutionRepository.save(institution);
-		return result;
-		
-		
+		return result;		
 	}
-
-	
 }

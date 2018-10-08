@@ -33,11 +33,11 @@ public class SubjectService {
 	
 	public Subject createSubject(SubjectCreationInput input) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId())
-				.orElseThrow(() -> new InvalidIDException());
+				.orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", input.getGradeId()));
 		Institution institution = this.institutionService.findById(grade.getInstitution().getId())
-				.orElseThrow(() -> new InvalidIDException());
+				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", grade.getInstitution().getId()));
 		User user = this.userService.findLoggedUser();
-		//if (!institution.getOwner().equals(user)) throw new RuntimeException("Only owners can do this action"); // CRIAR UMA EXCEPTION
+		//if (!institution.getOwner().(user)) throw new RuntimeException("Only owners can do this action"); // CRIAR UMA EXCEPTION
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
