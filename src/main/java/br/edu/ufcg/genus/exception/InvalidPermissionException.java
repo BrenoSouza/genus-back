@@ -17,7 +17,7 @@ public class InvalidPermissionException extends RuntimeException implements Grap
 	public InvalidPermissionException(List<UserRole> roles) {
 		super("You dont have permission to execute this action.\nAccess allowed for users:" + roles);
 		this.extensions = new HashMap<>();
-		extensions.put("PERMISSION_DENIED", "You do not have permission to perform this action.Access allowed for users:" + roles);
+		extensions.put("PERMISSION_DENIED", "PERMISSION_DENIED");
 
 	}
 	

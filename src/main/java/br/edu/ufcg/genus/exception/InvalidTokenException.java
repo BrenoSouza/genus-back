@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.exception;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ public class InvalidTokenException extends RuntimeException implements GraphQLEr
 
     public InvalidTokenException(String message) {
 		this(message, null);
+		this.extensions = new HashMap<>();
+		this.extensions.put("TOKEN_INVALID", "TOKEN_INVALID");
     }
 
 	public InvalidTokenException(String message, Map<String, Object> extensions) {

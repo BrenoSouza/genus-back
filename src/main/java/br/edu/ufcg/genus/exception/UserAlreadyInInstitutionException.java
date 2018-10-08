@@ -16,7 +16,7 @@ public class UserAlreadyInInstitutionException extends RuntimeException implemen
 	public UserAlreadyInInstitutionException() {
 		super("User already belongs to this institution.");
 		this.extensions = new HashMap<>();
-		extensions.put("PERMISSION_DENIED", "User already belongs to this institution");
+		extensions.put("PERMISSION_DENIED", "PERMISSION_DENIED");
 	}
 
 	@Override

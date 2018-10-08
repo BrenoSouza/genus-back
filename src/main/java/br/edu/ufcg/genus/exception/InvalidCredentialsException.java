@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.exception;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,8 @@ public class InvalidCredentialsException extends RuntimeException implements Gra
     
     public InvalidCredentialsException(String message, Map<String, Object> extensions) {
         super(message);
-        this.extensions = extensions;
+        this.extensions = new HashMap<>();
+        this.extensions.put("CREDENTIALS_INVALID", "CREDENTIALS_INVALID");
     }
 
     @Override

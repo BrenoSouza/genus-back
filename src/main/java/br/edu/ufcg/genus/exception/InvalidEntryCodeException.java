@@ -18,7 +18,7 @@ public class InvalidEntryCodeException extends RuntimeException implements Graph
 	public InvalidEntryCodeException() {
 		super("Institution code doesn't exist.");
 		this.extensions = new HashMap<>();
-		extensions.put("INVALID_CODE", "Institution code doesn't exist.");
+		extensions.put("CODE_INVALID", "CODE_INVALID");
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,8 @@ public class NotAuthorizedException extends RuntimeException implements GraphQLE
 
     public NotAuthorizedException(String message, Map<String, Object> extensions) {
         super(message);
-        this.extensions = extensions;
+        this.extensions = new HashMap<>();
+        this.extensions.put("PERMISSION_DENIED", "PERMISSION_DENIED");
     }
 
 	@Override

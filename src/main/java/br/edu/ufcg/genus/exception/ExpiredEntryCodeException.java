@@ -16,7 +16,7 @@ public class ExpiredEntryCodeException extends RuntimeException implements Graph
 	public ExpiredEntryCodeException() {
 		super("Code expired");
 		this.extensions = new HashMap<>();
-		extensions.put("INVALID_CODE", "Code expired.");
+		extensions.put("CODE_INVALID", "CODE_INVALID");
 	}
 
 	@Override
