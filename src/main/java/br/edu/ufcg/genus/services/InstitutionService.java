@@ -7,6 +7,7 @@ import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
+import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
 
 @Service
 public class InstitutionService {
@@ -33,6 +35,9 @@ public class InstitutionService {
 	
 	@Autowired
     private UserService userService;
+	
+	@Autowired
+	private UserInstitutionRepository userInstitutionRepository;
 	
     public Optional<Institution> findById(Long id) {
         return institutionRepository.findById(id);
@@ -66,7 +71,8 @@ public class InstitutionService {
 	}
 	
 	public void addUserToInstitution(User user, Institution institution, UserRole role) {
-		institution.addUser(user, role);
+		UserInstitution userInstitution = institution.addUser(user, role);
+		this.userInstitutionRepository.save(userInstitution);
 		institutionRepository.save(institution);
 		this.userService.saveUserInRepository(user);
 	}
@@ -106,7 +112,7 @@ public class InstitutionService {
 		
 		User toBeRemoved = userService.findUserById(input.getToBeRemovedId()).orElseThrow(() -> new InvalidIDException("User with passed ID was not found", input.getToBeRemovedId()));
 		
-		boolean result;
+		boolean result = false;
 		if (user.equals(toBeRemoved)) {
 			result = removeSelfFromInstitution(user, institution);
 		} else {
@@ -114,27 +120,41 @@ public class InstitutionService {
 		}
 		return result;
 	}
-
+	
 	private boolean removeSelfFromInstitution(User user, Institution institution) {
-		boolean result = institution.removeUser(user);
-		this.userService.saveUserInRepository(user);
+		//boolean result = institution.removeUser(user);
+		boolean result = removeUserInstitution(user, institution);
+		//this.userService.saveUserInRepository(user);
 		if (institution.getUsers().isEmpty()) {
-			this.institutionRepository.delete(institution);
-		} else {
+			this.institutionRepository.deleteById(institution.getId());
+		} /*else {
 			this.institutionRepository.save(institution);
-		}
+		}*/
 		return result;
 	}
 	
 	private boolean removeOtherFromInstitution(User user, Institution institution, User toBeRemoved) {
-		boolean result;
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
 		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new RuntimeException("Cannot remove ADMIN");
-		result = institution.removeUser(toBeRemoved);
-		this.userService.saveUserInRepository(toBeRemoved);
-		this.institutionRepository.save(institution);
-		return result;		
+		//result = institution.removeUser(toBeRemoved);
+		return removeUserInstitution(toBeRemoved, institution);		
+	}
+	
+	private boolean removeUserInstitution (User user, Institution institution) {
+		boolean result = false;
+		for(Iterator<UserInstitution> iterator = institution.getUsers().iterator(); iterator.hasNext();) {
+			UserInstitution userInstitution = iterator.next();
+			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(institution)) {
+				iterator.remove();
+				userInstitution.getUser().getInstitutions().remove(userInstitution);
+				result = user.getInstitutions().remove(userInstitution);
+				this.userInstitutionRepository.deleteById(userInstitution.getId());
+				userInstitution.setInstitution(null);
+				userInstitution.setUser(null);
+			}
+		}
+		return result;
 	}
 }
