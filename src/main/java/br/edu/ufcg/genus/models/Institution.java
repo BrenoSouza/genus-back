@@ -39,7 +39,7 @@ public class Institution {
 	@Column(name="grades", nullable=false)
 	private List<Grade> grades;
 	
-	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<UserInstitution> users;
 
 	public Institution() {
@@ -60,19 +60,26 @@ public class Institution {
 		return this.grades.add(grade);
 	}
 	
-	public void addUser(User user, UserRole role) {
+	public UserInstitution addUser(User user, UserRole role) {
 		UserInstitution userInstitution = new UserInstitution(user, this, role);
 		this.users.add(userInstitution);
 		user.getInstitutions().add(userInstitution);
+		return userInstitution;
 	}
 	
 	public boolean removeUser(User user) {
-		boolean result = true;
+		boolean result = false;
 		for(Iterator<UserInstitution> iterator = users.iterator(); iterator.hasNext();) {
 			UserInstitution userInstitution = iterator.next();
 			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(this)) {
+				System.out.println("Entrou no if");
+				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
+				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
 				iterator.remove();
-				userInstitution.getUser().getInstitutions().remove(userInstitution);
+				result = userInstitution.getUser().getInstitutions().remove(userInstitution);
+				System.out.println("Removeu");
+				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
+				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
 				userInstitution.setInstitution(null);
 				userInstitution.setUser(null);
 			}

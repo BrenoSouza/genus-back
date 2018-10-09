@@ -89,12 +89,7 @@ public class UserInstitution {
 		if (getClass() != obj.getClass())
 			return false;
 		UserInstitution other = (UserInstitution) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (institution == null) {
+		/*if (institution == null) {
 			if (other.institution != null)
 				return false;
 		} else if (!institution.equals(other.institution))
@@ -106,9 +101,14 @@ public class UserInstitution {
 				return false;
 		} else if (!user.equals(other.user))
 			return false;
-		return true;
+		return true;*/
+		return id.equals(other.getId());
 	}
 	
+	@Override
+	public String toString() {
+		return "UserID: " + user.getId() + " InstitutionID: " + institution.getId() + " Role: " + role.toString();
+	}
 	
 
 }

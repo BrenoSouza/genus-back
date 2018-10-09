@@ -6,6 +6,7 @@ import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
+import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
 
 @Service
 public class InstitutionService {
@@ -32,6 +34,9 @@ public class InstitutionService {
 	
 	@Autowired
     private UserService userService;
+	
+	@Autowired
+	private UserInstitutionRepository userInstitutionRepository;
 	
     public Optional<Institution> findById(Long id) {
         return institutionRepository.findById(id);
@@ -65,7 +70,8 @@ public class InstitutionService {
 	}
 	
 	public void addUserToInstitution(User user, Institution institution, UserRole role) {
-		institution.addUser(user, role);
+		UserInstitution userInstitution = institution.addUser(user, role);
+		this.userInstitutionRepository.save(userInstitution);
 		institutionRepository.save(institution);
 		this.userService.saveUserInRepository(user);
 	}
@@ -125,14 +131,43 @@ public class InstitutionService {
 	}
 	
 	private boolean removeOtherFromInstitution(User user, Institution institution, User toBeRemoved) {
-		boolean result;
+		boolean result = false;
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
 		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new RuntimeException("Nao pode remover ADMIN");
-		result = institution.removeUser(toBeRemoved);
-		this.userService.saveUserInRepository(toBeRemoved);
-		this.institutionRepository.save(institution);
+		//result = institution.removeUser(toBeRemoved);
+		for(Iterator<UserInstitution> iterator = institution.getUsers().iterator(); iterator.hasNext();) {
+			UserInstitution userInstitution = iterator.next();
+			if (userInstitution.getUser().equals(toBeRemoved) && userInstitution.getInstitution().equals(institution)) {
+				System.out.println("Entrou no if");
+				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
+				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
+				iterator.remove();
+				System.out.println(toBeRemoved.getInstitutions().toString());
+				userInstitution.getUser().getInstitutions().remove(userInstitution);
+				result = toBeRemoved.getInstitutions().remove(userInstitution);
+				//this.userInstitutionRepository.delete(userInstitution);
+				this.userInstitutionRepository.deleteById(userInstitution.getId());
+				System.out.println("Removeu");
+				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
+				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
+				userInstitution.setInstitution(null);
+				userInstitution.setUser(null);
+			}
+		}
+		//aaa
+		System.out.println("Removeu 2");
+		System.out.println("size users: " + institution.getUsers().size());
+		System.out.println("size institutions: " + toBeRemoved.getInstitutions().size());
+		//this.institutionRepository.save(institution);
+		System.out.println("Removeu 4");
+		System.out.println("size users: " + institution.getUsers().size());
+		System.out.println("size institutions: " + toBeRemoved.getInstitutions().size());
+		//this.userService.saveUserInRepository(toBeRemoved);
+		System.out.println("Removeu 3");
+		System.out.println("size users: " + institution.getUsers().size());
+		System.out.println("size institutions: " + toBeRemoved.getInstitutions().size());
 		return result;
 		
 		
