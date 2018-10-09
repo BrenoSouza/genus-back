@@ -55,7 +55,7 @@ public class User {
 	@ManyToMany(cascade = { 
         CascadeType.PERSIST, 
         CascadeType.MERGE
-    })
+    }, fetch=FetchType.EAGER)
     @JoinTable(name = "teacher_subject",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "subject_id")

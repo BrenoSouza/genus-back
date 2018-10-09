@@ -2,6 +2,7 @@ type Subject {
   id: ID!
   grade: Grade!
   name: String!
+  teachers: [ User! ]!
 }
 
 input SubjectCreationInput {
@@ -17,5 +18,5 @@ extend type Query {
 
 extend type Mutation {
   createSubject (input: SubjectCreationInput!) : Subject
-  addTeacher (subjectId: ID!, teacherId: ID!)
+  addTeacherToSubject (subjectId: ID!, teacherId: ID!) : Subject
 }

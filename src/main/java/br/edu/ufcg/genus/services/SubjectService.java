@@ -51,7 +51,7 @@ public class SubjectService {
 	}
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
-        return this.subjectRepository.findByGradeId(gradeId);
+        return this.gradeService.findGradeById(gradeId).get().getSubjects();
 	}
 		
 	public Iterable<User> findTeachersBySubject(Long subjectId) {

@@ -39,8 +39,8 @@ public class SubjectMutations implements GraphQLMutationResolver {
 		return this.subjectService.createSubject(input);		
 	}
 
-	public void addTeacher(Long subjectId, Long teacherId) {
-		this.userService.addSubject(subjectId, teacherId);
+	public Subject addTeacherToSubject(Long subjectId, Long teacherId) {
+		return this.userService.addTeacher(subjectId, teacherId);
 	}
 
 }

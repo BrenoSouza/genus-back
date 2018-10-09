@@ -66,13 +66,13 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Subject addSubject(Long subjectId, Long teacherId) {
-        Optional<User> teacher = this.userRepository.findById(teacherId);
-        Optional<Subject> subject = this.subjectService.findSubjectById(subjectId);
+    public Subject addTeacher(Long subjectId, Long teacherId) {
+        User teacher = this.userRepository.findById(teacherId).get();
+        Subject subject = this.subjectService.findSubjectById(subjectId).get();
 
-        teacher.get().addSubject(subject.get());
+        teacher.addSubject(subject);
 
-        this.saveUserInRepository(teacher.get());
+        this.saveUserInRepository(teacher);
 
         return this.subjectService.findSubjectById(subjectId).get();
     }
