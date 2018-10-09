@@ -110,7 +110,7 @@ public class InstitutionService {
 		
 		User toBeRemoved = userService.findUserById(input.getToBeRemovedId()).orElseThrow(() -> new InvalidIDException());
 		
-		boolean result;
+		boolean result = false;
 		if (user.equals(toBeRemoved)) {
 			result = removeSelfFromInstitution(user, institution);
 		} else {
@@ -118,59 +118,42 @@ public class InstitutionService {
 		}
 		return result;
 	}
-
+	
 	private boolean removeSelfFromInstitution(User user, Institution institution) {
-		boolean result = institution.removeUser(user);
-		this.userService.saveUserInRepository(user);
+		//boolean result = institution.removeUser(user);
+		boolean result = removeUserInstitution(user, institution);
+		//this.userService.saveUserInRepository(user);
 		if (institution.getUsers().isEmpty()) {
-			this.institutionRepository.delete(institution);
-		} else {
+			this.institutionRepository.deleteById(institution.getId());
+		} /*else {
 			this.institutionRepository.save(institution);
-		}
+		}*/
 		return result;
 	}
 	
 	private boolean removeOtherFromInstitution(User user, Institution institution, User toBeRemoved) {
-		boolean result = false;
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
 		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new RuntimeException("Nao pode remover ADMIN");
 		//result = institution.removeUser(toBeRemoved);
+		return removeUserInstitution(toBeRemoved, institution);		
+	}
+	
+	private boolean removeUserInstitution (User user, Institution institution) {
+		boolean result = false;
 		for(Iterator<UserInstitution> iterator = institution.getUsers().iterator(); iterator.hasNext();) {
 			UserInstitution userInstitution = iterator.next();
-			if (userInstitution.getUser().equals(toBeRemoved) && userInstitution.getInstitution().equals(institution)) {
-				System.out.println("Entrou no if");
-				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
-				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
+			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(institution)) {
 				iterator.remove();
-				System.out.println(toBeRemoved.getInstitutions().toString());
 				userInstitution.getUser().getInstitutions().remove(userInstitution);
-				result = toBeRemoved.getInstitutions().remove(userInstitution);
-				//this.userInstitutionRepository.delete(userInstitution);
+				result = user.getInstitutions().remove(userInstitution);
 				this.userInstitutionRepository.deleteById(userInstitution.getId());
-				System.out.println("Removeu");
-				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
-				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
 				userInstitution.setInstitution(null);
 				userInstitution.setUser(null);
 			}
 		}
-		//aaa
-		System.out.println("Removeu 2");
-		System.out.println("size users: " + institution.getUsers().size());
-		System.out.println("size institutions: " + toBeRemoved.getInstitutions().size());
-		//this.institutionRepository.save(institution);
-		System.out.println("Removeu 4");
-		System.out.println("size users: " + institution.getUsers().size());
-		System.out.println("size institutions: " + toBeRemoved.getInstitutions().size());
-		//this.userService.saveUserInRepository(toBeRemoved);
-		System.out.println("Removeu 3");
-		System.out.println("size users: " + institution.getUsers().size());
-		System.out.println("size institutions: " + toBeRemoved.getInstitutions().size());
 		return result;
-		
-		
 	}
 
 	
