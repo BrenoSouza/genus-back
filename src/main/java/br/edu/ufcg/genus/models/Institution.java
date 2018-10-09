@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import javax.validation.constraints.Size;
 
@@ -65,26 +64,6 @@ public class Institution {
 		this.users.add(userInstitution);
 		user.getInstitutions().add(userInstitution);
 		return userInstitution;
-	}
-	
-	public boolean removeUser(User user) {
-		boolean result = false;
-		for(Iterator<UserInstitution> iterator = users.iterator(); iterator.hasNext();) {
-			UserInstitution userInstitution = iterator.next();
-			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(this)) {
-				System.out.println("Entrou no if");
-				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
-				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
-				iterator.remove();
-				result = userInstitution.getUser().getInstitutions().remove(userInstitution);
-				System.out.println("Removeu");
-				System.out.println("size users: " + userInstitution.getInstitution().getUsers().size());
-				System.out.println("size institutions: " + userInstitution.getUser().getInstitutions().size());
-				userInstitution.setInstitution(null);
-				userInstitution.setUser(null);
-			}
-		}
-		return result;
 	}
 	
 	//Getters and Setters
