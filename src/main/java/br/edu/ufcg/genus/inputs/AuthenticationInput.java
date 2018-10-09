@@ -7,13 +7,15 @@ import br.edu.ufcg.genus.utils.ServerConstants;
 
 public class AuthenticationInput {
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do username deve ser entre 6 e 50 dígitos.")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "USERNAME_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "USERNAME_INVALID_MAX_LENGTH")
 	private String username;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do password deve ser entre 6 e 50 dígitos).")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "PASSWORD_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "PASSWORD_INVALID_MAX_LENGTH")
 	private String password;
 	
-	@NotBlank(message="Email do usuário não pode ser vazio.")
+	@NotBlank(message="EMAIL_INVALID_BLANK")
     private String email;
 
 	public AuthenticationInput() {

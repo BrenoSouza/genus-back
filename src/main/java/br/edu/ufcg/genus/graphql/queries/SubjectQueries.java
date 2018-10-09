@@ -13,8 +13,8 @@ public class SubjectQueries implements GraphQLQueryResolver {
 	@Autowired
 	private SubjectService subjectService;
 	
-	public Subject findSubject(long id) {
-		return this.subjectService.findSubjectById(id).orElseThrow(() -> new InvalidIDException());
+	public Subject findSubject(long subjectId) {
+		return this.subjectService.findSubjectById(subjectId).orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", subjectId));
 	}
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {

@@ -1,10 +1,6 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.Optional;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
-import br.edu.ufcg.genus.exception.AttributeDoNotMatchException;
+import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
@@ -27,7 +23,6 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
 	@Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -35,19 +30,7 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 	
-	@Autowired
-    private Validator validator;
-	
 	public User createUser (CreateUserInput input) {
-		Set<ConstraintViolation<CreateUserInput>> violations = validator.validate(input);
-
-		if (violations.size() > 0) {
-        	String errorString = "";
-        	for (ConstraintViolation<CreateUserInput> v : violations) {
-        		errorString = " " + errorString + v.getMessage();
-        	}
-            throw new RuntimeException("Atributos passados na criação do usuário são inválidos." + errorString);
-        }
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		return this.userRepository.save(newUser);
 	}
@@ -55,16 +38,16 @@ public class UserService {
 	public String login (AuthenticationInput input) {
         String email = input.getEmail();
         String password = input.getPassword();
-
+                
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             User user = userRepository.findByEmail(email)
-            		.orElseThrow(() -> new AttributeDoNotMatchException("Email ou senha inválido."));
+            		.orElseThrow(() -> new InvalidCredentialsException("Invalid email or password.", null));
             
             return jwtTokenProvider.createToken(email, user.getRoles());
         } catch (Exception e) {
-            throw new RuntimeException("Email ou senha inválido.", e);
-		}		
+            throw new InvalidCredentialsException("Invalid email or password", null);
+        }	
     }
     
     public User findLoggedUser() {

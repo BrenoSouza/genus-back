@@ -31,9 +31,9 @@ public class InstitutionMutations implements GraphQLMutationResolver {
         if (violations.size() > 0) {
             Map<String, Object> extensions = new HashMap<>();
             violations.forEach((ConstraintViolation<CreateInstitutionInput> v) -> {
-                extensions.put(v.getMessage(), v.getInvalidValue());
-            });
-            throw new InvalidAttributesException("Atributos passados na criação de institução são inválidos.", extensions);
+                extensions.put(v.getMessage(), v.getMessage());
+			});
+            throw new InvalidAttributesException("Invalid attributes passed to creation of an institution.", extensions);
 		}
 		return institutionService.createInstitution(input);
 	}

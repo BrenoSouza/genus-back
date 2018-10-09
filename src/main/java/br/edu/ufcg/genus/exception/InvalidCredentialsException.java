@@ -8,21 +8,21 @@ import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
 
-public class InvalidTokenException extends RuntimeException implements GraphQLError {
+public class InvalidCredentialsException extends RuntimeException implements GraphQLError {
 
     private static final long serialVersionUID = 1L;
     private Map<String, Object> extensions;
-
-    public InvalidTokenException(String message) {
-		this(message, null);
-		this.extensions = new HashMap<>();
-		this.extensions.put("TOKEN_INVALID", "TOKEN_INVALID");
+    
+    public InvalidCredentialsException(String message, Map<String, Object> extensions) {
+        super(message);
+        this.extensions = new HashMap<>();
+        this.extensions.put("CREDENTIALS_INVALID", "CREDENTIALS_INVALID");
     }
 
-	public InvalidTokenException(String message, Map<String, Object> extensions) {
-		super(message);
-		this.extensions = extensions;
-	}
+    @Override
+    public Map<String, Object> getExtensions() {
+        return extensions;
+    }
 
 	@Override
 	public List<SourceLocation> getLocations() {
@@ -30,12 +30,8 @@ public class InvalidTokenException extends RuntimeException implements GraphQLEr
 	}
 
 	@Override
-	public Map<String, Object> getExtensions() {
-		return extensions;
-	}
-
-	@Override
 	public ErrorType getErrorType() {
 		return ErrorType.ValidationError;
 	}
+
 }

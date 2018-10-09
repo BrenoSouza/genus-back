@@ -1,6 +1,8 @@
 package br.edu.ufcg.genus.exception;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import graphql.ErrorType;
 import graphql.GraphQLError;
@@ -9,9 +11,12 @@ import graphql.language.SourceLocation;
 public class UserAlreadyInInstitutionException extends RuntimeException implements GraphQLError {
 
 	private static final long serialVersionUID = 1565825606806604180L;
-	
+	private Map<String, Object> extensions;
+
 	public UserAlreadyInInstitutionException() {
-		super("Este Usuario já pertence a esta Instituição!");
+		super("User already belongs to this institution.");
+		this.extensions = new HashMap<>();
+		extensions.put("PERMISSION_DENIED", "PERMISSION_DENIED");
 	}
 
 	@Override
