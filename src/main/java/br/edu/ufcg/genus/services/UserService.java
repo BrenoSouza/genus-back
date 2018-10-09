@@ -13,6 +13,7 @@ import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.UserRepository;
@@ -22,7 +23,9 @@ import br.edu.ufcg.genus.security.JwtTokenProvider;
 public class UserService {
 	
 	@Autowired
-	private UserRepository userRepository;
+    private UserRepository userRepository;
+    @Autowired
+	private SubjectService subjectService;
 	@Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -61,6 +64,17 @@ public class UserService {
 
 	public Optional<User> findUserById(long id) {
         return userRepository.findById(id);
+    }
+
+    public Subject addSubject(Long subjectId, Long teacherId) {
+        Optional<User> teacher = this.userRepository.findById(teacherId);
+        Optional<Subject> subject = this.subjectService.findSubjectById(subjectId);
+
+        teacher.get().addSubject(subject.get());
+
+        this.saveUserInRepository(teacher.get());
+
+        return this.subjectService.findSubjectById(subjectId).get();
     }
 
     public Optional<User> findUserByEmail(String email) {

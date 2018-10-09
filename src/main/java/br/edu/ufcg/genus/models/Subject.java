@@ -1,11 +1,16 @@
 package br.edu.ufcg.genus.models;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -22,6 +27,9 @@ public class Subject {
 	@ManyToOne
     @JoinColumn(name="grade_id", nullable=false)
 	private Grade grade;
+
+	@ManyToMany(mappedBy = "subjects")
+	private Set<User> teachers = new HashSet<>();
 	
 	//list of students/ StudentSubject
 	//forum
@@ -57,6 +65,13 @@ public class Subject {
 		this.grade = grade;
 	}
 
+	public void setTeachers(Set<User> teachers) {
+		this.teachers = teachers;
+	}
+
+	public Set<User> getTeachers() {
+		return this.teachers;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

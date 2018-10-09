@@ -14,6 +14,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
@@ -49,6 +52,16 @@ public class User {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<UserInstitution> institutions;
 	
+	@ManyToMany(cascade = { 
+        CascadeType.PERSIST, 
+        CascadeType.MERGE
+    })
+    @JoinTable(name = "teacher_subject",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+	private Set<Subject> subjects = new HashSet<>();
+
 	public User() {
 		this.institutions = new HashSet<>();
 	}
@@ -114,6 +127,19 @@ public class User {
 		this.institutions = institutions;
 	}
 
+	public void setSubjects(Set<Subject> subjects) {
+		this.subjects = subjects;
+	}
+
+	public Set<Subject> getSubjects() {
+		return this.subjects;
+	}
+
+	public void addSubject(Subject subject) {
+        subjects.add(subject);
+        subject.getTeachers().add(this);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
