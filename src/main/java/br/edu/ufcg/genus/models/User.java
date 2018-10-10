@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -46,7 +47,8 @@ public class User {
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
+	@Basic(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserInstitution> institutions;
 	
 	public User() {

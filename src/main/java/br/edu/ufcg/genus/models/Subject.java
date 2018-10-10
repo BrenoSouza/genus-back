@@ -23,11 +23,6 @@ public class Subject {
     @JoinColumn(name="grade_id", nullable=false)
 	private Grade grade;
 	
-	//list of students/ StudentSubject
-	//forum
-	//material repository
-	//teachers
-	
 	public Subject() {
 		
 	}

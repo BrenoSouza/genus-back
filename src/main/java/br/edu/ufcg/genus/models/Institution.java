@@ -38,7 +38,8 @@ public class Institution {
 	@Column(name="grades", nullable=false)
 	private List<Grade> grades;
 	
-	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
+	@Basic(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserInstitution> users;
 
 	public Institution() {
