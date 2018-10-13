@@ -3,7 +3,15 @@ input CreateEntryCodeInput {
   role: UserRole
 }
 
+input CreateAdvancedEntryCodeInput {
+  institutionId: ID!
+  role: UserRole!
+  uses: Int!
+  days: Int!
+}
+
 extend type Mutation {
   createEntryCode (input: CreateEntryCodeInput!) : String
+  createAdvancedEntryCode (input: CreateAdvancedEntryCodeInput!) : String
   joinInstitution (code: String!) : Institution!
 }
