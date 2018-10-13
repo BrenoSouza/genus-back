@@ -24,17 +24,17 @@ public class InstitutionResolver implements GraphQLResolver<Institution> {
         return gradeService.findGradesByInstitution(institution.getId());
     }
     
-    public Iterable<User> getAdminList(Institution institution) {
+    public Iterable<User> getAdmins(Institution institution) {
     	GetUsersFromInstitutionByRoleInput input = new GetUsersFromInstitutionByRoleInput(institution.getId(), UserRole.ADMIN);
     	return this.institutionService.getUsersFromInstitutionByRole(input);
     }
     
-    public Iterable<User> getTeacherList(Institution institution) {
+    public Iterable<User> getTeachers(Institution institution) {
     	GetUsersFromInstitutionByRoleInput input = new GetUsersFromInstitutionByRoleInput(institution.getId(), UserRole.TEACHER);
     	return this.institutionService.getUsersFromInstitutionByRole(input);
     }
     
-    public Iterable<User> getStudentList(Institution institution) {
+    public Iterable<User> getStudents(Institution institution) {
     	GetUsersFromInstitutionByRoleInput input = new GetUsersFromInstitutionByRoleInput(institution.getId(), UserRole.STUDENT);
     	return this.institutionService.getUsersFromInstitutionByRole(input);
     }
