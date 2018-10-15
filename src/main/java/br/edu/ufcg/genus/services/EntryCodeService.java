@@ -12,6 +12,7 @@ import br.edu.ufcg.genus.exception.ExpiredEntryCodeException;
 import br.edu.ufcg.genus.exception.InvalidEntryCodeException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.UserAlreadyInInstitutionException;
+import br.edu.ufcg.genus.inputs.CreateAdvancedEntryCodeInput;
 import br.edu.ufcg.genus.inputs.CreateEntryCodeInput;
 import br.edu.ufcg.genus.models.EntryCode;
 import br.edu.ufcg.genus.models.Institution;
@@ -42,7 +43,19 @@ public class EntryCodeService {
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, input.getInstitutionId(), permitedRoles);
-		EntryCode entryCode = new EntryCode(generateRandomCode(), input.getRole(), input.getInstitutionId());
+		Date expirationDate = getNDaysFromNow(1);
+		EntryCode entryCode = new EntryCode(generateRandomCode(), input.getRole(), input.getInstitutionId(), expirationDate);
+		this.entryCodeRepository.save(entryCode);
+		return entryCode.getCode();
+	}
+	
+	public String createAdvancedEntryCode(CreateAdvancedEntryCodeInput input) {
+		User user = this.userService.findLoggedUser();
+		ArrayList<UserRole> permitedRoles = new ArrayList<>();
+		permitedRoles.add(UserRole.ADMIN);
+		PermissionChecker.checkPermission(user, input.getInstitutionId(), permitedRoles);
+		Date expirationDate = getNDaysFromNow(input.getDays());
+		EntryCode entryCode = new EntryCode(generateRandomCode(), input.getRole(), input.getInstitutionId(), expirationDate, input.getUses());
 		this.entryCodeRepository.save(entryCode);
 		return entryCode.getCode();
 	}
@@ -65,7 +78,11 @@ public class EntryCodeService {
 		
 		Institution institution = this.institutionService.findById(entryCode.getInstitutionId()).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", entryCode.getInstitutionId()));
 		this.institutionService.addUserToInstitution(user, institution, entryCode.getRole());
-		this.entryCodeRepository.delete(entryCode);
+		if (entryCode.consumeUse() <= 0 ) {
+			this.entryCodeRepository.delete(entryCode);
+		} else {
+			this.entryCodeRepository.save(entryCode);
+		}
 		return institution;
 		
 	}
@@ -85,6 +102,12 @@ public class EntryCodeService {
 			}
 		}
 		return generatedString;
+	}
+	
+	private Date getNDaysFromNow(int n) {
+		Date now = new Date();
+		Date nDaysFromNow = new Date(now.getTime() + n * ServerConstants.DAY_MILLISECONDS);
+		return nDaysFromNow;
 	}
 
 }
