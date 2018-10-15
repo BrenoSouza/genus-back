@@ -58,8 +58,8 @@ public class User {
         CascadeType.MERGE
     })
     @JoinTable(name = "teacher_subject",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "subject_id")
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName="id"),
+        inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName="id")
     )
 	private Set<Subject> subjects = new HashSet<>();;
 
