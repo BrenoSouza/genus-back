@@ -1,9 +1,11 @@
 package br.edu.ufcg.genus.models;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,8 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="subjects")
 public class Subject {
 	
 	@Id
@@ -29,7 +33,12 @@ public class Subject {
     @JoinColumn(name="grade_id", nullable=false)
 	private Grade grade;
 
-	@ManyToMany(mappedBy = "subjects", fetch=FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY,
+	cascade = {
+		CascadeType.PERSIST,
+		CascadeType.MERGE
+	},
+	mappedBy = "subjects")
 	private Set<User> teachers = new HashSet<>();
 	
 	//list of students/ StudentSubject
@@ -38,12 +47,13 @@ public class Subject {
 	//teachers
 	
 	public Subject() {
-		
+		this.teachers = new HashSet<>();
 	}
 	
 	public Subject(Grade owner, String name) {
 		this.grade = owner;
 		this.name = name;
+		this.teachers = new HashSet<>();
 	}
 
 	public Long getId() {
@@ -70,9 +80,18 @@ public class Subject {
 		this.teachers = teachers;
 	}
 
-	public Set<User> getTeachers() {
-		return this.teachers;
+	public boolean addTeacher(User teacher) {
+		return this.teachers.add(teacher);
 	}
+
+	public List<User> getTeachers() {
+		List<User> result = new ArrayList<>();
+		for (User teacher : teachers) {
+			result.add(teacher);
+		}
+		return result;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

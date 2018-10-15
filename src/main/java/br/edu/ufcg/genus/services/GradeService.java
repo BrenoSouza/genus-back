@@ -1,7 +1,6 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +40,9 @@ public class GradeService {
 		return newGrade;		
 	}
 	
-	public Optional<Grade> findGradeById(Long id) {
-		return this.gradeRepository.findById(id);
+	public Grade findGradeById(Long id) {
+		return this.gradeRepository.findById(id)
+				.orElseThrow(() -> new InvalidIDException("Grade with passed ID was not found", id));
 	}
 	
 	public void addSubjectToGrade(Grade grade, Subject newSubject) {
@@ -51,6 +51,9 @@ public class GradeService {
 	}
 	
     public Iterable<Grade> findGradesByInstitution(Long institutionId) {
-        return gradeRepository.findByInstitutionId(institutionId);
+		Institution institution = this.institutionService.findById(institutionId)
+			.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", institutionId));
+
+        return institution.getGrades();
 	}
 }

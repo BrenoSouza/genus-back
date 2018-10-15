@@ -11,9 +11,7 @@ input SubjectCreationInput {
 }
 
 extend type Query {
-  findSubject (input: ID!) : Subject
-  findSubjectsByGrade(gradeId: ID!): [ Subject! ]!
-  findTeachers(subjectId: ID!): [ User! ]!
+  findSubjectById (input: ID!) : Subject
 }
 
 extend type Mutation {

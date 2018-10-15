@@ -52,18 +52,20 @@ public class User {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<UserInstitution> institutions;
 	
-	@ManyToMany(cascade = { 
+	@ManyToMany(fetch=FetchType.LAZY,
+	cascade = { 
         CascadeType.PERSIST, 
         CascadeType.MERGE
-    }, fetch=FetchType.EAGER)
+    })
     @JoinTable(name = "teacher_subject",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-	private Set<Subject> subjects = new HashSet<>();
+	private Set<Subject> subjects = new HashSet<>();;
 
 	public User() {
 		this.institutions = new HashSet<>();
+		this.subjects = new HashSet<>();
 	}
 	
 	public User(String username, String email, String password) {
@@ -83,7 +85,15 @@ public class User {
 		}
 		return result;
 	}
-	
+
+	public List<Subject> findSubjects() {
+		List<Subject> result = new ArrayList<>();
+		for (Subject subject : subjects) {
+			result.add(subject);
+		}
+		return result;
+	}
+
 	public UserRole getRole(Long institutionID) {
 		UserRole result = null;
 		for (UserInstitution userInstitution : institutions) {
@@ -131,13 +141,16 @@ public class User {
 		this.subjects = subjects;
 	}
 
-	public Set<Subject> getSubjects() {
-		return this.subjects;
+	public List<Subject> getSubjects() {
+		List<Subject> result = new ArrayList<>();
+		for (Subject subject : subjects) {
+			result.add(subject);
+		}
+		return result;
 	}
 
 	public void addSubject(Subject subject) {
         subjects.add(subject);
-        subject.getTeachers().add(this);
 	}
 	
 	@Override

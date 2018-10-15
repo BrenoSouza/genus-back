@@ -35,15 +35,15 @@ public class Institution {
 	@Column(nullable = false)
 	private String phone;
 	
-	@OneToMany(mappedBy="institution")
+	@OneToMany(mappedBy="institution", fetch=FetchType.EAGER)
 	@Column(name="grades", nullable=false)
-	private List<Grade> grades;
+	private Set<Grade> grades;
 	
 	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<UserInstitution> users;
 
 	public Institution() {
-		this.grades = new ArrayList<>();
+		this.grades = new HashSet<>();
 		this.users = new HashSet<>();
 	}
 	
@@ -53,7 +53,7 @@ public class Institution {
 		this.address = address;
 		this.phone = phone;
 		this.email = email;
-		this.grades = new ArrayList<Grade>();
+		this.grades = new HashSet<>();
 	}
 	
 	public boolean addGrade(Grade grade) {
@@ -119,10 +119,14 @@ public class Institution {
 	}
 
 	public List<Grade> getGrades() {
-		return grades;
+		List<Grade> result = new ArrayList<>();
+		for (Grade grade : grades) {
+			result.add(grade);
+		}
+		return result;
 	}
 
-	public void setGrades(List<Grade> grades) {
+	public void setGrades(Set<Grade> grades) {
 		this.grades = grades;
 	}
 
