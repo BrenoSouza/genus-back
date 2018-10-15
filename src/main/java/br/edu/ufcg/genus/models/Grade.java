@@ -87,7 +87,6 @@ public class Grade {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((subjects == null) ? 0 : subjects.hashCode());
 		return result;
 	}
 
