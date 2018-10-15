@@ -109,11 +109,6 @@ public class Grade {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (subjects == null) {
-			if (other.subjects != null)
-				return false;
-		} else if (!subjects.equals(other.subjects))
-			return false;
 		return true;
 	}
 

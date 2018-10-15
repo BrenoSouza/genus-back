@@ -110,11 +110,6 @@ public class Subject {
 		if (getClass() != obj.getClass())
 			return false;
 		Subject other = (Subject) obj;
-		if (grade == null) {
-			if (other.grade != null)
-				return false;
-		} else if (!grade.equals(other.grade))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
