@@ -18,11 +18,11 @@ public class UserInstitution {
 	@Column(name = "role")
 	private UserRole role;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
 	private User user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @MapsId("institutionId")
 	private Institution institution;
 	
