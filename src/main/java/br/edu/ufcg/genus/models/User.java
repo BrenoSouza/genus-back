@@ -49,7 +49,7 @@ public class User {
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<UserInstitution> institutions;
 	
 	@ManyToMany(fetch=FetchType.EAGER,

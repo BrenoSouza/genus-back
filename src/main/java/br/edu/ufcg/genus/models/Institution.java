@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import javax.validation.constraints.Size;
 
@@ -39,7 +38,7 @@ public class Institution {
 	@Column(name="grades", nullable=false)
 	private Set<Grade> grades;
 	
-	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<UserInstitution> users;
 
 	public Institution() {
@@ -60,24 +59,11 @@ public class Institution {
 		return this.grades.add(grade);
 	}
 	
-	public void addUser(User user, UserRole role) {
+	public UserInstitution addUser(User user, UserRole role) {
 		UserInstitution userInstitution = new UserInstitution(user, this, role);
 		this.users.add(userInstitution);
 		user.getInstitutions().add(userInstitution);
-	}
-	
-	public boolean removeUser(User user) {
-		boolean result = true;
-		for(Iterator<UserInstitution> iterator = users.iterator(); iterator.hasNext();) {
-			UserInstitution userInstitution = iterator.next();
-			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(this)) {
-				iterator.remove();
-				userInstitution.getUser().getInstitutions().remove(userInstitution);
-				userInstitution.setInstitution(null);
-				userInstitution.setUser(null);
-			}
-		}
-		return result;
+		return userInstitution;
 	}
 	
 	//Getters and Setters

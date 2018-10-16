@@ -5,6 +5,9 @@ type Institution {
   phone: String!
   address: String!
   grades: [ Grade! ]!
+  admins : [User] !
+  teachers : [User] !
+  students : [User] !
 }
 
 input CreateInstitutionInput {
