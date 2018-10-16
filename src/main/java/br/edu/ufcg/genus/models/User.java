@@ -52,7 +52,7 @@ public class User {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<UserInstitution> institutions;
 	
-	@ManyToMany(fetch=FetchType.LAZY,
+	@ManyToMany(fetch=FetchType.EAGER,
 	cascade = { 
         CascadeType.PERSIST, 
         CascadeType.MERGE
