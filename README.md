@@ -5,6 +5,7 @@
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/BrenoSouza/genus-back.svg)](http://isitmaintained.com/project/BrenoSouza/genus-back "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/BrenoSouza/genus-back.svg)](http://isitmaintained.com/project/BrenoSouza/genus-back "Percentage of issues still open")
 </div>
 
+
 ### About
 Genus is a web application for managing educational institutions.
 
@@ -14,21 +15,33 @@ Genus is a web application for managing educational institutions.
 - [Maven 3](https://maven.apache.org)
 
 ### Technologies
-- Spring Boot Framework / Security / JPA
+- Spring Boot Framework
+- Spring Security
+- Spring JPA
 - Postgres
 - GraphQl
 
 ### How to run
 Execute the `main` method in the `br.edu.ufcg.genus.GenusApplication` class from your IDE. Or,
 
-For local db configuration:
+For h2 configuration:
 ```shell
 mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
+
+For local db configuration:
+```shell
+mvn spring-boot:run -Dspring-boot.run.profiles=local-db
+```
+
 For heroku postgres database:
 ```shell
 mvn spring-boot:run -Dspring-boot.run.profiles=release
 ```
+
+See queries and mutations:
+[localhost:8080/graphiql](localhost:8080/graphiql)
+ 
 ### Client Repository
 - [Genus Client](https://github.com/Klynger/genus-client)
 
