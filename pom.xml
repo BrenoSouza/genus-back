@@ -93,6 +93,7 @@
 				<configuration>
 					<profiles>
 						<profile>local</profile>
+						<profile>local-bd</profile>
 						<profile>release</profile>
 					</profiles>
 				</configuration>
