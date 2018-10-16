@@ -2,6 +2,7 @@ type Subject {
   id: ID!
   grade: Grade!
   name: String!
+  teachers: [ User! ]!
 }
 
 input SubjectCreationInput {
@@ -10,10 +11,10 @@ input SubjectCreationInput {
 }
 
 extend type Query {
-  findSubject (input: ID!) : Subject
-  findSubjectsByGrade(gradeId: ID!): [ Subject! ]!
+  findSubjectById (input: ID!) : Subject
 }
 
 extend type Mutation {
   createSubject (input: SubjectCreationInput!) : Subject
+  addTeacherToSubject (subjectId: ID!, teacherId: ID!) : Subject
 }

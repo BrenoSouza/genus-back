@@ -14,6 +14,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
@@ -49,8 +52,20 @@ public class User {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<UserInstitution> institutions;
 	
+	@ManyToMany(fetch=FetchType.EAGER,
+	cascade = { 
+        CascadeType.PERSIST, 
+        CascadeType.MERGE
+    })
+    @JoinTable(name = "teacher_subject",
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName="id"),
+        inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName="id")
+    )
+	private Set<Subject> subjects = new HashSet<>();;
+
 	public User() {
 		this.institutions = new HashSet<>();
+		this.subjects = new HashSet<>();
 	}
 	
 	public User(String username, String email, String password) {
@@ -70,7 +85,15 @@ public class User {
 		}
 		return result;
 	}
-	
+
+	public List<Subject> findSubjects() {
+		List<Subject> result = new ArrayList<>();
+		for (Subject subject : subjects) {
+			result.add(subject);
+		}
+		return result;
+	}
+
 	public UserRole getRole(Long institutionID) {
 		UserRole result = null;
 		for (UserInstitution userInstitution : institutions) {
@@ -114,6 +137,22 @@ public class User {
 		this.institutions = institutions;
 	}
 
+	public void setSubjects(Set<Subject> subjects) {
+		this.subjects = subjects;
+	}
+
+	public List<Subject> getSubjects() {
+		List<Subject> result = new ArrayList<>();
+		for (Subject subject : subjects) {
+			result.add(subject);
+		}
+		return result;
+	}
+
+	public void addSubject(Subject subject) {
+        subjects.add(subject);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

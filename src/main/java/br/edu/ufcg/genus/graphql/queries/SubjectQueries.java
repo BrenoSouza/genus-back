@@ -6,6 +6,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.models.Subject;
+import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.services.SubjectService;
 
 public class SubjectQueries implements GraphQLQueryResolver {
@@ -13,11 +14,15 @@ public class SubjectQueries implements GraphQLQueryResolver {
 	@Autowired
 	private SubjectService subjectService;
 	
-	public Subject findSubject(long subjectId) {
+	public Subject findSubjectById(long subjectId) {
 		return this.subjectService.findSubjectById(subjectId).orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", subjectId));
 	}
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
         return subjectService.findSubjectsByGrade(gradeId);
-    }
+	}
+	
+	public Iterable<User> findTeachersBySubject(Long subjectId) {
+		return this.subjectService.findTeachersBySubject(subjectId);
+	}
 }

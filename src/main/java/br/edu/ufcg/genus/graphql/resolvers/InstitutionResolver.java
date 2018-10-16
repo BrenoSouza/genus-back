@@ -21,7 +21,7 @@ public class InstitutionResolver implements GraphQLResolver<Institution> {
     private InstitutionService institutionService;
 
     public Iterable<Grade> getGrades(Institution institution) {
-        return gradeService.findGradesByInstitution(institution.getId());
+        return institution.getGrades();
     }
     
     public Iterable<User> getAdmins(Institution institution) {

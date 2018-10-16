@@ -23,6 +23,9 @@ public class SubjectService {
 	private SubjectRepository subjectRepository;
 	
 	@Autowired
+	private SubjectService subjectService;
+
+	@Autowired
     private UserService userService;
 	
 	@Autowired
@@ -32,8 +35,7 @@ public class SubjectService {
 	private GradeService gradeService;
 	
 	public Subject createSubject(SubjectCreationInput input) {
-		Grade grade = this.gradeService.findGradeById(input.getGradeId())
-				.orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", input.getGradeId()));
+		Grade grade = this.gradeService.findGradeById(input.getGradeId());
 		Institution institution = this.institutionService.findById(grade.getInstitution().getId())
 				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", grade.getInstitution().getId()));
 		User user = this.userService.findLoggedUser();
@@ -51,7 +53,16 @@ public class SubjectService {
 	}
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
-        return subjectRepository.findByGradeId(gradeId);
+		Grade grade = this.gradeService.findGradeById(gradeId);
+
+		return grade.getSubjects();
+	}
+		
+	public Iterable<User> findTeachersBySubject(Long subjectId) {
+		Subject subject = this.subjectService.findSubjectById(subjectId)
+			.orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", subjectId));
+
+        return subject.getTeachers();
     }
 
 }

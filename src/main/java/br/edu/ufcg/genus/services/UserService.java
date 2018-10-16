@@ -12,9 +12,12 @@ import org.springframework.stereotype.Service;
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.exception.InvalidCredentialsException;
+import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
+import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
 
@@ -22,7 +25,11 @@ import br.edu.ufcg.genus.security.JwtTokenProvider;
 public class UserService {
 	
 	@Autowired
-	private UserRepository userRepository;
+    private UserRepository userRepository;
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+	private SubjectService subjectService;
 	@Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -61,6 +68,22 @@ public class UserService {
 
 	public Optional<User> findUserById(long id) {
         return userRepository.findById(id);
+    }
+
+    public Subject addTeacher(Long subjectId, Long teacherId) {
+        User teacher = this.userRepository.findById(teacherId)
+            .orElseThrow(() -> new InvalidIDException("Teacher with passed ID was not found", teacherId));
+
+        Subject subject = this.subjectService.findSubjectById(subjectId)
+            .orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", subjectId));
+
+        teacher.addSubject(subject);
+        subject.addTeacher(teacher);
+
+        this.subjectRepository.save(subject);
+        this.saveUserInRepository(teacher);
+
+        return this.subjectService.findSubjectById(subjectId).get();
     }
 
     public Optional<User> findUserByEmail(String email) {

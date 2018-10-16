@@ -12,7 +12,6 @@ input GradeCreationInput {
 
 extend type Query {
   findGrade (input: ID!) : Grade
-  findGradesByInstitution(institutionId: ID!): [ Grade! ]!
 }
 
 extend type Mutation {

@@ -15,11 +15,14 @@ import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.services.SubjectService;
+import br.edu.ufcg.genus.services.UserService;
 
 public class SubjectMutations implements GraphQLMutationResolver {
 	
 	@Autowired
 	private SubjectService subjectService;
+	@Autowired
+	private UserService userService;
 	@Autowired
     private Validator validator;
 
@@ -34,6 +37,10 @@ public class SubjectMutations implements GraphQLMutationResolver {
 		}
 
 		return this.subjectService.createSubject(input);		
+	}
+
+	public Subject addTeacherToSubject(Long subjectId, Long teacherId) {
+		return this.userService.addTeacher(subjectId, teacherId);
 	}
 
 }
