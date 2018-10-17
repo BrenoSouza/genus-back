@@ -81,7 +81,7 @@ public class UserService {
         subject.addTeacher(teacher);
 
         this.subjectRepository.save(subject);
-        this.saveUserInRepository(teacher);
+        //this.saveUserInRepository(teacher);
 
         return this.subjectService.findSubjectById(subjectId).get();
     }

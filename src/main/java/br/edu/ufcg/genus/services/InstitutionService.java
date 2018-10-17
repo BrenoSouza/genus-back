@@ -21,6 +21,7 @@ import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
 import br.edu.ufcg.genus.inputs.RemoveUserFromInstitutionInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
+import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
@@ -124,7 +125,6 @@ public class InstitutionService {
 		boolean result = removeUserInstitution(user, institution);
 		if (institution.getUsers().isEmpty()) {
 			this.institutionRepository.deleteById(institution.getId());
-			System.out.println("CHEGOU AQUI");
 		}
 		return result;
 	}
@@ -139,6 +139,7 @@ public class InstitutionService {
 	
 	private boolean removeUserInstitution (User user, Institution institution) {
 		boolean result = false;
+		removeSubjectsFromUser(user, institution);
 		for(Iterator<UserInstitution> iterator = institution.getUsers().iterator(); iterator.hasNext();) {
 			UserInstitution userInstitution = iterator.next();
 			if (userInstitution.getUser().equals(user) && userInstitution.getInstitution().equals(institution)) {
@@ -151,5 +152,14 @@ public class InstitutionService {
 			}
 		}
 		return result;
+	}
+	
+	private void removeSubjectsFromUser(User user, Institution institution) {
+		for (Subject subject : user.getSubjects()) {
+			if (subject.getGrade().getInstitution().equals(institution)) {
+				user.removeSubject(subject);
+			}
+		}
+		this.userService.saveUserInRepository(user);
 	}
 }
