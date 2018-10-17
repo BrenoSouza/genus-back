@@ -44,7 +44,6 @@ public class InstitutionService {
     }
 
     public Institution createInstitution(CreateInstitutionInput input) {
-        //System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User owner = userService.findUserByEmail(email)
@@ -122,14 +121,11 @@ public class InstitutionService {
 	}
 	
 	private boolean removeSelfFromInstitution(User user, Institution institution) {
-		//boolean result = institution.removeUser(user);
 		boolean result = removeUserInstitution(user, institution);
-		//this.userService.saveUserInRepository(user);
 		if (institution.getUsers().isEmpty()) {
 			this.institutionRepository.deleteById(institution.getId());
-		} /*else {
-			this.institutionRepository.save(institution);
-		}*/
+			System.out.println("CHEGOU AQUI");
+		}
 		return result;
 	}
 	
@@ -138,7 +134,6 @@ public class InstitutionService {
 		permittedRoles.add(UserRole.ADMIN);
 		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
 		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new RuntimeException("Cannot remove ADMIN");
-		//result = institution.removeUser(toBeRemoved);
 		return removeUserInstitution(toBeRemoved, institution);		
 	}
 	

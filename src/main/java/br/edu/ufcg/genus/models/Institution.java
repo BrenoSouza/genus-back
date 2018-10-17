@@ -38,7 +38,7 @@ public class Institution {
 	@Column(name="grades", nullable=false)
 	private Set<Grade> grades;
 	
-	@OneToMany(mappedBy="institution", cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy="institution", fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<UserInstitution> users;
 
 	public Institution() {
