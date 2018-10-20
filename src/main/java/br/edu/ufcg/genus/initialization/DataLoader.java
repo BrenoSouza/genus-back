@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
@@ -12,13 +13,18 @@ import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
+import br.edu.ufcg.genus.services.InstitutionService;
+import br.edu.ufcg.genus.services.UserService;
 
 
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
+
+	@Autowired
+	private InstitutionService institutionService;
 
 	@Autowired
 	private InstitutionRepository institutionRepository;
@@ -29,13 +35,15 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 
-		User admin = new User("administrador", "admin@gmail.com", "123456");
-		User prof1 = new User("professor1", "prof1@gmail.com", "123456");
-		User prof2 = new User("professor2", "prof2@gmail.com", "123456");
+		CreateUserInput adminInput = new CreateUserInput("administrador", "admin@gmail.com", "123456");
+		CreateUserInput prof1Input = new CreateUserInput("professor1", "prof1@gmail.com", "123456");
+		CreateUserInput prof2Input = new CreateUserInput("professor2", "prof2@gmail.com", "123456");
+		CreateUserInput prof3Input = new CreateUserInput("professor3", "prof3@gmail.com", "123456");
 
-		userRepository.save(admin);
-		userRepository.save(prof1);
-		userRepository.save(prof2);
+		User admin = userService.createUser(adminInput);
+		User prof1 = userService.createUser(prof1Input);
+		User prof2 = userService.createUser(prof2Input);
+		User prof3 = userService.createUser(prof3Input);
 
 		Institution institution = new Institution("Escola", "escola@gmail.com", "Rua qualquer", "838888888");
 		
@@ -45,7 +53,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		
 		userInstitutionRepository.save(userInstitution);
 		institutionRepository.save(institution);
-		userRepository.save(admin);
+		userService.saveUserInRepository(admin);
+
+		institutionService.addUserToInstitution(prof1, institution, UserRole.TEACHER);
+		institutionService.addUserToInstitution(prof2, institution, UserRole.TEACHER);
 
 	}
 
