@@ -87,19 +87,6 @@ public class UserInstitution {
 		if (getClass() != obj.getClass())
 			return false;
 		UserInstitution other = (UserInstitution) obj;
-		/*if (institution == null) {
-			if (other.institution != null)
-				return false;
-		} else if (!institution.equals(other.institution))
-			return false;
-		if (role != other.role)
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		return true;*/
 		return id.equals(other.getId());
 	}
 	

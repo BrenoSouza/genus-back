@@ -153,6 +153,10 @@ public class User {
         subjects.add(subject);
 	}
 	
+	public boolean removeSubject(Subject subject) {
+		return subjects.remove(subject);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
