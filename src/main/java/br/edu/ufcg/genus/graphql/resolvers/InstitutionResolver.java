@@ -9,13 +9,9 @@ import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
-import br.edu.ufcg.genus.services.GradeService;
 import br.edu.ufcg.genus.services.InstitutionService;
 
 public class InstitutionResolver implements GraphQLResolver<Institution> {
-
-    @Autowired
-    private GradeService gradeService;
     
     @Autowired
     private InstitutionService institutionService;
