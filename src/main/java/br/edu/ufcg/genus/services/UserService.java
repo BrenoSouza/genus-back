@@ -20,6 +20,7 @@ import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
+import br.edu.ufcg.genus.update_inputs.UpdateUserInput;
 
 @Service
 public class UserService {
@@ -101,5 +102,36 @@ public class UserService {
 	public UserRole findRole(Long institutionId) {
 		User user = findLoggedUser();
 		return user.getRole(institutionId);
-	}
+    }
+    
+    public User updateUser(UpdateUserInput input) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+
+        if (input.getUsername() != null) {
+            user.setUsername(input.getUsername());
+        }
+
+        return userRepository.save(user);
+    }
+
+    public boolean updateUserPassword(String password) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidTokenException("User with passed Email was not found"));
+
+        user.setPassword(passwordEncoder.encode(password));
+
+        userRepository.save(user);
+
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+
+        return true;
+    }
+
 }

@@ -10,6 +10,10 @@ input CreateUserInput {
   password: String!
 }
 
+input UpdateUserInput {
+  username: String
+}
+
 input AuthenticationInput {
   email: String!
   password: String!
@@ -31,4 +35,6 @@ type Query {
 
 type Mutation {
   createUser(input: CreateUserInput!) : User
+  updateUser(input: UpdateUserInput!): User
+  updateUserPassword(password: String!): Boolean
 }
