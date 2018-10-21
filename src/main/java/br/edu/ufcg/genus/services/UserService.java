@@ -1,5 +1,7 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
+import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
@@ -118,14 +121,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean updateUserPassword(String password) {
+    public boolean updateUserPassword(String password, String newPassword) {
+		List<UserRole> permittedRoles = new ArrayList<>();
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new InvalidTokenException("User with passed Email was not found"));
+        
+        if (!this.passwordMatch(user, password)) throw new InvalidPermissionException(permittedRoles);
 
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(newPassword));
 
         userRepository.save(user);
 
