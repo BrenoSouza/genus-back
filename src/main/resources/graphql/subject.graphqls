@@ -10,11 +10,17 @@ input SubjectCreationInput {
   name: String!
 }
 
+input UpdateSubjectInput {
+  subjectId: ID!
+  name: String
+}
+
 extend type Query {
   findSubjectById (input: ID!) : Subject
 }
 
 extend type Mutation {
   createSubject (input: SubjectCreationInput!) : Subject
+  updateSubject(input: UpdateSubjectInput!): Subject
   addTeacherToSubject (subjectId: ID!, teacherId: ID!) : Subject
 }

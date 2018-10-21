@@ -22,10 +22,6 @@ import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 
-/*
- * TODO:
- * Add Student, Teacher, ADM and Notification to this class
- */
 @Entity
 @Table(name="User_Sys")
 public class User {

@@ -12,7 +12,6 @@ import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
-import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.services.InstitutionService;
 import br.edu.ufcg.genus.services.UserService;
 
