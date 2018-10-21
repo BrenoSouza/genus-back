@@ -1,0 +1,94 @@
+package br.edu.ufcg.genus.update_inputs;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import br.edu.ufcg.genus.utils.ServerConstants;
+
+public class UpdateInstitutionInput {
+	
+	@NotNull(message="ID_INVALID_NULL")
+    private Long institutionId;
+
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "NAME_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "NAME_INVALID_MAX_LENGTH")
+	private String name;
+	
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "ADDRESS_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "ADDRESS_INVALID_MAX_LENGTH")
+	private String address;
+
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "PHONE_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "PHONE_INVALID_MAX_LENGTH")
+	private String phone;
+
+	public UpdateInstitutionInput () {
+		
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+    public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Long getInstitutionId() {
+		return institutionId;
+	}
+
+	public void setInstitutionId(Long institutionId) {
+        this.institutionId = institutionId;
+    }
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+        UpdateInstitutionInput other = (UpdateInstitutionInput) obj;
+		if (phone == null) {
+			if (other.phone != null)
+				return false;
+		} else if (!phone.equals(other.phone))
+			return false;
+        if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (institutionId == null) {
+			if (other.institutionId != null)
+				return false;
+		} else if (!institutionId.equals(other.institutionId))
+			return false;
+	
+		return true;
+	}
+
+}
