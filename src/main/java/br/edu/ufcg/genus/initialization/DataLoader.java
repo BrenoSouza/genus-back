@@ -45,7 +45,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		User prof2 = userService.createUser(prof2Input);
 		User prof3 = userService.createUser(prof3Input);
 
-		Institution institution = new Institution("Escola", "escola@gmail.com", "Rua qualquer", "838888888");
+		Institution institution = new Institution("Escola", "Rua qualquer", "838888888", "escola@gmail.com" );
 		
 		institutionRepository.save(institution);
 

@@ -54,9 +54,9 @@ public class UserMutations implements GraphQLMutationResolver {
         return userService.updateUser(input);
     }
 
-    public boolean updateUserPassword(String password) {
+    public boolean updateUserPassword(String password, String newPassword) {
 
-        if (password.length() < ServerConstants.MIN_LOGIN_FIELD) {
+        if (newPassword.length() < ServerConstants.MIN_LOGIN_FIELD) {
 
             Map<String, Object> extensions = new HashMap<>();
             extensions.put("PASSWORD_INVALID_MIN_LENGTH", "PASSWORD_INVALID_MIN_LENGTH");
@@ -64,6 +64,6 @@ public class UserMutations implements GraphQLMutationResolver {
             throw new InvalidAttributesException("Passed password is invalid", extensions);
         }
 
-        return userService.updateUserPassword(password);
+        return userService.updateUserPassword(password, newPassword);
     }
 }

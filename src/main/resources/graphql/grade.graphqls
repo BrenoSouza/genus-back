@@ -10,10 +10,16 @@ input GradeCreationInput {
   name: String!
 }
 
+input UpdateGradeInput {
+  gradeId: ID!
+  name: String
+}
+
 extend type Query {
   findGrade (input: ID!) : Grade
 }
 
 extend type Mutation {
   createGrade (input : GradeCreationInput!) : Grade
+  updateGrade(input: UpdateGradeInput!): Grade
 }

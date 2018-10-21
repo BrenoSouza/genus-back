@@ -15,6 +15,7 @@ import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.GradeCreationInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.services.GradeService;
+import br.edu.ufcg.genus.update_inputs.UpdateGradeInput;
 
 public class GradeMutations implements GraphQLMutationResolver {
 	
@@ -34,4 +35,18 @@ public class GradeMutations implements GraphQLMutationResolver {
 		}
 		return gradeService.createGrade(input);
 	}
+
+	public Grade updateGrade(UpdateGradeInput input) {
+
+        Set<ConstraintViolation<UpdateGradeInput>> violations = validator.validate(input);
+        if (violations.size() > 0) {
+            Map<String, Object> extensions = new HashMap<>();
+            violations.forEach((ConstraintViolation<UpdateGradeInput> v) -> {
+                extensions.put(v.getMessage(), v.getMessage());
+            });
+            throw new InvalidAttributesException("Invalidattributes passed", extensions);
+        }
+
+        return gradeService.updateGrade(input);
+    }
 }
