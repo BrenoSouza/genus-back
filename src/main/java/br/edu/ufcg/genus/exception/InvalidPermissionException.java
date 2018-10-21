@@ -18,8 +18,12 @@ public class InvalidPermissionException extends RuntimeException implements Grap
 		super("You dont have permission to execute this action.\nAccess allowed for users:" + roles);
 		this.extensions = new HashMap<>();
 		extensions.put("PERMISSION_DENIED", "PERMISSION_DENIED");
-
 	}
+
+	@Override
+    public Map<String, Object> getExtensions() {
+        return extensions;
+    }
 	
 	@Override
 	public List<SourceLocation> getLocations() {
