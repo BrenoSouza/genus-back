@@ -1,18 +1,24 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.inputs.GradeCreationInput;
 import br.edu.ufcg.genus.exception.InvalidIDException;
+import br.edu.ufcg.genus.exception.InvalidPermissionException;
+import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.GradeRepository;
+import br.edu.ufcg.genus.repositories.UserRepository;
+import br.edu.ufcg.genus.update_inputs.UpdateGradeInput;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
@@ -22,7 +28,10 @@ public class GradeService {
 	private GradeRepository gradeRepository;
 	
 	@Autowired
-    private UserService userService;
+	private UserService userService;
+	
+	@Autowired
+    private UserRepository userRepository;
 	
 	@Autowired
 	private InstitutionService institutionService;
@@ -56,4 +65,28 @@ public class GradeService {
 
         return institution.getGrades();
 	}
+
+	public Grade updateGrade(UpdateGradeInput input) {
+		List<UserRole> permittedRoles = new ArrayList<>();
+		permittedRoles.add(UserRole.ADMIN);
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		User user = userRepository.findByEmail(email)
+        	.orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+
+		Grade grade = gradeRepository.findById(input.getGradeId())
+			.orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+
+		Institution institution = grade.getInstitution();
+		
+		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
+
+        if (input.getName() != null) {
+            grade.setName(input.getName());
+		}
+		
+        return gradeRepository.save(grade);
+    }
+
 }

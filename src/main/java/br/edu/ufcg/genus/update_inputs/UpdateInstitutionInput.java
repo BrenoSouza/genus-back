@@ -68,24 +68,24 @@ public class UpdateInstitutionInput {
 			return false;
         UpdateInstitutionInput other = (UpdateInstitutionInput) obj;
 		if (phone == null) {
-			if (other.phone != null)
+			if (other.getPhone() != null)
 				return false;
-		} else if (!phone.equals(other.phone))
+		} else if (!phone.equals(other.getPhone()))
 			return false;
         if (address == null) {
-			if (other.address != null)
+			if (other.getAddress() != null)
 				return false;
-		} else if (!address.equals(other.address))
+		} else if (!address.equals(other.getAddress()))
 			return false;
 		if (name == null) {
-			if (other.name != null)
+			if (other.getName() != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.getName()))
 			return false;
 		if (institutionId == null) {
-			if (other.institutionId != null)
+			if (other.getInstitutionId() != null)
 				return false;
-		} else if (!institutionId.equals(other.institutionId))
+		} else if (!institutionId.equals(other.getInstitutionId()))
 			return false;
 	
 		return true;
