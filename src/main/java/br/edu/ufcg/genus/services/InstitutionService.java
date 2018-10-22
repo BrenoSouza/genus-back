@@ -27,7 +27,6 @@ import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
-import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateInstitutionInput;
 
 @Service
@@ -38,9 +37,6 @@ public class InstitutionService {
 	
 	@Autowired
     private UserService userService;
-	
-	@Autowired
-    private UserRepository userRepository;
 
 	@Autowired
 	private UserInstitutionRepository userInstitutionRepository;
@@ -172,10 +168,7 @@ public class InstitutionService {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-		User user = userRepository.findByEmail(email)
-        	.orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+		User user = this.userService.findLoggedUser();
 
 		Institution institution = findById(input.getInstitutionId())
 			.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
