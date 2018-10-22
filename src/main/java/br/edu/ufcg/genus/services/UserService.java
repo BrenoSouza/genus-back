@@ -78,16 +78,13 @@ public class UserService {
         User teacher = this.userRepository.findById(teacherId)
             .orElseThrow(() -> new InvalidIDException("Teacher with passed ID was not found", teacherId));
 
-        Subject subject = this.subjectService.findSubjectById(subjectId)
-            .orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", subjectId));
+        Subject subject = this.subjectService.findSubjectById(subjectId);
 
         teacher.addSubject(subject);
         subject.addTeacher(teacher);
 
         this.subjectRepository.save(subject);
-        //this.saveUserInRepository(teacher);
-
-        return this.subjectService.findSubjectById(subjectId).get();
+        return this.subjectService.findSubjectById(subjectId);
     }
 
     public Optional<User> findUserByEmail(String email) {

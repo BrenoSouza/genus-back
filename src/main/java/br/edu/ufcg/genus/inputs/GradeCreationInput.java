@@ -14,6 +14,11 @@ public class GradeCreationInput {
 	public GradeCreationInput() {
 		
 	}
+	
+	public GradeCreationInput(String name, Long institutionId) {
+		this.name = name;
+		this.institutionId = institutionId;
+	}
 
 	public String getName() {
 		return name;
