@@ -22,4 +22,5 @@ extend type Query {
 extend type Mutation {
   createGrade (input : GradeCreationInput!) : Grade
   updateGrade(input: UpdateGradeInput!): Grade
+  removeGrade(gradeId: ID!) : Boolean
 }
