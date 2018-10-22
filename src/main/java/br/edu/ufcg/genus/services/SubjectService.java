@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
@@ -18,7 +17,6 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.SubjectRepository;
-import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateSubjectInput;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
@@ -30,9 +28,6 @@ public class SubjectService {
 	
 	@Autowired
 	private SubjectService subjectService;
-
-	@Autowired
-    private UserRepository userRepository;
 
 	@Autowired
     private UserService userService;
@@ -48,7 +43,6 @@ public class SubjectService {
 		Institution institution = this.institutionService.findById(grade.getInstitution().getId())
 				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", grade.getInstitution().getId()));
 		User user = this.userService.findLoggedUser();
-		//if (!institution.getOwner().(user)) throw new RuntimeException("Only owners can do this action"); // CRIAR UMA EXCEPTION
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
@@ -78,12 +72,9 @@ public class SubjectService {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = this.userService.findLoggedUser();
 
-		User user = userRepository.findByEmail(email)
-        	.orElseThrow(() -> new InvalidTokenException("Token is not valid"));
-
-		Subject subject = subjectRepository.findById(input.getSubjectId())
+		Subject subject = findSubjectById(input.getSubjectId())
 			.orElseThrow(() -> new InvalidTokenException("Token is not valid"));
 
 		Grade grade = subject.getGrade();
