@@ -49,4 +49,8 @@ public class GradeMutations implements GraphQLMutationResolver {
 
         return gradeService.updateGrade(input);
     }
+	
+	public boolean removeGrade(long gradeId) {
+		return this.gradeService.removeGrade(gradeId);
+	}
 }

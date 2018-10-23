@@ -52,10 +52,16 @@ public class SubjectMutations implements GraphQLMutationResolver {
             violations.forEach((ConstraintViolation<UpdateSubjectInput> v) -> {
                 extensions.put(v.getMessage(), v.getMessage());
             });
-            throw new InvalidAttributesException("Invalidattributes passed", extensions);
+            throw new InvalidAttributesException("Invalid attributes passed", extensions);
         }
 
         return subjectService.updateSubject(input);
     }
+    
+	public boolean removeSubject(long subjectId) {
+		return this.subjectService.removeSubject(subjectId);
+	}
+	
+	
 
 }

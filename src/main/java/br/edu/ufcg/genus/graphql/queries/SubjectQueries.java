@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
-import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.services.SubjectService;
@@ -15,7 +14,7 @@ public class SubjectQueries implements GraphQLQueryResolver {
 	private SubjectService subjectService;
 	
 	public Subject findSubjectById(long subjectId) {
-		return this.subjectService.findSubjectById(subjectId).orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", subjectId));
+		return this.subjectService.findSubjectById(subjectId);
 	}
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {

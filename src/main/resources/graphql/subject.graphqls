@@ -22,5 +22,6 @@ extend type Query {
 extend type Mutation {
   createSubject (input: SubjectCreationInput!) : Subject
   updateSubject(input: UpdateSubjectInput!): Subject
+  removeSubject (subjectId: ID!) : Boolean 
   addTeacherToSubject (subjectId: ID!, teacherId: ID!) : Subject
 }

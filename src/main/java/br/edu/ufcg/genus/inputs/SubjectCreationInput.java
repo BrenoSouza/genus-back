@@ -14,6 +14,11 @@ public class SubjectCreationInput {
 	public SubjectCreationInput() {
 		
 	}
+	
+	public SubjectCreationInput(String name, Long gradeId) {
+		this.name = name;
+		this.gradeId = gradeId;
+	}
 
 	public String getName() {
 		return name;
