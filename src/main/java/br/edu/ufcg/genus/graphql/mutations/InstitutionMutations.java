@@ -13,9 +13,11 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
+import br.edu.ufcg.genus.inputs.RemoveUserFromInstitutionInput;
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.services.InstitutionService;
+import br.edu.ufcg.genus.update_inputs.UpdateInstitutionInput;
 
 public class InstitutionMutations implements GraphQLMutationResolver {
 	
@@ -30,10 +32,28 @@ public class InstitutionMutations implements GraphQLMutationResolver {
         if (violations.size() > 0) {
             Map<String, Object> extensions = new HashMap<>();
             violations.forEach((ConstraintViolation<CreateInstitutionInput> v) -> {
-                extensions.put(v.getMessage(), v.getInvalidValue());
-            });
-            throw new InvalidAttributesException("Atributos passados na criação de institução são inválidos.", extensions);
+                extensions.put(v.getMessage(), v.getMessage());
+			});
+            throw new InvalidAttributesException("Invalid attributes passed to creation of an institution.", extensions);
 		}
 		return institutionService.createInstitution(input);
 	}
+	
+	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input) {
+		return this.institutionService.removeUserFromInstitution(input);
+	}
+
+	public Institution updateInstitution(UpdateInstitutionInput input) {
+
+        Set<ConstraintViolation<UpdateInstitutionInput>> violations = validator.validate(input);
+        if (violations.size() > 0) {
+            Map<String, Object> extensions = new HashMap<>();
+            violations.forEach((ConstraintViolation<UpdateInstitutionInput> v) -> {
+                extensions.put(v.getMessage(), v.getMessage());
+            });
+            throw new InvalidAttributesException("Invalidattributes passed", extensions);
+        }
+
+        return institutionService.updateInstitution(input);
+    }
 }

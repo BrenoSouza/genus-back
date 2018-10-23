@@ -10,6 +10,10 @@ input CreateUserInput {
   password: String!
 }
 
+input UpdateUserInput {
+  username: String
+}
+
 input AuthenticationInput {
   email: String!
   password: String!
@@ -26,8 +30,11 @@ type Query {
   findUser(id: ID!): User
   findLoggedUser: User!
   findRole(institutionId: ID!) : UserRole!
+  findSubjectsByUser(userId: ID!, institutionId: ID!) : [ Subject! ]!
 }
 
 type Mutation {
   createUser(input: CreateUserInput!) : User
+  updateUser(input: UpdateUserInput!): User
+  updateUserPassword(password: String!, newPassword: String!): Boolean
 }

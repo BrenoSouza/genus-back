@@ -1,15 +1,23 @@
 package br.edu.ufcg.genus.inputs;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class SubjectCreationInput {
 	
-	@NotBlank(message="O nome da disciplina não pode ser vazio.")
+	@NotNull(message="NAME_INVALID_MISSING")
+	@NotBlank(message="NAME_INVALID_BLANK")
 	private String name;
+	
 	private Long gradeId;
 	
 	public SubjectCreationInput() {
 		
+	}
+	
+	public SubjectCreationInput(String name, Long gradeId) {
+		this.name = name;
+		this.gradeId = gradeId;
 	}
 
 	public String getName() {

@@ -1,24 +1,37 @@
 package br.edu.ufcg.genus.inputs;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 
 public class CreateUserInput {
 	
-	//@Pattern( regexp = "^[a-zA-Z0-9._]", message = "Invalid username")
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message = "O tamanho do username deve ter entre 6 e 50 dígitos.")
+	@NotNull(message="USERNAME_INVALID_MISSING")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "USERNAME_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "USERNAME_INVALID_MAX_LENGTH")
+	@NotBlank(message="USERNAME_INVALID_BLANK")
 	private String username;
 	
-	@NotBlank(message="Email do usuário não pode ser vazio.")
+	@NotNull(message="EMAIL_INVALID_MISSING")
+	@NotBlank(message="EMAIL_INVALID_BLANK")
 	private String email;
 	
-	@Size(min = ServerConstants.MIN_LOGIN_FIELD, max = ServerConstants.MAX_LOGIN_FIELD,  message="O tamanho do senha deve ter entre 6 e 50 dígitos.")
+	@NotNull(message="PASSWORD_INVALID_MISSING")
+	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "PASSWORD_INVALID_MIN_LENGTH")
+	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "PASSWORD_INVALID_MAX_LENGTH")
+	@NotBlank(message="PASSWORD_INVALID_BLANK")
 	private String password;
 	
 	public CreateUserInput () {
 		
+	}
+
+	public CreateUserInput (String username, String email, String password) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
 	}
 
 	public String getUsername() {

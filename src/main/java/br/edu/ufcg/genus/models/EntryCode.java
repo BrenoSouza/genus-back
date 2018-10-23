@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import br.edu.ufcg.genus.utils.ServerConstants;
-
 @Entity
 public class EntryCode {
 	
@@ -23,16 +21,28 @@ public class EntryCode {
 	@Column(nullable = false)
 	private long institutionId;
 	
+	@Column(nullable = false)
+	private int uses;
+	
 	public EntryCode() {
-		Date now = new Date();
-		this.expirationDate = new Date(now.getTime() + ServerConstants.DAY_MILLISECONDS);
+		
 	}
 	
-	public EntryCode (String code, UserRole role, long institutionId) {
-		this();
+	public EntryCode (String code, UserRole role, long institutionId, Date expirationDate,  int uses) {
+		this.expirationDate = expirationDate;
 		this.code = code;
 		this.role = role;
 		this.institutionId = institutionId;
+		this.uses = uses;		
+	}
+	
+	public EntryCode (String code, UserRole role, long institutionId, Date expirationDate) {
+		this(code, role, institutionId, expirationDate, 1);
+	}
+	
+	public int consumeUse() {
+		this.uses--;
+		return this.uses;
 	}
 
 	public String getCode() {
@@ -50,6 +60,10 @@ public class EntryCode {
 	public long getInstitutionId() {
 		return institutionId;
 	}
+	
+	public int getUses() {
+		return uses;
+	}
 
 	public void setCode(String code) {
 		this.code = code;
@@ -65,6 +79,10 @@ public class EntryCode {
 
 	public void setInstitutionId(long institutionId) {
 		this.institutionId = institutionId;
+	}
+
+	public void setUses(int uses) {
+		this.uses = uses;
 	}
 
 	@Override

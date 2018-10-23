@@ -1,10 +1,8 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,18 +13,27 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
+import br.edu.ufcg.genus.exception.InvalidCredentialsException;
+import br.edu.ufcg.genus.exception.InvalidIDException;
+import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
+import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
+import br.edu.ufcg.genus.update_inputs.UpdateUserInput;
 
 @Service
 public class UserService {
 	
 	@Autowired
-	private UserRepository userRepository;
-	
+    private UserRepository userRepository;
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+	private SubjectService subjectService;
 	@Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -34,19 +41,7 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 	
-	@Autowired
-    private Validator validator;
-	
 	public User createUser (CreateUserInput input) {
-		Set<ConstraintViolation<CreateUserInput>> violations = validator.validate(input);
-
-		if (violations.size() > 0) {
-        	String errorString = "";
-        	for (ConstraintViolation<CreateUserInput> v : violations) {
-        		errorString = " " + errorString + v.getMessage();
-        	}
-            throw new RuntimeException("Atributos passados na criação do usuário são inválidos." + errorString);
-        }
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		return this.userRepository.save(newUser);
 	}
@@ -54,16 +49,16 @@ public class UserService {
 	public String login (AuthenticationInput input) {
         String email = input.getEmail();
         String password = input.getPassword();
-
+                
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             User user = userRepository.findByEmail(email)
-            		.orElseThrow(() -> new RuntimeException("Email ou senha inválido.", null));
+            		.orElseThrow(() -> new InvalidCredentialsException("Invalid email or password.", null));
             
             return jwtTokenProvider.createToken(email, user.getRoles());
         } catch (Exception e) {
-            throw new RuntimeException("Email ou senha inválido.", e);
-		}		
+            throw new InvalidCredentialsException("Invalid email or password", null);
+        }	
     }
     
     public User findLoggedUser() {
@@ -79,17 +74,67 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Subject addTeacher(Long subjectId, Long teacherId) {
+        User teacher = this.userRepository.findById(teacherId)
+            .orElseThrow(() -> new InvalidIDException("Teacher with passed ID was not found", teacherId));
+
+        Subject subject = this.subjectService.findSubjectById(subjectId);
+
+        teacher.addSubject(subject);
+        subject.addTeacher(teacher);
+
+        this.subjectRepository.save(subject);
+        return this.subjectService.findSubjectById(subjectId);
+    }
+
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
 	}
-
-	public void addRole(User user, long institutionId, UserRole role) {
-		user.addRole(institutionId, role);	
-		userRepository.save(user);
-	}
+    
+    public void saveUserInRepository(User user) {
+    	userRepository.save(user);
+    }
+    
+    public boolean passwordMatch(User user, String password) {
+    	return passwordEncoder.matches(password, user.getPassword());
+    }
 	
 	public UserRole findRole(Long institutionId) {
 		User user = findLoggedUser();
 		return user.getRole(institutionId);
-	}
+    }
+    
+    public User updateUser(UpdateUserInput input) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+
+        if (input.getUsername() != null) {
+            user.setUsername(input.getUsername());
+        }
+
+        return userRepository.save(user);
+    }
+
+    public boolean updateUserPassword(String password, String newPassword) {
+		List<UserRole> permittedRoles = new ArrayList<>();
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidTokenException("User with passed Email was not found"));
+        
+        if (!this.passwordMatch(user, password)) throw new InvalidPermissionException(permittedRoles);
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.save(user);
+
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+
+        return true;
+    }
+
 }

@@ -5,6 +5,9 @@ type Institution {
   phone: String!
   address: String!
   grades: [ Grade! ]!
+  admins : [User] !
+  teachers : [User] !
+  students : [User] !
 }
 
 input CreateInstitutionInput {
@@ -14,11 +17,35 @@ input CreateInstitutionInput {
   address: String!
 }
 
+input UpdateInstitutionInput {
+  institutionId: ID!
+  name: String
+  phone: String
+  address: String
+}
+
+input GetUsersFromInstitutionByRoleInput {
+  institutionId: ID!
+  role: UserRole!
+}
+
+input RemoveUserFromInstitutionInput {
+  institutionId: ID!
+  toBeRemovedId: ID!
+  institutionName: String
+  password: String
+  
+}
+
 extend type Query {
-    findInstitution(id: ID!): Institution
-    getInstitutionsFromLoggedUser: [Institution!]
+  findInstitution(id: ID!): Institution
+  getInstitutionsFromLoggedUser: [Institution!]
+  getAllUsersFromInstitution(id: ID!) : [User]!
+  getUsersFromInstitutionByRole(input: GetUsersFromInstitutionByRoleInput!) : [User]!
 }
 
 extend type Mutation {
-    createInstitution(input: CreateInstitutionInput!): Institution
+  createInstitution(input: CreateInstitutionInput!): Institution
+  removeUserFromInstitution(input: RemoveUserFromInstitutionInput!) : Boolean
+  updateInstitution(input: UpdateInstitutionInput!): Institution
 }

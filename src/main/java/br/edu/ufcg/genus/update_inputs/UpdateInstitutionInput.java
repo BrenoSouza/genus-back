@@ -1,37 +1,28 @@
-package br.edu.ufcg.genus.inputs;
+package br.edu.ufcg.genus.update_inputs;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 
-public class CreateInstitutionInput {
+public class UpdateInstitutionInput {
+	
+	@NotNull(message="ID_INVALID_NULL")
+    private Long institutionId;
 
-	@NotNull(message="NAME_INVALID_MISSING")
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "NAME_INVALID_MIN_LENGTH")
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "NAME_INVALID_MAX_LENGTH")
-	@NotBlank(message="NAME_INVALID_BLANK")
 	private String name;
 	
-		
-	@NotNull(message="EMAIL_MISSING")
-	@NotBlank(message="EMAIL_INVALIDBLANK")
-	private String email;
-
-	@NotNull(message="ADDRESS_INVALID_MISSING")
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "ADDRESS_INVALID_MIN_LENGTH")
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "ADDRESS_INVALID_MAX_LENGTH")
-	@NotBlank(message="ADDRESS_INVALID_BLANK")
 	private String address;
 
-	@NotNull(message="PHONE_INVALID_MISSING")
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "PHONE_INVALID_MIN_LENGTH")
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "PHONE_INVALID_MAX_LENGTH")
-	@NotBlank(message="PHONE_INVALID_BLANK")
 	private String phone;
 
-	public CreateInstitutionInput () {
+	public UpdateInstitutionInput () {
 		
 	}
 
@@ -51,14 +42,6 @@ public class CreateInstitutionInput {
 		this.address = address;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
     public String getPhone() {
 		return phone;
 	}
@@ -67,14 +50,13 @@ public class CreateInstitutionInput {
 		this.phone = phone;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public Long getInstitutionId() {
+		return institutionId;
 	}
+
+	public void setInstitutionId(Long institutionId) {
+        this.institutionId = institutionId;
+    }
 
 	@Override
 	public boolean equals(Object obj) {
@@ -84,34 +66,29 @@ public class CreateInstitutionInput {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CreateInstitutionInput other = (CreateInstitutionInput) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
+        UpdateInstitutionInput other = (UpdateInstitutionInput) obj;
 		if (phone == null) {
-			if (other.phone != null)
+			if (other.getPhone() != null)
 				return false;
-		} else if (!phone.equals(other.phone))
+		} else if (!phone.equals(other.getPhone()))
 			return false;
         if (address == null) {
-			if (other.address != null)
+			if (other.getAddress() != null)
 				return false;
-		} else if (!address.equals(other.address))
+		} else if (!address.equals(other.getAddress()))
 			return false;
 		if (name == null) {
-			if (other.name != null)
+			if (other.getName() != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.getName()))
 			return false;
+		if (institutionId == null) {
+			if (other.getInstitutionId() != null)
+				return false;
+		} else if (!institutionId.equals(other.getInstitutionId()))
+			return false;
+	
 		return true;
 	}
-	
-	
-
-	
-	
-	
 
 }

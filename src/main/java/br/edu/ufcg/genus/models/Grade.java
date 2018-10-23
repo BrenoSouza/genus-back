@@ -1,10 +1,13 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,22 +30,23 @@ public class Grade {
 	@Column(nullable = false)
 	private String name;
 
-	@OneToMany(mappedBy="grade")
+	@OneToMany(mappedBy="grade", fetch=FetchType.EAGER)
 	@Column(name="subjects", nullable=false)
-	private List<Subject> subjects;
+	private Set<Subject> subjects;
 	
 	@ManyToOne
     @JoinColumn(name="institution_id", nullable=false)
 	private Institution institution;
 	
 	public Grade() {
-		this.subjects = new ArrayList<>();
+		this.subjects = new HashSet<>();
 	}
 	
 	public Grade(String name, Institution institution) {
 		this();
 		this.name = name;
 		this.institution = institution;
+		this.subjects = new HashSet<>();
 	}
 	
 	public boolean addSubject(Subject subject) {
@@ -62,11 +66,11 @@ public class Grade {
 	}
 
 	public List<Subject> getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(List<Subject> subjects) {
-		this.subjects = subjects;
+		List<Subject> result = new ArrayList<>();
+		for (Subject subject : subjects) {
+			result.add(subject);
+		}
+		return result;
 	}
 
 	public Institution getInstitution() {
@@ -83,7 +87,6 @@ public class Grade {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((subjects == null) ? 0 : subjects.hashCode());
 		return result;
 	}
 
@@ -105,11 +108,6 @@ public class Grade {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (subjects == null) {
-			if (other.subjects != null)
-				return false;
-		} else if (!subjects.equals(other.subjects))
 			return false;
 		return true;
 	}
