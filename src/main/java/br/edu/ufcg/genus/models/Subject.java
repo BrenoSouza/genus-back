@@ -2,6 +2,7 @@ package br.edu.ufcg.genus.models;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class Subject {
 	
 	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
 	@Column(name="forum", nullable=false)
-	private List<Discussion> forum;
+	private Set<Discussion> forum;
 	
 	//list of students/ StudentSubject
 	//forum
@@ -53,7 +54,7 @@ public class Subject {
 	
 	public Subject() {
 		this.teachers = new HashSet<>();
-		this.forum = new ArrayList<>();
+		this.forum = new LinkedHashSet<>();
 	}
 	
 	public Subject(Grade owner, String name) {
@@ -94,11 +95,11 @@ public class Subject {
 		return this.forum.add(discussion);
 	}
 
-	public List<Discussion> getForum() {
+	public Set<Discussion> getForum() {
 		return forum;
 	}
 
-	public void setForum(List<Discussion> forum) {
+	public void setForum(Set<Discussion> forum) {
 		this.forum = forum;
 	}
 
