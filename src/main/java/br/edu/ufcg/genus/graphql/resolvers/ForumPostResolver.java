@@ -10,12 +10,12 @@ import br.edu.ufcg.genus.models.ForumPost;
 public class ForumPostResolver implements GraphQLResolver<ForumPost>{
 	
 	public String getCreationDate(ForumPost forumPost) {
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
 		return df.format(forumPost.getCreationDate());
 	}
 	
 	public String getLastUpdatedDate(ForumPost forumPost) {
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
 		return df.format(forumPost.getLastUpdatedDate());
 	}
 

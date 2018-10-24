@@ -89,6 +89,10 @@ public class Subject {
 	public boolean addTeacher(User teacher) {
 		return this.teachers.add(teacher);
 	}
+	
+	public boolean addForumPost(ForumPost forumPost) {
+		return this.forum.add(forumPost);
+	}
 
 	public List<ForumPost> getForum() {
 		return forum;

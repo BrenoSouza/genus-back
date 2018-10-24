@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
 import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
+import br.edu.ufcg.genus.graphql.mutations.ForumPostMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
@@ -131,5 +132,10 @@ public class GenusApplication {
 	@Bean
 	public ForumPostResolver forumPostResolver() {
 		return new ForumPostResolver();
+	}
+	
+	@Bean
+	public ForumPostMutations forumPostMutations() {
+		return new ForumPostMutations();
 	}
 }

@@ -6,3 +6,12 @@ type ForumPost {
   creationDate: String!
   lastUpdatedDate: String!
 }
+
+input ForumPostCreationInput {
+  title: String!
+  subjectId: ID!
+}
+
+extend type Mutation {
+  createForumPost (input: ForumPostCreationInput!) : ForumPost!
+}
