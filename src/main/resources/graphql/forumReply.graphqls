@@ -1,0 +1,16 @@
+type ForumReply {
+  id: ID!
+  content: String!
+  date: String!
+  user: User!
+  forumPost: ForumPost!
+}
+
+input ForumReplyCreationInput {
+  content: String!
+  forumPostId: ID!
+}
+
+extend type Mutation {
+  createForumReply (input: ForumReplyCreationInput!) : ForumReply!
+}

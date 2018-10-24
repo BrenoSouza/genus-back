@@ -5,6 +5,8 @@ type ForumPost {
   subject: Subject!
   creationDate: String!
   lastUpdatedDate: String!
+  replies: [ForumReply!]!
+  replyNumber: Int!
 }
 
 input ForumPostCreationInput {

@@ -1,14 +1,18 @@
 package br.edu.ufcg.genus.models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class ForumPost {
@@ -32,7 +36,12 @@ public class ForumPost {
 	
 	private String title;
 	
+	@OneToMany(mappedBy="forumPost", fetch=FetchType.EAGER)
+	@Column(name="replies", nullable=false)
+	private List<ForumReply> replies;
+	
 	public ForumPost() {
+		this.replies = new ArrayList<>();
 		Date now = new Date();
 		this.creationDate = now;
 		this.lastUpdatedDate = now;
@@ -43,6 +52,14 @@ public class ForumPost {
 		this.creator = creator;
 		this.subject = subject;
 		this.title = title;
+	}
+	
+	public boolean addReply(ForumReply reply) {
+		return this.replies.add(reply);
+	}
+	
+	public int getReplyNumber() {
+		return this.replies.size();
 	}
 
 	public Long getId() {
@@ -87,6 +104,14 @@ public class ForumPost {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public List<ForumReply> getReplies() {
+		return replies;
+	}
+
+	public void setReplies(List<ForumReply> replies) {
+		this.replies = replies;
 	}
 
 	@Override

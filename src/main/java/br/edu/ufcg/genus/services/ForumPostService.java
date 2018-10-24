@@ -3,6 +3,7 @@ package br.edu.ufcg.genus.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.inputs.ForumPostCreationInput;
 import br.edu.ufcg.genus.models.ForumPost;
 import br.edu.ufcg.genus.models.Subject;
@@ -20,6 +21,11 @@ public class ForumPostService {
 	
 	@Autowired
 	private SubjectService subjectService;
+	
+	public ForumPost findForumPostById(Long id) {
+		return forumPostRepository.findById(id)
+			.orElseThrow(() -> new InvalidIDException("Discussion with passed ID was not found", id));
+	}
 	
 	public ForumPost createForumPost(ForumPostCreationInput input) {
 		User user = userService.findLoggedUser();

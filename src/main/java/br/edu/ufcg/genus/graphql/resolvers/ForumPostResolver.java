@@ -18,5 +18,9 @@ public class ForumPostResolver implements GraphQLResolver<ForumPost>{
 		DateFormat df = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
 		return df.format(forumPost.getLastUpdatedDate());
 	}
+	
+	public int getReplyNumber(ForumPost forumPost) {
+		return forumPost.getReplyNumber();
+	}
 
 }

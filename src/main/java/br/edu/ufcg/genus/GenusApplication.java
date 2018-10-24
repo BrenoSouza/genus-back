@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
 import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
 import br.edu.ufcg.genus.graphql.mutations.ForumPostMutations;
+import br.edu.ufcg.genus.graphql.mutations.ForumReplyMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
@@ -21,6 +22,7 @@ import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import br.edu.ufcg.genus.graphql.queries.UserRoleQueries;
 import br.edu.ufcg.genus.graphql.resolvers.ForumPostResolver;
+import br.edu.ufcg.genus.graphql.resolvers.ForumReplyResolver;
 import br.edu.ufcg.genus.graphql.resolvers.GradeResolver;
 import br.edu.ufcg.genus.graphql.resolvers.InstitutionResolver;
 import br.edu.ufcg.genus.graphql.resolvers.SubjectResolver;
@@ -137,5 +139,15 @@ public class GenusApplication {
 	@Bean
 	public ForumPostMutations forumPostMutations() {
 		return new ForumPostMutations();
+	}
+	
+	@Bean
+	public ForumReplyResolver forumReplyResolver() {
+		return new ForumReplyResolver();
+	}
+	
+	@Bean
+	public ForumReplyMutations forumReplyMutations() {
+		return new ForumReplyMutations();
 	}
 }
