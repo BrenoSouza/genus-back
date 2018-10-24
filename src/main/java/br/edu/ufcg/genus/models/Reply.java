@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ForumReply {
+public class Reply {
 	
 	@Id
 	@Column(name="id", nullable=false)
@@ -27,18 +27,18 @@ public class ForumReply {
 	private User user;
 	
 	@ManyToOne
-    @JoinColumn(name="forumPost_id", nullable=false)
-	private ForumPost forumPost;
+    @JoinColumn(name="discussion_id", nullable=false)
+	private Discussion discussion;
 	
-	public ForumReply () {
+	public Reply () {
 		this.date = new Date();
 	}
 	
-	public ForumReply(String content, User user, ForumPost forumPost) {
+	public Reply(String content, User user, Discussion discussion) {
 		this();
 		this.content = content;
 		this.user = user;
-		this.forumPost = forumPost;
+		this.discussion = discussion;
 	}
 
 	public Long getId() {
@@ -69,12 +69,12 @@ public class ForumReply {
 		this.user = user;
 	}
 
-	public ForumPost getForumPost() {
-		return forumPost;
+	public Discussion getDiscussion() {
+		return discussion;
 	}
 
-	public void setForumPost(ForumPost forumPost) {
-		this.forumPost = forumPost;
+	public void setDiscussion(Discussion discussion) {
+		this.discussion = discussion;
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class ForumReply {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ForumReply other = (ForumReply) obj;
+		Reply other = (Reply) obj;
 		if (date == null) {
 			if (other.date != null)
 				return false;

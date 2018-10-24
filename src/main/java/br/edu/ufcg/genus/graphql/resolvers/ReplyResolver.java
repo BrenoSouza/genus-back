@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 
 import com.coxautodev.graphql.tools.GraphQLResolver;
 
-import br.edu.ufcg.genus.models.ForumReply;
+import br.edu.ufcg.genus.models.Reply;
 
-public class ForumReplyResolver implements GraphQLResolver<ForumReply>{
+public class ReplyResolver implements GraphQLResolver<Reply>{
 	
-	public String getDate(ForumReply forumReply) {
+	public String getDate(Reply reply) {
 		DateFormat df = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
-		return df.format(forumReply.getDate());		
+		return df.format(reply.getDate());		
 	}
 }

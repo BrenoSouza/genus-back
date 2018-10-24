@@ -1,12 +1,12 @@
 package br.edu.ufcg.genus.inputs;
 
-public class ForumPostCreationInput {
+public class DiscussionCreationInput {
 	
 	private String title;
 	private Long subjectId;
 	private String content;
 	
-	public ForumPostCreationInput() {
+	public DiscussionCreationInput() {
 		
 	}
 
@@ -52,7 +52,7 @@ public class ForumPostCreationInput {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ForumPostCreationInput other = (ForumPostCreationInput) obj;
+		DiscussionCreationInput other = (DiscussionCreationInput) obj;
 		if (subjectId == null) {
 			if (other.subjectId != null)
 				return false;

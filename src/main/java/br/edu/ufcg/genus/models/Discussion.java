@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class ForumPost {
+public class Discussion {
 	
 	@Id
 	@Column(name="id", nullable=false)
@@ -36,25 +36,25 @@ public class ForumPost {
 	
 	private String title;
 	
-	@OneToMany(mappedBy="forumPost", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="discussion", fetch=FetchType.EAGER)
 	@Column(name="replies", nullable=false)
-	private List<ForumReply> replies;
+	private List<Reply> replies;
 	
-	public ForumPost() {
+	public Discussion() {
 		this.replies = new ArrayList<>();
 		Date now = new Date();
 		this.creationDate = now;
 		this.lastUpdatedDate = now;
 	}
 	
-	public ForumPost(User creator, Subject subject, String title) {
+	public Discussion(User creator, Subject subject, String title) {
 		this();
 		this.creator = creator;
 		this.subject = subject;
 		this.title = title;
 	}
 	
-	public boolean addReply(ForumReply reply) {
+	public boolean addReply(Reply reply) {
 		return this.replies.add(reply);
 	}
 	
@@ -106,11 +106,11 @@ public class ForumPost {
 		this.title = title;
 	}
 
-	public List<ForumReply> getReplies() {
+	public List<Reply> getReplies() {
 		return replies;
 	}
 
-	public void setReplies(List<ForumReply> replies) {
+	public void setReplies(List<Reply> replies) {
 		this.replies = replies;
 	}
 
@@ -132,7 +132,7 @@ public class ForumPost {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ForumPost other = (ForumPost) obj;
+		Discussion other = (Discussion) obj;
 		if (creationDate == null) {
 			if (other.creationDate != null)
 				return false;

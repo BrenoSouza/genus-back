@@ -44,7 +44,7 @@ public class Subject {
 	
 	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
 	@Column(name="forum", nullable=false)
-	private List<ForumPost> forum;
+	private List<Discussion> forum;
 	
 	//list of students/ StudentSubject
 	//forum
@@ -90,15 +90,15 @@ public class Subject {
 		return this.teachers.add(teacher);
 	}
 	
-	public boolean addForumPost(ForumPost forumPost) {
-		return this.forum.add(forumPost);
+	public boolean addDiscussion(Discussion discussion) {
+		return this.forum.add(discussion);
 	}
 
-	public List<ForumPost> getForum() {
+	public List<Discussion> getForum() {
 		return forum;
 	}
 
-	public void setForum(List<ForumPost> forum) {
+	public void setForum(List<Discussion> forum) {
 		this.forum = forum;
 	}
 

@@ -1,20 +1,20 @@
-type ForumPost {
+type Discussion {
   id: ID!
   title: String!
   creator: User!
   subject: Subject!
   creationDate: String!
   lastUpdatedDate: String!
-  replies: [ForumReply!]!
+  replies: [Reply!]!
   replyNumber: Int!
 }
 
-input ForumPostCreationInput {
+input DiscussionCreationInput {
   title: String!
   subjectId: ID!
   content: String!
 }
 
 extend type Mutation {
-  createForumPost (input: ForumPostCreationInput!) : ForumPost!
+  createDiscussion (input: DiscussionCreationInput!) : Discussion!
 }

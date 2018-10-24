@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Bean;
 
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
 import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
-import br.edu.ufcg.genus.graphql.mutations.ForumPostMutations;
-import br.edu.ufcg.genus.graphql.mutations.ForumReplyMutations;
+import br.edu.ufcg.genus.graphql.mutations.DiscussionMutations;
+import br.edu.ufcg.genus.graphql.mutations.ReplyMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
@@ -21,8 +21,8 @@ import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
 import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import br.edu.ufcg.genus.graphql.queries.UserRoleQueries;
-import br.edu.ufcg.genus.graphql.resolvers.ForumPostResolver;
-import br.edu.ufcg.genus.graphql.resolvers.ForumReplyResolver;
+import br.edu.ufcg.genus.graphql.resolvers.DiscussionResolver;
+import br.edu.ufcg.genus.graphql.resolvers.ReplyResolver;
 import br.edu.ufcg.genus.graphql.resolvers.GradeResolver;
 import br.edu.ufcg.genus.graphql.resolvers.InstitutionResolver;
 import br.edu.ufcg.genus.graphql.resolvers.SubjectResolver;
@@ -132,22 +132,22 @@ public class GenusApplication {
 	}
 	
 	@Bean
-	public ForumPostResolver forumPostResolver() {
-		return new ForumPostResolver();
+	public DiscussionResolver discussionResolver() {
+		return new DiscussionResolver();
 	}
 	
 	@Bean
-	public ForumPostMutations forumPostMutations() {
-		return new ForumPostMutations();
+	public DiscussionMutations discussionMutations() {
+		return new DiscussionMutations();
 	}
 	
 	@Bean
-	public ForumReplyResolver forumReplyResolver() {
-		return new ForumReplyResolver();
+	public ReplyResolver replyResolver() {
+		return new ReplyResolver();
 	}
 	
 	@Bean
-	public ForumReplyMutations forumReplyMutations() {
-		return new ForumReplyMutations();
+	public ReplyMutations replyMutations() {
+		return new ReplyMutations();
 	}
 }

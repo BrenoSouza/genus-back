@@ -1,15 +1,15 @@
 package br.edu.ufcg.genus.inputs;
 
-public class ForumReplyCreationInput {
+public class ReplyCreationInput {
 	
 	private String content;
 	private Long forumPostId;
 	
-	public ForumReplyCreationInput() {
+	public ReplyCreationInput() {
 		
 	}
 	
-	public ForumReplyCreationInput(String content, Long id) {
+	public ReplyCreationInput(String content, Long id) {
 		this.content = content;
 		this.forumPostId = id;
 	}
@@ -47,7 +47,7 @@ public class ForumReplyCreationInput {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ForumReplyCreationInput other = (ForumReplyCreationInput) obj;
+		ReplyCreationInput other = (ReplyCreationInput) obj;
 		if (content == null) {
 			if (other.content != null)
 				return false;
