@@ -8,6 +8,11 @@ public class ForumReplyCreationInput {
 	public ForumReplyCreationInput() {
 		
 	}
+	
+	public ForumReplyCreationInput(String content, Long id) {
+		this.content = content;
+		this.forumPostId = id;
+	}
 
 	public String getContent() {
 		return content;

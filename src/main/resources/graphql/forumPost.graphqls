@@ -12,6 +12,7 @@ type ForumPost {
 input ForumPostCreationInput {
   title: String!
   subjectId: ID!
+  content: String!
 }
 
 extend type Mutation {
