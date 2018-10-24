@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -41,6 +42,10 @@ public class Subject {
 	mappedBy = "subjects")
 	private Set<User> teachers = new HashSet<>();
 	
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
+	@Column(name="forum", nullable=false)
+	private List<ForumPost> forum;
+	
 	//list of students/ StudentSubject
 	//forum
 	//material repository
@@ -48,12 +53,13 @@ public class Subject {
 	
 	public Subject() {
 		this.teachers = new HashSet<>();
+		this.forum = new ArrayList<>();
 	}
 	
 	public Subject(Grade owner, String name) {
+		this();
 		this.grade = owner;
 		this.name = name;
-		this.teachers = new HashSet<>();
 	}
 
 	public Long getId() {
@@ -82,6 +88,14 @@ public class Subject {
 
 	public boolean addTeacher(User teacher) {
 		return this.teachers.add(teacher);
+	}
+
+	public List<ForumPost> getForum() {
+		return forum;
+	}
+
+	public void setForum(List<ForumPost> forum) {
+		this.forum = forum;
 	}
 
 	public List<User> getTeachers() {

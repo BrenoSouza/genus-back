@@ -3,6 +3,7 @@ type Subject {
   grade: Grade!
   name: String!
   teachers: [ User! ]!
+  forum: [ForumPost!]!
 }
 
 input SubjectCreationInput {

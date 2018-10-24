@@ -1,0 +1,8 @@
+type ForumPost {
+  id: ID!
+  title: String!
+  creator: User!
+  subject: Subject!
+  creationDate: String!
+  lastUpdatedDate: String!
+}
