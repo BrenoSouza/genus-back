@@ -5,7 +5,7 @@ type Discussion {
   subject: Subject!
   creationDate: String!
   lastUpdatedDate: String!
-  replies: [Reply!]!
+  replies(page: Int!, size: Int!): [Reply!]!
   replyNumber: Int!
 }
 
