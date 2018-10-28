@@ -48,7 +48,7 @@ public class Subject {
 		CascadeType.PERSIST,
 		CascadeType.MERGE
 	},
-	mappedBy = "subjects")
+	mappedBy = "subjectsStudent")
 	private Set<User> students = new HashSet<>();
 
 
