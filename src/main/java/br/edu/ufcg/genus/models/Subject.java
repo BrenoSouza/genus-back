@@ -43,6 +43,15 @@ public class Subject {
 	mappedBy = "subjects")
 	private Set<User> teachers = new HashSet<>();
 	
+	@ManyToMany(fetch = FetchType.EAGER,
+	cascade = {
+		CascadeType.PERSIST,
+		CascadeType.MERGE
+	},
+	mappedBy = "subjects")
+	private Set<User> students = new HashSet<>();
+
+
 	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
 	@Column(name="forum", nullable=false)
 	private Set<Discussion> forum;
@@ -87,8 +96,16 @@ public class Subject {
 		this.teachers = teachers;
 	}
 
+	public void setStudents(Set<User> students) {
+		this.students = students;
+	}
+
 	public boolean addTeacher(User teacher) {
 		return this.teachers.add(teacher);
+	}
+	
+	public boolean addStudent(User student) {
+		return this.students.add(student);
 	}
 	
 	public boolean addDiscussion(Discussion discussion) {
@@ -107,6 +124,14 @@ public class Subject {
 		List<User> result = new ArrayList<>();
 		for (User teacher : teachers) {
 			result.add(teacher);
+		}
+		return result;
+	}
+
+	public List<User> getStudents() {
+		List<User> result = new ArrayList<>();
+		for (User student : students) {
+			result.add(student);
 		}
 		return result;
 	}

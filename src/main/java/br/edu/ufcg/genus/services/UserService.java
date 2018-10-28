@@ -17,6 +17,8 @@ import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+import br.edu.ufcg.genus.models.Institution;
+import br.edu.ufcg.genus.models.Role;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
@@ -82,6 +84,25 @@ public class UserService {
 
         teacher.addSubject(subject);
         subject.addTeacher(teacher);
+
+        this.subjectRepository.save(subject);
+        return this.subjectService.findSubjectById(subjectId);
+    }
+
+    public Subject addStudent(Long subjectId, Long studentId) {
+		List<UserRole> permittedRoles = new ArrayList<>();
+		permittedRoles.add(UserRole.ADMIN);
+
+        User student = this.userRepository.findById(studentId)
+            .orElseThrow(() -> new InvalidIDException("Student with passed ID was not found", studentId));
+
+        Subject subject = this.subjectService.findSubjectById(subjectId);
+        Institution institution = subject.getGrade().getInstitution();
+
+        if (!findRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
+
+        student.addSubjectStudent(subject);
+        subject.addStudent(student);
 
         this.subjectRepository.save(subject);
         return this.subjectService.findSubjectById(subjectId);
