@@ -1,0 +1,16 @@
+type Reply {
+  id: ID!
+  content: String!
+  date: String!
+  user: User!
+  discussion: Discussion!
+}
+
+input ReplyCreationInput {
+  content: String!
+  forumPostId: ID!
+}
+
+extend type Mutation {
+  createReply (input: ReplyCreationInput!) : Reply!
+}
