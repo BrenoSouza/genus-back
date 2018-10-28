@@ -150,9 +150,4 @@ public class Discussion {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-
 }

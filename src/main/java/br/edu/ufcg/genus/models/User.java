@@ -197,6 +197,28 @@ public class User {
 	public boolean removeSubjectStudent(Subject subject) {
 		return subjectsStudent.remove(subject);
 	}
+
+	public boolean checkStudent(Subject subject) {
+		boolean result = false;
+
+		for (Subject subjectStudent : subjectsStudent) {
+			if (subject.equals(subjectStudent)) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	public boolean checkTeacher(Subject subject) {
+		boolean result = false;
+
+		for (Subject subjectTeacher : subjects) {
+			if (subject.equals(subjectTeacher)) {
+				result = true;
+			}
+		}
+		return result;
+	}
 	
 	@Override
 	public int hashCode() {
