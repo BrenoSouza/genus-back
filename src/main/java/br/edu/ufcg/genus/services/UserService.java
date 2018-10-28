@@ -17,6 +17,7 @@ import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Role;
 import br.edu.ufcg.genus.models.Subject;
@@ -81,6 +82,9 @@ public class UserService {
             .orElseThrow(() -> new InvalidIDException("Teacher with passed ID was not found", teacherId));
 
         Subject subject = this.subjectService.findSubjectById(subjectId);
+        Institution institution = subject.getGrade().getInstitution();
+
+        if (!teacher.getRole(institution.getId()).equals(UserRole.TEACHER)) throw new NotAuthorizedException("You don't have permission to do this");
 
         teacher.addSubject(subject);
         subject.addTeacher(teacher);
@@ -100,6 +104,8 @@ public class UserService {
         Institution institution = subject.getGrade().getInstitution();
 
         if (!findRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
+
+        if (!student.getRole(institution.getId()).equals(UserRole.STUDENT)) throw new NotAuthorizedException("You don't have permission to do this");
 
         student.addSubjectStudent(subject);
         subject.addStudent(student);
