@@ -17,4 +17,8 @@ public class DiscussionMutations implements GraphQLMutationResolver {
 		return this.forumPostService.createDiscussion(input);
 	}
 
+	public Boolean removeDiscussion(Long discussionId) {
+		return this.forumPostService.removeDiscussion(discussionId);
+	}
+
 }

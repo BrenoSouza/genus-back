@@ -49,4 +49,14 @@ public class DiscussionService {
 		return forumPost;
 	}
 
+	public boolean removeDiscussion(long id) {
+		Discussion discussion = findDiscussionById(id);
+		User user = userService.findLoggedUser();
+		Subject subject = discussion.getSubject();
+
+		if (!user.checkTeacher(subject) || !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+		
+		discussionRepository.deleteById(id);
+		return true;
+	}
 }
