@@ -13,4 +13,5 @@ input ReplyCreationInput {
 
 extend type Mutation {
   createReply (input: ReplyCreationInput!) : Reply!
+  removeReply (replyId: ID!) : Boolean 
 }

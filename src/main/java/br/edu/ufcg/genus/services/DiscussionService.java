@@ -54,8 +54,8 @@ public class DiscussionService {
 		User user = userService.findLoggedUser();
 		Subject subject = discussion.getSubject();
 
-		if (!user.checkTeacher(subject) || !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
-		
+		if (!user.checkTeacher(subject) && !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+
 		discussionRepository.deleteById(id);
 		return true;
 	}

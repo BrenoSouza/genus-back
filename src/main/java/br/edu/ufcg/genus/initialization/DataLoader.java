@@ -93,7 +93,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectRepository.save(subject);
 		
 		userService.addTeacher(subject.getId(), prof1.getId());
-
 	}
 
 }

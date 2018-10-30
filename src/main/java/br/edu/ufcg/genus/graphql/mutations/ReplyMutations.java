@@ -17,4 +17,7 @@ public class ReplyMutations implements GraphQLMutationResolver {
 		return replyService.createReply(input);
 	}
 
+	public Boolean removeReply(Long replyId) {
+		return this.replyService.removeReply(replyId);
+	}
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.ReplyCreationInput;
 import br.edu.ufcg.genus.models.Discussion;
@@ -41,5 +42,17 @@ public class ReplyService {
 	public Iterable<Reply> findRepliesByDiscussion(Long id, Integer page, Integer size) {
 		return replyRepository.findByDiscussionId(PageRequest.of(page, size), id);
 	}
+
+	public Boolean removeReply(Long replyId) {
+		Reply reply = replyRepository.findById(replyId)
+			.orElseThrow(() -> new InvalidIDException("Reply with passed ID was not found", replyId));
+
+		User user = userService.findLoggedUser();
+		Subject subject = reply.getDiscussion().getSubject();
+
+		if (!user.checkTeacher(subject) || !reply.getUser().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+
+		this.replyRepository.deleteById(replyId);
+		return true;	}
 
 }
