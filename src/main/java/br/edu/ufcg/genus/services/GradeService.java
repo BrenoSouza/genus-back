@@ -1,6 +1,7 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.GradeRepository;
+import br.edu.ufcg.genus.update_inputs.UpdateGradeInput;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
@@ -22,10 +24,13 @@ public class GradeService {
 	private GradeRepository gradeRepository;
 	
 	@Autowired
-    private UserService userService;
+	private UserService userService;
 	
 	@Autowired
 	private InstitutionService institutionService;
+	
+	@Autowired
+	private SubjectService subjectService;
 	
 	public Grade createGrade(GradeCreationInput input) {
 		User user = this.userService.findLoggedUser();
@@ -56,4 +61,32 @@ public class GradeService {
 
         return institution.getGrades();
 	}
+
+	public Grade updateGrade(UpdateGradeInput input) {
+		Grade grade = findGradeById(input.getGradeId());
+		checkAdminPermission(grade);
+		        if (input.getName() != null) {
+            grade.setName(input.getName());
+		}
+        return gradeRepository.save(grade);
+    }
+	
+	public boolean removeGrade(long gradeId) {
+		Grade grade = findGradeById(gradeId);
+		checkAdminPermission(grade);
+		for(Subject subject: grade.getSubjects()) { //this should be optimized
+			subjectService.removeSubject(subject.getId());
+		}
+		gradeRepository.deleteById(gradeId);				
+		return true;
+	}
+	
+	private void checkAdminPermission(Grade grade) {
+		List<UserRole> permitedRoles = new ArrayList<>();
+		permitedRoles.add(UserRole.ADMIN);
+		User user = this.userService.findLoggedUser();
+		long institutionId = grade.getInstitution().getId();
+		PermissionChecker.checkPermission(user, institutionId, permitedRoles);
+	}
+
 }

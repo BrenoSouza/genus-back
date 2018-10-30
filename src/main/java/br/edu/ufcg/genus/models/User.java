@@ -22,10 +22,6 @@ import javax.validation.constraints.Size;
 
 import br.edu.ufcg.genus.utils.ServerConstants;
 
-/*
- * TODO:
- * Add Student, Teacher, ADM and Notification to this class
- */
 @Entity
 @Table(name="User_Sys")
 public class User {
@@ -54,8 +50,7 @@ public class User {
 	
 	@ManyToMany(fetch=FetchType.EAGER,
 	cascade = { 
-        CascadeType.PERSIST, 
-        CascadeType.MERGE
+        CascadeType.PERSIST
     })
     @JoinTable(name = "teacher_subject",
         joinColumns = @JoinColumn(name = "user_id", referencedColumnName="id"),
@@ -113,12 +108,20 @@ public class User {
 		return username;
 	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getEmail() {
 		return email;
 	}
 
 	public String getPassword() {
 		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public List<Role> getRoles() {

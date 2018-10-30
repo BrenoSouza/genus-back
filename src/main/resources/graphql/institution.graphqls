@@ -17,6 +17,13 @@ input CreateInstitutionInput {
   address: String!
 }
 
+input UpdateInstitutionInput {
+  institutionId: ID!
+  name: String
+  phone: String
+  address: String
+}
+
 input GetUsersFromInstitutionByRoleInput {
   institutionId: ID!
   role: UserRole!
@@ -31,13 +38,14 @@ input RemoveUserFromInstitutionInput {
 }
 
 extend type Query {
-    findInstitution(id: ID!): Institution
-    getInstitutionsFromLoggedUser: [Institution!]
-    getAllUsersFromInstitution(id: ID!) : [User]!
-    getUsersFromInstitutionByRole(input: GetUsersFromInstitutionByRoleInput!) : [User]!
+  findInstitution(id: ID!): Institution
+  getInstitutionsFromLoggedUser: [Institution!]
+  getAllUsersFromInstitution(id: ID!) : [User]!
+  getUsersFromInstitutionByRole(input: GetUsersFromInstitutionByRoleInput!) : [User]!
 }
 
 extend type Mutation {
-    createInstitution(input: CreateInstitutionInput!): Institution
-    removeUserFromInstitution(input: RemoveUserFromInstitutionInput!) : Boolean
+  createInstitution(input: CreateInstitutionInput!): Institution
+  removeUserFromInstitution(input: RemoveUserFromInstitutionInput!) : Boolean
+  updateInstitution(input: UpdateInstitutionInput!): Institution
 }

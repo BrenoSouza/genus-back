@@ -3,11 +3,17 @@ type Subject {
   grade: Grade!
   name: String!
   teachers: [ User! ]!
+  forum: [Discussion!]!
 }
 
 input SubjectCreationInput {
   gradeId: ID!
   name: String!
+}
+
+input UpdateSubjectInput {
+  subjectId: ID!
+  name: String
 }
 
 extend type Query {
@@ -16,5 +22,7 @@ extend type Query {
 
 extend type Mutation {
   createSubject (input: SubjectCreationInput!) : Subject
+  updateSubject(input: UpdateSubjectInput!): Subject
+  removeSubject (subjectId: ID!) : Boolean 
   addTeacherToSubject (subjectId: ID!, teacherId: ID!) : Subject
 }

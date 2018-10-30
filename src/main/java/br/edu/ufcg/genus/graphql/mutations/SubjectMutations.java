@@ -16,6 +16,7 @@ import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.services.SubjectService;
 import br.edu.ufcg.genus.services.UserService;
+import br.edu.ufcg.genus.update_inputs.UpdateSubjectInput;
 
 public class SubjectMutations implements GraphQLMutationResolver {
 	
@@ -42,5 +43,25 @@ public class SubjectMutations implements GraphQLMutationResolver {
 	public Subject addTeacherToSubject(Long subjectId, Long teacherId) {
 		return this.userService.addTeacher(subjectId, teacherId);
 	}
+
+	public Subject updateSubject(UpdateSubjectInput input) {
+
+        Set<ConstraintViolation<UpdateSubjectInput>> violations = validator.validate(input);
+        if (violations.size() > 0) {
+            Map<String, Object> extensions = new HashMap<>();
+            violations.forEach((ConstraintViolation<UpdateSubjectInput> v) -> {
+                extensions.put(v.getMessage(), v.getMessage());
+            });
+            throw new InvalidAttributesException("Invalid attributes passed", extensions);
+        }
+
+        return subjectService.updateSubject(input);
+    }
+    
+	public boolean removeSubject(long subjectId) {
+		return this.subjectService.removeSubject(subjectId);
+	}
+	
+	
 
 }

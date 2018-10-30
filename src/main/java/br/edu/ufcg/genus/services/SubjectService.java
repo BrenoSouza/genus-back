@@ -1,7 +1,7 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +14,8 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.SubjectRepository;
+import br.edu.ufcg.genus.repositories.UserRepository;
+import br.edu.ufcg.genus.update_inputs.UpdateSubjectInput;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
@@ -34,12 +36,14 @@ public class SubjectService {
 	@Autowired
 	private GradeService gradeService;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	public Subject createSubject(SubjectCreationInput input) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
 		Institution institution = this.institutionService.findById(grade.getInstitution().getId())
 				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", grade.getInstitution().getId()));
 		User user = this.userService.findLoggedUser();
-		//if (!institution.getOwner().(user)) throw new RuntimeException("Only owners can do this action"); // CRIAR UMA EXCEPTION
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
@@ -48,8 +52,8 @@ public class SubjectService {
 		return newSubject;
 	}
 	
-	public Optional<Subject> findSubjectById(long id) {
-		return this.subjectRepository.findById(id);
+	public Subject findSubjectById(long id) {
+		return this.subjectRepository.findById(id).orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", id));
 	}
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
@@ -59,10 +63,36 @@ public class SubjectService {
 	}
 		
 	public Iterable<User> findTeachersBySubject(Long subjectId) {
-		Subject subject = this.subjectService.findSubjectById(subjectId)
-			.orElseThrow(() -> new InvalidIDException("Subject with passed ID was not found", subjectId));
-
+		Subject subject = this.subjectService.findSubjectById(subjectId);
         return subject.getTeachers();
     }
+
+	public Subject updateSubject(UpdateSubjectInput input) {
+		Subject subject = findSubjectById(input.getSubjectId());
+		checkAdminPermission(subject);
+        if (input.getName() != null) {
+            subject.setName(input.getName());
+		}
+        return subjectRepository.save(subject);
+	}
+	
+	public boolean removeSubject(long id) {
+		Subject subject = findSubjectById(id);
+		checkAdminPermission(subject);
+		for(User user: subject.getTeachers()) {
+			user.removeSubject(subject);
+		}
+		userRepository.saveAll(subject.getTeachers());
+		this.subjectRepository.deleteById(id);
+		return true;
+	}
+	
+	private void checkAdminPermission(Subject subject) {
+		List<UserRole> permitedRoles = new ArrayList<>();
+		permitedRoles.add(UserRole.ADMIN);
+		long institutionId = subject.getGrade().getInstitution().getId();
+		User user = this.userService.findLoggedUser();
+		PermissionChecker.checkPermission(user, institutionId, permitedRoles);
+	}
 
 }

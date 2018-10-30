@@ -27,6 +27,7 @@ import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
+import br.edu.ufcg.genus.update_inputs.UpdateInstitutionInput;
 
 @Service
 public class InstitutionService {
@@ -36,7 +37,7 @@ public class InstitutionService {
 	
 	@Autowired
     private UserService userService;
-	
+
 	@Autowired
 	private UserInstitutionRepository userInstitutionRepository;
 	
@@ -162,4 +163,30 @@ public class InstitutionService {
 		}
 		this.userService.saveUserInRepository(user);
 	}
+
+	public Institution updateInstitution(UpdateInstitutionInput input) {
+		List<UserRole> permittedRoles = new ArrayList<>();
+		permittedRoles.add(UserRole.ADMIN);
+
+		User user = this.userService.findLoggedUser();
+
+		Institution institution = findById(input.getInstitutionId())
+			.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
+		
+		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
+
+        if (input.getName() != null) {
+            institution.setName(input.getName());
+		}
+		
+		if (input.getAddress() != null) {
+            institution.setAddress(input.getAddress());
+		}
+		
+		if (input.getPhone() != null) {
+            institution.setPhone(input.getPhone());
+        }
+
+        return institutionRepository.save(institution);
+    }
 }

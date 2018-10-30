@@ -2,6 +2,7 @@ package br.edu.ufcg.genus.models;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -41,6 +43,10 @@ public class Subject {
 	mappedBy = "subjects")
 	private Set<User> teachers = new HashSet<>();
 	
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
+	@Column(name="forum", nullable=false)
+	private Set<Discussion> forum;
+	
 	//list of students/ StudentSubject
 	//forum
 	//material repository
@@ -48,12 +54,13 @@ public class Subject {
 	
 	public Subject() {
 		this.teachers = new HashSet<>();
+		this.forum = new LinkedHashSet<>();
 	}
 	
 	public Subject(Grade owner, String name) {
+		this();
 		this.grade = owner;
 		this.name = name;
-		this.teachers = new HashSet<>();
 	}
 
 	public Long getId() {
@@ -82,6 +89,18 @@ public class Subject {
 
 	public boolean addTeacher(User teacher) {
 		return this.teachers.add(teacher);
+	}
+	
+	public boolean addDiscussion(Discussion discussion) {
+		return this.forum.add(discussion);
+	}
+
+	public Set<Discussion> getForum() {
+		return forum;
+	}
+
+	public void setForum(Set<Discussion> forum) {
+		this.forum = forum;
 	}
 
 	public List<User> getTeachers() {

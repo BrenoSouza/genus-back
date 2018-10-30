@@ -1,0 +1,20 @@
+type Discussion {
+  id: ID!
+  title: String!
+  creator: User!
+  subject: Subject!
+  creationDate: String!
+  lastUpdatedDate: String!
+  replies(page: Int!, size: Int!): [Reply!]!
+  replyNumber: Int!
+}
+
+input DiscussionCreationInput {
+  title: String!
+  subjectId: ID!
+  content: String!
+}
+
+extend type Mutation {
+  createDiscussion (input: DiscussionCreationInput!) : Discussion!
+}
