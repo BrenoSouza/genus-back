@@ -65,6 +65,11 @@ public class SubjectService {
 	public Iterable<User> findTeachersBySubject(Long subjectId) {
 		Subject subject = this.subjectService.findSubjectById(subjectId);
         return subject.getTeachers();
+	}
+	
+	public Iterable<User> findStudentsBySubject(Long subjectId) {
+		Subject subject = this.subjectService.findSubjectById(subjectId);
+        return subject.getStudents();
     }
 
 	public Subject updateSubject(UpdateSubjectInput input) {

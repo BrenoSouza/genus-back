@@ -25,6 +25,7 @@ import br.edu.ufcg.genus.graphql.resolvers.DiscussionResolver;
 import br.edu.ufcg.genus.graphql.resolvers.ReplyResolver;
 import br.edu.ufcg.genus.graphql.resolvers.GradeResolver;
 import br.edu.ufcg.genus.graphql.resolvers.InstitutionResolver;
+import br.edu.ufcg.genus.graphql.resolvers.UserResolver;
 import br.edu.ufcg.genus.graphql.resolvers.SubjectResolver;
 import graphql.servlet.GraphQLErrorHandler;
 import graphql.ExceptionWhileDataFetching;
@@ -74,6 +75,11 @@ public class GenusApplication {
 	@Bean
 	public UserMutations userMutations() {
 		return new UserMutations();
+	}
+	
+	@Bean
+	public UserResolver userResolver() {
+		return new UserResolver();
 	}
 	
 	@Bean

@@ -3,6 +3,7 @@ type Subject {
   grade: Grade!
   name: String!
   teachers: [ User! ]!
+  students: [ User! ]!
   forum: [Discussion!]!
 }
 
@@ -25,4 +26,5 @@ extend type Mutation {
   updateSubject(input: UpdateSubjectInput!): Subject
   removeSubject (subjectId: ID!) : Boolean 
   addTeacherToSubject (subjectId: ID!, teacherId: ID!) : Subject
+  addStudentToSubject (subjectId: ID!, studentId: ID!) : Subject
 }

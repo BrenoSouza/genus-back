@@ -58,6 +58,16 @@ public class User {
     )
 	private Set<Subject> subjects = new HashSet<>();;
 
+	@ManyToMany(fetch=FetchType.EAGER,
+	cascade = { 
+        CascadeType.PERSIST
+    })
+    @JoinTable(name = "student_subject",
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName="id"),
+        inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName="id")
+    )
+	private Set<Subject> subjectsStudent = new HashSet<>();;
+
 	public User() {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
@@ -84,6 +94,14 @@ public class User {
 	public List<Subject> findSubjects() {
 		List<Subject> result = new ArrayList<>();
 		for (Subject subject : subjects) {
+			result.add(subject);
+		}
+		return result;
+	}
+
+	public List<Subject> findSubjectsStudent() {
+		List<Subject> result = new ArrayList<>();
+		for (Subject subject : subjectsStudent) {
 			result.add(subject);
 		}
 		return result;
@@ -152,12 +170,54 @@ public class User {
 		return result;
 	}
 
+	public void setSubjectsStudent(Set<Subject> subjectsStudent) {
+		this.subjectsStudent = subjectsStudent;
+	}
+
+	public List<Subject> getSubjectsStudent() {
+		List<Subject> result = new ArrayList<>();
+		for (Subject subject : subjectsStudent) {
+			result.add(subject);
+		}
+		return result;
+	}
+
 	public void addSubject(Subject subject) {
         subjects.add(subject);
+	}
+
+	public void addSubjectStudent(Subject subject) {
+        subjectsStudent.add(subject);
 	}
 	
 	public boolean removeSubject(Subject subject) {
 		return subjects.remove(subject);
+	}
+
+	public boolean removeSubjectStudent(Subject subject) {
+		return subjectsStudent.remove(subject);
+	}
+
+	public boolean checkStudent(Subject subject) {
+		boolean result = false;
+
+		for (Subject subjectStudent : subjectsStudent) {
+			if (subject.equals(subjectStudent)) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	public boolean checkTeacher(Subject subject) {
+		boolean result = false;
+
+		for (Subject subjectTeacher : subjects) {
+			if (subject.equals(subjectTeacher)) {
+				result = true;
+			}
+		}
+		return result;
 	}
 	
 	@Override

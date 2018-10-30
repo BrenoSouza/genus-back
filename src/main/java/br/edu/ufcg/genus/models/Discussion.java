@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +37,7 @@ public class Discussion {
 	
 	private String title;
 	
-	@OneToMany(mappedBy="discussion", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="discussion", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	@Column(name="replies", nullable=false)
 	private List<Reply> replies;
 	
@@ -150,9 +151,4 @@ public class Discussion {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-
 }

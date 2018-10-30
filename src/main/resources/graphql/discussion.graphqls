@@ -17,4 +17,5 @@ input DiscussionCreationInput {
 
 extend type Mutation {
   createDiscussion (input: DiscussionCreationInput!) : Discussion!
+  removeDiscussion (discussionId: ID!) : Boolean 
 }

@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
+import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.models.Discussion;
+import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
@@ -35,7 +37,9 @@ public class DiscussionService {
 	public Discussion createDiscussion(DiscussionCreationInput input) {
 		User user = userService.findLoggedUser();
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
-		//TODO: ADD CHECK HERE TO SEE IF THIS USER CAN CREATE THE FORUM POST ON THE SUBJECT
+
+		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
+
 		Discussion forumPost = new Discussion(user, subject, input.getTitle());
 		subject.addDiscussion(forumPost);
 		Reply reply = new Reply(input.getContent(), user, forumPost);
@@ -45,4 +49,14 @@ public class DiscussionService {
 		return forumPost;
 	}
 
+	public boolean removeDiscussion(long id) {
+		Discussion discussion = findDiscussionById(id);
+		User user = userService.findLoggedUser();
+		Subject subject = discussion.getSubject();
+
+		if (!user.checkTeacher(subject) && !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+
+		discussionRepository.deleteById(id);
+		return true;
+	}
 }
