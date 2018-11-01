@@ -77,8 +77,9 @@ public class UserService {
         return user;
     }
 
-	public Optional<User> findUserById(long id) {
-        return userRepository.findById(id);
+	public User findUserById(long id) {
+        return userRepository.findById(id)
+        		.orElseThrow(() -> new InvalidIDException("User with passed ID was not found", id));
     }
 
     public Subject addTeacher(Long subjectId, Long teacherId) {

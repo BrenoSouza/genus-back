@@ -111,7 +111,7 @@ public class InstitutionService {
             throw new NotAuthorizedException("You don't have permission to do this");
 		}
 		
-		User toBeRemoved = userService.findUserById(input.getToBeRemovedId()).orElseThrow(() -> new InvalidIDException("User with passed ID was not found", input.getToBeRemovedId()));
+		User toBeRemoved = userService.findUserById(input.getToBeRemovedId());
 		
 		boolean result = false;
 		if (user.equals(toBeRemoved)) {
