@@ -15,7 +15,13 @@ input DiscussionCreationInput {
   content: String!
 }
 
+input UpdateDiscussionInput {
+  discussionId: ID!
+  title: String
+}
+
 extend type Mutation {
   createDiscussion (input: DiscussionCreationInput!) : Discussion!
   removeDiscussion (discussionId: ID!) : Boolean 
+  updateDiscussion(input: UpdateDiscussionInput!): Discussion
 }

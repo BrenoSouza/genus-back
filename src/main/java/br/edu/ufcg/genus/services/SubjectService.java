@@ -69,7 +69,7 @@ public class SubjectService {
 	
 	public Iterable<User> findStudentsBySubject(Long subjectId) {
 		Subject subject = this.subjectService.findSubjectById(subjectId);
-        return subject.getStudents();
+        return subject.findStudents();
     }
 
 	public Subject updateSubject(UpdateSubjectInput input) {

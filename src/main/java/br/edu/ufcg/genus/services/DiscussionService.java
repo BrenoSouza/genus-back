@@ -1,5 +1,7 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,12 +9,12 @@ import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.models.Discussion;
-import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.DiscussionRepository;
 import br.edu.ufcg.genus.repositories.ReplyRepository;
+import br.edu.ufcg.genus.update_inputs.UpdateDiscussionInput;
 
 @Service
 public class DiscussionService {
@@ -53,10 +55,24 @@ public class DiscussionService {
 		Discussion discussion = findDiscussionById(id);
 		User user = userService.findLoggedUser();
 		Subject subject = discussion.getSubject();
-
 		if (!user.checkTeacher(subject) && !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
 
 		discussionRepository.deleteById(id);
 		return true;
+	}
+
+	public Discussion updateDiscussion(UpdateDiscussionInput input) {
+		Discussion discussion = findDiscussionById(input.getDiscussionId());
+		Subject subject = discussion.getSubject();
+		User user = userService.findLoggedUser();
+
+		if (!user.checkTeacher(subject) && !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+
+        if (input.getTitle() != null) {
+            discussion.setTitle(input.getTitle());
+		}
+		Date now = new Date();
+		discussion.setLastUpdatedDate(now);
+        return discussionRepository.save(discussion);
 	}
 }

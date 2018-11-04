@@ -58,15 +58,8 @@ public class User {
     )
 	private Set<Subject> subjects = new HashSet<>();;
 
-	@ManyToMany(fetch=FetchType.EAGER,
-	cascade = { 
-        CascadeType.PERSIST
-    })
-    @JoinTable(name = "student_subject",
-        joinColumns = @JoinColumn(name = "user_id", referencedColumnName="id"),
-        inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName="id")
-    )
-	private Set<Subject> subjectsStudent = new HashSet<>();;
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, orphanRemoval = true)
+	private Set<StudentSubject> subjectsStudent = new HashSet<>();
 
 	public User() {
 		this.institutions = new HashSet<>();
@@ -101,8 +94,10 @@ public class User {
 
 	public List<Subject> findSubjectsStudent() {
 		List<Subject> result = new ArrayList<>();
-		for (Subject subject : subjectsStudent) {
-			result.add(subject);
+		for(StudentSubject studentSubject : this.subjectsStudent) {
+			if(studentSubject.getUser().equals(this)) {
+				result.add(studentSubject.getSubject());
+			}
 		}
 		return result;
 	}
@@ -170,13 +165,13 @@ public class User {
 		return result;
 	}
 
-	public void setSubjectsStudent(Set<Subject> subjectsStudent) {
+	public void setSubjectsStudent(Set<StudentSubject> subjectsStudent) {
 		this.subjectsStudent = subjectsStudent;
 	}
 
-	public List<Subject> getSubjectsStudent() {
-		List<Subject> result = new ArrayList<>();
-		for (Subject subject : subjectsStudent) {
+	public List<StudentSubject> getSubjectsStudent() {
+		List<StudentSubject> result = new ArrayList<>();
+		for (StudentSubject subject : subjectsStudent) {
 			result.add(subject);
 		}
 		return result;
@@ -186,23 +181,23 @@ public class User {
         subjects.add(subject);
 	}
 
-	public void addSubjectStudent(Subject subject) {
-        subjectsStudent.add(subject);
+	public void addSubjectStudent(StudentSubject studentSubject) {
+        subjectsStudent.add(studentSubject);
 	}
 	
 	public boolean removeSubject(Subject subject) {
 		return subjects.remove(subject);
 	}
 
-	public boolean removeSubjectStudent(Subject subject) {
+	/*public boolean removeSubjectStudent(Subject subject) {
 		return subjectsStudent.remove(subject);
-	}
+	}*/
 
 	public boolean checkStudent(Subject subject) {
 		boolean result = false;
 
-		for (Subject subjectStudent : subjectsStudent) {
-			if (subject.equals(subjectStudent)) {
+		for (StudentSubject subjectStudent : subjectsStudent) {
+			if (subject.equals(subjectStudent.getSubject())) {
 				result = true;
 			}
 		}
