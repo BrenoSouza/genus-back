@@ -58,10 +58,13 @@ public class ReplyService {
 		User user = userService.findLoggedUser();
 		Subject subject = reply.getDiscussion().getSubject();
 
-		if (!user.checkTeacher(subject) || !reply.getUser().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+		if (!user.checkTeacher(subject) && !reply.getUser().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
 
-		this.replyRepository.deleteById(replyId);
-		return true;	}
+		reply.setContent("REPLY_REMOVED");
+		this.replyRepository.save(reply);
+
+		return true;
+	}
 
 	public Reply updateReply(UpdateReplyInput input) {
 		Reply reply = findReplyById(input.getReplyId());
