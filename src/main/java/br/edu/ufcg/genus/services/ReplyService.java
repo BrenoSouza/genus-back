@@ -1,5 +1,7 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.ReplyRepository;
+import br.edu.ufcg.genus.update_inputs.UpdateReplyInput;
 
 @Service
 public class ReplyService {
@@ -25,6 +28,11 @@ public class ReplyService {
 	@Autowired
 	private UserService userService;
 	
+	public Reply findReplyById(Long id) {
+		return replyRepository.findById(id)
+			.orElseThrow(() -> new InvalidIDException("Discussion with passed ID was not found", id));
+	}
+
 	public Reply createReply(ReplyCreationInput input) {
 		User user = userService.findLoggedUser();	
 		Discussion discussion = discussionService.findDiscussionById(input.getForumPostId());
@@ -54,5 +62,19 @@ public class ReplyService {
 
 		this.replyRepository.deleteById(replyId);
 		return true;	}
+
+	public Reply updateReply(UpdateReplyInput input) {
+		Reply reply = findReplyById(input.getReplyId());
+		Discussion discussion = reply.getDiscussion();
+		Subject subject = discussion.getSubject();
+		User user = userService.findLoggedUser();
+
+		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
+
+		if (input.getContent() != null) {
+			reply.setContent(input.getContent());
+		}
+		return replyRepository.save(reply);
+	}
 
 }
