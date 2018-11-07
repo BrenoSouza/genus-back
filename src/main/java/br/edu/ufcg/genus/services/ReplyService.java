@@ -16,6 +16,7 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.ReplyRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateReplyInput;
+import br.edu.ufcg.genus.utils.ServerConstants;
 
 @Service
 public class ReplyService {
@@ -73,11 +74,20 @@ public class ReplyService {
 		Subject subject = reply.getDiscussion().getSubject();
 
 		if (!user.checkTeacher(subject) && !reply.getUser().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+		
+		//removeReplyAndChildren(reply);
+		//reply.setContent("REPLY_REMOVED");
+		//this.replyRepository.save(reply);
+		return removeReplyAndChildren(reply);
+	}
 
-		reply.setContent("REPLY_REMOVED");
+	private Boolean removeReplyAndChildren(Reply reply) {
+		for (Reply child : reply.getReplies()) {
+			removeReplyAndChildren(child);
+		}
+		reply.setContent(ServerConstants.REMOVED);
 		this.replyRepository.save(reply);
-
-		return true;
+		return null;
 	}
 
 	public Reply updateReply(UpdateReplyInput input) {
