@@ -42,12 +42,12 @@ public class DiscussionService {
 
 		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
 
-		Discussion forumPost = new Discussion(user, subject, input.getTitle());
+		Discussion forumPost = new Discussion(user, subject, input.getTitle(), input.getContent());
 		subject.addDiscussion(forumPost);
-		Reply reply = new Reply(input.getContent(), user, forumPost);
-		forumPost.addReply(reply);
+		//Reply reply = new Reply(input.getContent(), user, forumPost);
+		//forumPost.addReply(reply);
 		discussionRepository.save(forumPost);
-		forumReplyRepository.save(reply);
+		//forumReplyRepository.save(reply);
 		return forumPost;
 	}
 

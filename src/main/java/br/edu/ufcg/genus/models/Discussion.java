@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Discussion {
@@ -37,6 +38,8 @@ public class Discussion {
 	
 	private String title;
 	
+	private String content;
+	
 	@OneToMany(mappedBy="discussion", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	@Column(name="replies", nullable=false)
 	private List<Reply> replies;
@@ -48,11 +51,12 @@ public class Discussion {
 		this.lastUpdatedDate = now;
 	}
 	
-	public Discussion(User creator, Subject subject, String title) {
+	public Discussion(User creator, Subject subject, String title, String content) {
 		this();
 		this.creator = creator;
 		this.subject = subject;
 		this.title = title;
+		this.content = content;
 	}
 	
 	public boolean addReply(Reply reply) {
@@ -113,6 +117,14 @@ public class Discussion {
 
 	public void setReplies(List<Reply> replies) {
 		this.replies = replies;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	@Override
