@@ -4,6 +4,8 @@ type Reply {
   date: String!
   user: User!
   discussion: Discussion!
+  parent: Reply
+  replies: [Reply!]!
 }
 
 input ReplyCreationInput {
@@ -16,8 +18,14 @@ input UpdateReplyInput {
   content: String
 }
 
+input ReplyToReplyInput {
+  parentId: ID!
+  content: String
+}
+
 extend type Mutation {
   createReply (input: ReplyCreationInput!) : Reply!
   removeReply (replyId: ID!) : Boolean 
   updateReply (input: UpdateReplyInput): Reply
+  replyToReply(input: ReplyToReplyInput) : Reply
 }

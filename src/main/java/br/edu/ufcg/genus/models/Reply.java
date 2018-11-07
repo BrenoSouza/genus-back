@@ -1,14 +1,18 @@
 package br.edu.ufcg.genus.models;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Reply {
@@ -30,8 +34,16 @@ public class Reply {
     @JoinColumn(name="discussion_id", nullable=false)
 	private Discussion discussion;
 	
+	@ManyToOne
+	@JoinColumn(name="parent_id", nullable=true)
+	private Reply parent;
+	
+	@OneToMany(mappedBy = "parent", fetch=FetchType.EAGER)
+	private Set<Reply> replies;
+	
 	public Reply () {
 		this.date = new Date();
+		this.replies = new LinkedHashSet<>();
 	}
 	
 	public Reply(String content, User user, Discussion discussion) {
@@ -39,6 +51,15 @@ public class Reply {
 		this.content = content;
 		this.user = user;
 		this.discussion = discussion;
+	}
+	
+	public Reply(String content, User user, Discussion discussion, Reply parent) {
+		this(content, user, discussion);
+		this.parent = parent;
+	}
+	
+	public boolean addReply(Reply reply) {
+		return this.replies.add(reply);
 	}
 
 	public Long getId() {
@@ -75,6 +96,22 @@ public class Reply {
 
 	public void setDiscussion(Discussion discussion) {
 		this.discussion = discussion;
+	}
+
+	public Reply getParent() {
+		return parent;
+	}
+
+	public void setParenty(Reply parent) {
+		this.parent = parent;
+	}
+
+	public Set<Reply> getReplies() {
+		return replies;
+	}
+
+	public void setReplies(Set<Reply> replies) {
+		this.replies = replies;
 	}
 
 	@Override

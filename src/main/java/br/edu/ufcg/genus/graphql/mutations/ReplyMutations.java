@@ -13,6 +13,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.ReplyCreationInput;
+import br.edu.ufcg.genus.inputs.ReplyToReplyInput;
 import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.services.ReplyService;
 import br.edu.ufcg.genus.update_inputs.UpdateReplyInput;
@@ -26,6 +27,10 @@ public class ReplyMutations implements GraphQLMutationResolver {
 
 	public Reply createReply(ReplyCreationInput input) {
 		return replyService.createReply(input);
+	}
+	
+	public Reply replyToReply(ReplyToReplyInput input) {
+		return replyService.replyToReply(input);
 	}
 
 	public Boolean removeReply(Long replyId) {
