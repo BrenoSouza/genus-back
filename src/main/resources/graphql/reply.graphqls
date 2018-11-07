@@ -11,7 +11,13 @@ input ReplyCreationInput {
   forumPostId: ID!
 }
 
+input UpdateReplyInput {
+  replyId: ID!
+  content: String
+}
+
 extend type Mutation {
   createReply (input: ReplyCreationInput!) : Reply!
   removeReply (replyId: ID!) : Boolean 
+  updateReply (input: UpdateReplyInput): Reply
 }

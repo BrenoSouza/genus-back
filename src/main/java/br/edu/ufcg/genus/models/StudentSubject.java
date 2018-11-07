@@ -114,7 +114,4 @@ public class StudentSubject {
 			return false;
 		return true;
 	}
-	
-	
-
 }
