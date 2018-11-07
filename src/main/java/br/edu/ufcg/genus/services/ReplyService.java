@@ -87,7 +87,7 @@ public class ReplyService {
 		}
 		reply.setContent(ServerConstants.REMOVED);
 		this.replyRepository.save(reply);
-		return null;
+		return true;
 	}
 
 	public Reply updateReply(UpdateReplyInput input) {
