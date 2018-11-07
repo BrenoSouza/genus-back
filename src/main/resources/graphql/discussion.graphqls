@@ -26,3 +26,7 @@ extend type Mutation {
   removeDiscussion (discussionId: ID!) : Boolean 
   updateDiscussion(input: UpdateDiscussionInput!): Discussion
 }
+
+extend type Query {
+  findDiscussion (id: ID!) : Discussion
+}

@@ -29,3 +29,7 @@ extend type Mutation {
   updateReply (input: UpdateReplyInput): Reply
   replyToReply(input: ReplyToReplyInput) : Reply
 }
+
+extend type Query {
+  findReply (id: ID!) : Reply
+}
