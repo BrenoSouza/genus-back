@@ -15,7 +15,7 @@ public class Evaluation {
 	@Id
 	@Column(name="id", nullable=false)
     @GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	@Column(name = "name")
 	private String name;
@@ -44,7 +44,7 @@ public class Evaluation {
 		this.studentSubject = studentSubject;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

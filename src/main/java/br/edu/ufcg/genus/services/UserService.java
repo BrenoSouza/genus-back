@@ -19,7 +19,6 @@ import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.models.Institution;
-import br.edu.ufcg.genus.models.Role;
 import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
@@ -98,7 +97,7 @@ public class UserService {
         return this.subjectService.findSubjectById(subjectId);
     }
 
-    public Subject addStudent(Long subjectId, Long studentId) {
+    public Subject addStudent(Long subjectId, Long studentId, User user) {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 
@@ -109,7 +108,7 @@ public class UserService {
         Institution institution = subject.getGrade().getInstitution();
         
         //Use checker here
-        if (!findRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
+        if (!findRole(institution.getId(), user).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
         if (!student.getRole(institution.getId()).equals(UserRole.STUDENT)) throw new NotAuthorizedException("You don't have permission to do this");
         
         StudentSubject studentSubject = new StudentSubject(student, subject);
@@ -133,8 +132,7 @@ public class UserService {
     	return passwordEncoder.matches(password, user.getPassword());
     }
 	
-	public UserRole findRole(Long institutionId) {
-		User user = findLoggedUser();
+	public UserRole findRole(Long institutionId, User user) {
 		return user.getRole(institutionId);
     }
     

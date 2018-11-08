@@ -3,7 +3,6 @@ package br.edu.ufcg.genus.services;
 import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidPermissionException;
-import br.edu.ufcg.genus.exception.InvalidTokenException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
 import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
@@ -34,23 +31,18 @@ public class InstitutionService {
 	
 	@Autowired
 	private InstitutionRepository institutionRepository;
-	
-	@Autowired
-    private UserService userService;
 
 	@Autowired
 	private UserInstitutionRepository userInstitutionRepository;
+	
+	@Autowired
+	private UserService userService;
 	
     public Optional<Institution> findById(Long id) {
         return institutionRepository.findById(id);
     }
 
-    public Institution createInstitution(CreateInstitutionInput input) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        User owner = userService.findUserByEmail(email)
-        .orElseThrow(() -> new InvalidTokenException("Token is not valid."));
-
+    public Institution createInstitution(CreateInstitutionInput input, User owner) {
         Institution institution = new Institution();
         institution.setName(input.getName());
         institution.setEmail(input.getEmail());
@@ -66,8 +58,7 @@ public class InstitutionService {
 		institutionRepository.save(institution);
 	}
 	
-	public List<Institution> getInstitutionsFromLoggedUser() {
-		User user = this.userService.findLoggedUser();
+	public List<Institution> getInstitutionsFromUser(User user) {
 		return user.findInstitutions();
 	}
 	
@@ -100,8 +91,7 @@ public class InstitutionService {
 		return result;
 	}
 	
-	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input) {
-		User user = this.userService.findLoggedUser();
+	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input, User user) {
 		if (!this.userService.passwordMatch(user, input.getPassword())) {
 			throw new InvalidCredentialsException("Invalid email or password", null);
 
@@ -164,11 +154,9 @@ public class InstitutionService {
 		this.userService.saveUserInRepository(user);
 	}
 
-	public Institution updateInstitution(UpdateInstitutionInput input) {
+	public Institution updateInstitution(UpdateInstitutionInput input, User user) {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
-
-		User user = this.userService.findLoggedUser();
 
 		Institution institution = findById(input.getInstitutionId())
 			.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));

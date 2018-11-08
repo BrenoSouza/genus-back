@@ -43,13 +43,6 @@ public class Subject {
 	mappedBy = "subjects")
 	private Set<User> teachers;
 	
-	/*@ManyToMany(fetch = FetchType.EAGER,
-	cascade = {
-		CascadeType.PERSIST,
-		CascadeType.MERGE
-	},
-	mappedBy = "subjectsStudent")
-	private Set<User> students;*/
 	
 	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<StudentSubject> students;
@@ -59,10 +52,6 @@ public class Subject {
 	@Column(name="forum", nullable=false)
 	private Set<Discussion> forum;
 	
-	//list of students/ StudentSubject
-	//forum
-	//material repository
-	//teachers
 	
 	public Subject() {
 		this.students = new HashSet<>();

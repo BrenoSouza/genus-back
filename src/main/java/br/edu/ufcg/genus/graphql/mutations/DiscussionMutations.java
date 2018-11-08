@@ -15,6 +15,7 @@ import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.services.DiscussionService;
+import br.edu.ufcg.genus.services.UserService;
 import br.edu.ufcg.genus.update_inputs.UpdateDiscussionInput;
 
 public class DiscussionMutations implements GraphQLMutationResolver {
@@ -23,13 +24,15 @@ public class DiscussionMutations implements GraphQLMutationResolver {
 	private DiscussionService forumPostService;
 	@Autowired
     private Validator validator;
+	@Autowired
+	private UserService userService;
 
 	public Discussion createDiscussion(DiscussionCreationInput input) {
-		return this.forumPostService.createDiscussion(input);
+		return this.forumPostService.createDiscussion(input, userService.findLoggedUser());
 	}
 
 	public Boolean removeDiscussion(Long discussionId) {
-		return this.forumPostService.removeDiscussion(discussionId);
+		return this.forumPostService.removeDiscussion(discussionId, userService.findLoggedUser());
 	}
 
 	public Discussion updateDiscussion(UpdateDiscussionInput input) {
@@ -42,8 +45,7 @@ public class DiscussionMutations implements GraphQLMutationResolver {
             });
             throw new InvalidAttributesException("Invalidattributes passed", extensions);
         }
-
-        return forumPostService.updateDiscussion(input);
+        return forumPostService.updateDiscussion(input, userService.findLoggedUser());
     }
 
 }
