@@ -8,7 +8,6 @@ import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,7 @@ import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateInstitutionInput;
+import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
 public class InstitutionService {
@@ -38,16 +38,13 @@ public class InstitutionService {
 	@Autowired
 	private UserService userService;
 	
-    public Optional<Institution> findById(Long id) {
-        return institutionRepository.findById(id);
+    public Institution findById(Long id) {
+        return institutionRepository.findById(id)
+        		.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", id));
     }
 
     public Institution createInstitution(CreateInstitutionInput input, User owner) {
-        Institution institution = new Institution();
-        institution.setName(input.getName());
-        institution.setEmail(input.getEmail());
-        institution.setPhone(input.getPhone());
-        institution.setAddress(input.getAddress());
+        Institution institution = new Institution(input.getName(), input.getAddress(), input.getPhone(), input.getEmail());
         institutionRepository.save(institution);
         addUserToInstitution(owner, institution, UserRole.ADMIN); // calls save
         return institution;
@@ -70,7 +67,7 @@ public class InstitutionService {
 	}
 	
 	public List<User> getAllUsersFromInstitution(Long institutionId) {
-		Institution institution = findById(institutionId).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", institutionId));
+		Institution institution = findById(institutionId);
 		List<User> result = new ArrayList<>();
 		for (UserInstitution userInstitution : institution.getUsers()) {
 			if (userInstitution.getInstitution().equals(institution)) {
@@ -81,7 +78,7 @@ public class InstitutionService {
 	}
 	
 	public List<User> getUsersFromInstitutionByRole(GetUsersFromInstitutionByRoleInput input) {
-		Institution institution = findById(input.getInstitutionId()).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
+		Institution institution = findById(input.getInstitutionId());
 		List<User> result = new ArrayList<>();
 		for (UserInstitution userInstitution : institution.getUsers()) {
 			if (userInstitution.getInstitution().equals(institution) && userInstitution.getRole().equals(input.getRole())) {
@@ -96,7 +93,7 @@ public class InstitutionService {
 			throw new InvalidCredentialsException("Invalid email or password", null);
 
 		}
-		Institution institution = findById(input.getInstitutionId()).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
+		Institution institution = findById(input.getInstitutionId());
 		if (!institution.getName().equals(input.getInstitutionName())) {
             throw new NotAuthorizedException("You don't have permission to do this");
 		}
@@ -158,11 +155,9 @@ public class InstitutionService {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
 
-		Institution institution = findById(input.getInstitutionId())
-			.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
+		Institution institution = findById(input.getInstitutionId());
+		PermissionChecker.checkPermission(user, institution.getId(), permittedRoles);
 		
-		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
-
         if (input.getName() != null) {
             institution.setName(input.getName());
 		}

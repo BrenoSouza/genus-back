@@ -17,7 +17,6 @@ import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
-import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
@@ -28,6 +27,7 @@ import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
 import br.edu.ufcg.genus.update_inputs.UpdateUserInput;
+import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
 public class UserService {
@@ -82,13 +82,13 @@ public class UserService {
     }
 
     public Subject addTeacher(Long subjectId, Long teacherId) {
-        User teacher = this.userRepository.findById(teacherId)
-            .orElseThrow(() -> new InvalidIDException("Teacher with passed ID was not found", teacherId));
-
+    	User teacher = findUserById(teacherId);
         Subject subject = this.subjectService.findSubjectById(subjectId);
         Institution institution = subject.getGrade().getInstitution();
-
-        if (!teacher.getRole(institution.getId()).equals(UserRole.TEACHER)) throw new NotAuthorizedException("You don't have permission to do this");
+        
+        List<UserRole> permitedRoles = new ArrayList<>();
+		permitedRoles.add(UserRole.TEACHER);
+		PermissionChecker.checkPermission(teacher, institution.getId(), permitedRoles);
 
         teacher.addSubject(subject);
         subject.addTeacher(teacher);
@@ -98,18 +98,19 @@ public class UserService {
     }
 
     public Subject addStudent(Long subjectId, Long studentId, User user) {
-		List<UserRole> permittedRoles = new ArrayList<>();
-		permittedRoles.add(UserRole.ADMIN);
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		List<UserRole> permittedRolesStudent = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.STUDENT);
 
-        User student = this.userRepository.findById(studentId)
-            .orElseThrow(() -> new InvalidIDException("Student with passed ID was not found", studentId));
+        User student = findUserById(studentId);
 
         Subject subject = this.subjectService.findSubjectById(subjectId);
         Institution institution = subject.getGrade().getInstitution();
         
         //Use checker here
-        if (!findRole(institution.getId(), user).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
-        if (!student.getRole(institution.getId()).equals(UserRole.STUDENT)) throw new NotAuthorizedException("You don't have permission to do this");
+        PermissionChecker.checkPermission(user, institution.getId(), permittedRolesOwner);
+        PermissionChecker.checkPermission(student, institution.getId(), permittedRolesStudent);
         
         StudentSubject studentSubject = new StudentSubject(student, subject);
         student.addSubjectStudent(studentSubject);
@@ -138,10 +139,7 @@ public class UserService {
     
     public User updateUser(UpdateUserInput input) {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new InvalidTokenException("Token is not valid"));
+        User user = findLoggedUser();
 
         if (input.getUsername() != null) {
             user.setUsername(input.getUsername());
@@ -152,12 +150,7 @@ public class UserService {
 
     public boolean updateUserPassword(String password, String newPassword) {
 		List<UserRole> permittedRoles = new ArrayList<>();
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new InvalidTokenException("User with passed Email was not found"));
-        
+        User user = findLoggedUser();
         if (!this.passwordMatch(user, password)) throw new InvalidPermissionException(permittedRoles);
 
         user.setPassword(passwordEncoder.encode(newPassword));

@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
-import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.DiscussionRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateDiscussionInput;
+import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
 public class DiscussionService {
@@ -30,9 +30,7 @@ public class DiscussionService {
 	
 	public Discussion createDiscussion(DiscussionCreationInput input, User user) {
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
-
-		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
-
+		PermissionChecker.checkSubjectPermission(user, subject);
 		Discussion forumPost = new Discussion(user, subject, input.getTitle(), input.getContent());
 		subject.addDiscussion(forumPost);
 		discussionRepository.save(forumPost);
@@ -41,19 +39,15 @@ public class DiscussionService {
 
 	public boolean removeDiscussion(long id, User user) {
 		Discussion discussion = findDiscussionById(id);
-		Subject subject = discussion.getSubject();
-		if (!user.checkTeacher(subject) && !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
-
+		PermissionChecker.checkDiscussionPermission(user, discussion);
 		discussionRepository.deleteById(id);
 		return true;
 	}
 
 	public Discussion updateDiscussion(UpdateDiscussionInput input, User user) {
 		Discussion discussion = findDiscussionById(input.getDiscussionId());
-		Subject subject = discussion.getSubject();
-
-		if (!user.checkTeacher(subject) && !discussion.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
-
+		PermissionChecker.checkDiscussionPermission(user, discussion);
+		
         if (input.getTitle() != null) {
             discussion.setTitle(input.getTitle());
 		}

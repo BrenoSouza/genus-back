@@ -30,9 +30,7 @@ public class GradeService {
 	private SubjectService subjectService;
 	
 	public Grade createGrade(GradeCreationInput input, User user) {
-		Institution institution = this.institutionService.findById(input.getInstitutionId())
-				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
-
+		Institution institution = this.institutionService.findById(input.getInstitutionId());
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
@@ -52,9 +50,7 @@ public class GradeService {
 	}
 	
     public Iterable<Grade> findGradesByInstitution(Long institutionId) {
-		Institution institution = this.institutionService.findById(institutionId)
-			.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", institutionId));
-
+		Institution institution = this.institutionService.findById(institutionId);
         return institution.getGrades();
 	}
 

@@ -38,8 +38,7 @@ public class SubjectService {
 	
 	public Subject createSubject(SubjectCreationInput input, User user) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
-		Institution institution = this.institutionService.findById(grade.getInstitution().getId())
-				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", grade.getInstitution().getId()));
+		Institution institution = this.institutionService.findById(grade.getInstitution().getId());
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
@@ -54,7 +53,6 @@ public class SubjectService {
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
 		Grade grade = this.gradeService.findGradeById(gradeId);
-
 		return grade.getSubjects();
 	}
 		

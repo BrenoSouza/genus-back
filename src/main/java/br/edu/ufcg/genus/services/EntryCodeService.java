@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.ExpiredEntryCodeException;
 import br.edu.ufcg.genus.exception.InvalidEntryCodeException;
-import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.UserAlreadyInInstitutionException;
 import br.edu.ufcg.genus.inputs.CreateAdvancedEntryCodeInput;
 import br.edu.ufcg.genus.inputs.CreateEntryCodeInput;
@@ -70,7 +69,7 @@ public class EntryCodeService {
 			throw new UserAlreadyInInstitutionException();
 		}
 		
-		Institution institution = this.institutionService.findById(entryCode.getInstitutionId()).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", entryCode.getInstitutionId()));
+		Institution institution = this.institutionService.findById(entryCode.getInstitutionId());
 		this.institutionService.addUserToInstitution(user, institution, entryCode.getRole());
 		if (entryCode.consumeUse() <= 0 ) {
 			this.entryCodeRepository.delete(entryCode);

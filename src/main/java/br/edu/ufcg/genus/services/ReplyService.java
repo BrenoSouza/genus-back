@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
-import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.ReplyCreationInput;
 import br.edu.ufcg.genus.inputs.ReplyToReplyInput;
 import br.edu.ufcg.genus.models.Discussion;
@@ -14,6 +13,7 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.ReplyRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateReplyInput;
+import br.edu.ufcg.genus.utils.PermissionChecker;
 import br.edu.ufcg.genus.utils.ServerConstants;
 
 @Service
@@ -35,8 +35,7 @@ public class ReplyService {
 		Discussion discussion = discussionService.findDiscussionById(input.getForumPostId());
 
 		Subject subject = discussion.getSubject();
-
-		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
+		PermissionChecker.checkSubjectPermission(user, subject);
 
 		Reply reply = new Reply(input.getContent(), user, discussion);
 		discussion.addReply(reply);
@@ -48,7 +47,7 @@ public class ReplyService {
 		Reply parent = findReplyById(input.getParentId());
 		Discussion discussion = parent.getDiscussion();
 		Subject subject = discussion.getSubject();
-		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
+		PermissionChecker.checkSubjectPermission(user, subject);
 		Reply reply = new Reply(input.getContent(), user, discussion, parent);
 		discussion.addReply(reply);
 		parent.addReply(reply);
@@ -61,13 +60,8 @@ public class ReplyService {
 	}
 
 	public Boolean removeReply(Long replyId, User user) {
-		Reply reply = replyRepository.findById(replyId)
-			.orElseThrow(() -> new InvalidIDException("Reply with passed ID was not found", replyId));
-
-		Subject subject = reply.getDiscussion().getSubject();
-
-		if (!user.checkTeacher(subject) && !reply.getUser().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
-		
+		Reply reply = findReplyById(replyId);
+		PermissionChecker.checkReplyPermission(user, reply);
 		return removeReplyAndChildren(reply);
 	}
 
@@ -85,7 +79,7 @@ public class ReplyService {
 		Discussion discussion = reply.getDiscussion();
 		Subject subject = discussion.getSubject();
 
-		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
+		PermissionChecker.checkSubjectPermission(user, subject);
 
 		if (input.getContent() != null) {
 			reply.setContent(input.getContent());
