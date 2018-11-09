@@ -101,7 +101,7 @@ public class UserService {
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
 		permittedRolesOwner.add(UserRole.ADMIN);
 		List<UserRole> permittedRolesStudent = new ArrayList<>();
-		permittedRolesOwner.add(UserRole.STUDENT);
+		permittedRolesStudent.add(UserRole.STUDENT);
 
         User student = findUserById(studentId);
 

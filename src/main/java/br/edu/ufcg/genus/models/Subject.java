@@ -44,11 +44,11 @@ public class Subject {
 	private Set<User> teachers;
 	
 	
-	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
 	private Set<StudentSubject> students;
 
 
-	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@Column(name="forum", nullable=false)
 	private Set<Discussion> forum;
 	
