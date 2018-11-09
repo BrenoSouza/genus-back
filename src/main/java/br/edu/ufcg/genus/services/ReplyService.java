@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.ReplyCreationInput;
+import br.edu.ufcg.genus.inputs.ReplyToReplyInput;
 import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.ReplyRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateReplyInput;
+import br.edu.ufcg.genus.utils.ServerConstants;
 
 @Service
 public class ReplyService {
@@ -46,6 +48,19 @@ public class ReplyService {
 		this.replyRepository.save(reply);
 		return reply;		
 	}
+	
+	public Reply replyToReply(ReplyToReplyInput input) {
+		User user = userService.findLoggedUser();
+		Reply parent = findReplyById(input.getParentId());
+		Discussion discussion = parent.getDiscussion();
+		Subject subject = discussion.getSubject();
+		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) throw new NotAuthorizedException("You don't have permission to do this");
+		Reply reply = new Reply(input.getContent(), user, discussion, parent);
+		discussion.addReply(reply);
+		parent.addReply(reply);
+		this.replyRepository.save(reply);
+		return reply;
+	}
 
 	public Iterable<Reply> findRepliesByDiscussion(Long id, Integer page, Integer size) {
 		return replyRepository.findByDiscussionId(PageRequest.of(page, size), id);
@@ -59,10 +74,19 @@ public class ReplyService {
 		Subject subject = reply.getDiscussion().getSubject();
 
 		if (!user.checkTeacher(subject) && !reply.getUser().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+		
+		//removeReplyAndChildren(reply);
+		//reply.setContent("REPLY_REMOVED");
+		//this.replyRepository.save(reply);
+		return removeReplyAndChildren(reply);
+	}
 
-		reply.setContent("REPLY_REMOVED");
+	private Boolean removeReplyAndChildren(Reply reply) {
+		for (Reply child : reply.getReplies()) {
+			removeReplyAndChildren(child);
+		}
+		reply.setContent(ServerConstants.REMOVED);
 		this.replyRepository.save(reply);
-
 		return true;
 	}
 
@@ -79,5 +103,7 @@ public class ReplyService {
 		}
 		return replyRepository.save(reply);
 	}
+	
+	
 
 }

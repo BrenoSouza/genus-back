@@ -16,8 +16,10 @@ import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
+import br.edu.ufcg.genus.graphql.queries.DiscussionQueries;
 import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
+import br.edu.ufcg.genus.graphql.queries.ReplyQueries;
 import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import br.edu.ufcg.genus.graphql.queries.UserRoleQueries;
@@ -155,5 +157,15 @@ public class GenusApplication {
 	@Bean
 	public ReplyMutations replyMutations() {
 		return new ReplyMutations();
+	}
+	
+	@Bean
+	public ReplyQueries replyQueries() {
+		return new ReplyQueries();
+	}
+	
+	@Bean
+	public DiscussionQueries discussionQueries() {
+		return new DiscussionQueries();
 	}
 }
