@@ -10,17 +10,24 @@ import org.springframework.context.annotation.Bean;
 
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
 import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
+import br.edu.ufcg.genus.graphql.mutations.DiscussionMutations;
+import br.edu.ufcg.genus.graphql.mutations.ReplyMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
 import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
+import br.edu.ufcg.genus.graphql.queries.DiscussionQueries;
 import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
+import br.edu.ufcg.genus.graphql.queries.ReplyQueries;
 import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import br.edu.ufcg.genus.graphql.queries.UserRoleQueries;
+import br.edu.ufcg.genus.graphql.resolvers.DiscussionResolver;
+import br.edu.ufcg.genus.graphql.resolvers.ReplyResolver;
 import br.edu.ufcg.genus.graphql.resolvers.GradeResolver;
 import br.edu.ufcg.genus.graphql.resolvers.InstitutionResolver;
+import br.edu.ufcg.genus.graphql.resolvers.UserResolver;
 import br.edu.ufcg.genus.graphql.resolvers.SubjectResolver;
 import graphql.servlet.GraphQLErrorHandler;
 import graphql.ExceptionWhileDataFetching;
@@ -70,6 +77,11 @@ public class GenusApplication {
 	@Bean
 	public UserMutations userMutations() {
 		return new UserMutations();
+	}
+	
+	@Bean
+	public UserResolver userResolver() {
+		return new UserResolver();
 	}
 	
 	@Bean
@@ -125,5 +137,35 @@ public class GenusApplication {
 	@Bean
 	public UserRoleQueries userRoleQueries() {
 		return new UserRoleQueries();
+	}
+	
+	@Bean
+	public DiscussionResolver discussionResolver() {
+		return new DiscussionResolver();
+	}
+	
+	@Bean
+	public DiscussionMutations discussionMutations() {
+		return new DiscussionMutations();
+	}
+	
+	@Bean
+	public ReplyResolver replyResolver() {
+		return new ReplyResolver();
+	}
+	
+	@Bean
+	public ReplyMutations replyMutations() {
+		return new ReplyMutations();
+	}
+	
+	@Bean
+	public ReplyQueries replyQueries() {
+		return new ReplyQueries();
+	}
+	
+	@Bean
+	public DiscussionQueries discussionQueries() {
+		return new DiscussionQueries();
 	}
 }

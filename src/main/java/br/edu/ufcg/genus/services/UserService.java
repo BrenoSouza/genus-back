@@ -17,9 +17,14 @@ import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
+import br.edu.ufcg.genus.exception.NotAuthorizedException;
+import br.edu.ufcg.genus.models.Institution;
+import br.edu.ufcg.genus.models.Role;
+import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
+import br.edu.ufcg.genus.repositories.StudentSubjectRepository;
 import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
@@ -40,6 +45,8 @@ public class UserService {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private StudentSubjectRepository studentSubjectRepository;
 	
 	public User createUser (CreateUserInput input) {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
@@ -70,8 +77,9 @@ public class UserService {
         return user;
     }
 
-	public Optional<User> findUserById(long id) {
-        return userRepository.findById(id);
+	public User findUserById(long id) {
+        return userRepository.findById(id)
+        		.orElseThrow(() -> new InvalidIDException("User with passed ID was not found", id));
     }
 
     public Subject addTeacher(Long subjectId, Long teacherId) {
@@ -79,10 +87,36 @@ public class UserService {
             .orElseThrow(() -> new InvalidIDException("Teacher with passed ID was not found", teacherId));
 
         Subject subject = this.subjectService.findSubjectById(subjectId);
+        Institution institution = subject.getGrade().getInstitution();
+
+        if (!teacher.getRole(institution.getId()).equals(UserRole.TEACHER)) throw new NotAuthorizedException("You don't have permission to do this");
 
         teacher.addSubject(subject);
         subject.addTeacher(teacher);
 
+        this.subjectRepository.save(subject);
+        return this.subjectService.findSubjectById(subjectId);
+    }
+
+    public Subject addStudent(Long subjectId, Long studentId) {
+		List<UserRole> permittedRoles = new ArrayList<>();
+		permittedRoles.add(UserRole.ADMIN);
+
+        User student = this.userRepository.findById(studentId)
+            .orElseThrow(() -> new InvalidIDException("Student with passed ID was not found", studentId));
+
+        Subject subject = this.subjectService.findSubjectById(subjectId);
+        Institution institution = subject.getGrade().getInstitution();
+        
+        //Use checker here
+        if (!findRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
+        if (!student.getRole(institution.getId()).equals(UserRole.STUDENT)) throw new NotAuthorizedException("You don't have permission to do this");
+        
+        StudentSubject studentSubject = new StudentSubject(student, subject);
+        student.addSubjectStudent(studentSubject);
+        subject.addStudent(studentSubject);
+        
+        this.studentSubjectRepository.save(studentSubject);
         this.subjectRepository.save(subject);
         return this.subjectService.findSubjectById(subjectId);
     }

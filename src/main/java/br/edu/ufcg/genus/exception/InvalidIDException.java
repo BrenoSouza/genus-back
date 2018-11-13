@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.edu.ufcg.genus.models.StudentSubjectId;
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
@@ -14,6 +15,12 @@ public class InvalidIDException extends RuntimeException implements GraphQLError
 	private Map<String, Object> extensions;
     
     public InvalidIDException(String message, Long invalidId) {
+        super(message);
+        extensions = new HashMap<>();
+        extensions.put("INVALID_ID", "INVALID_ID");
+    }
+    
+    public InvalidIDException(String message, StudentSubjectId invalidId) {
         super(message);
         extensions = new HashMap<>();
         extensions.put("INVALID_ID", "INVALID_ID");

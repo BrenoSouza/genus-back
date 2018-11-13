@@ -46,7 +46,7 @@ public class UserQueries implements GraphQLQueryResolver {
 	}
 
     public User findUser(long userId) {
-        return userService.findUserById(userId).orElseThrow(() -> new InvalidIDException("User with passed ID was not found", userId));
+        return userService.findUserById(userId);
     }
 
     public User findLoggedUser() {
@@ -58,7 +58,7 @@ public class UserQueries implements GraphQLQueryResolver {
     }
 
     public Iterable<Subject> findSubjectsByUser(Long userId, Long institutionId) {
-        User user = userService.findUserById(userId).orElseThrow(() -> new InvalidIDException("User with passed ID was not found", userId));
+        User user = userService.findUserById(userId);
 
         Institution institution = this.institutionRepository.findById(institutionId).get();
 		List<Subject> result = new ArrayList<>();

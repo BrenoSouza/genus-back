@@ -2,6 +2,8 @@ type User {
   id: ID!
   username: String!
   email: String!
+  teacherSubjects: [ Subject! ]!
+  studentSubjects: [ Subject! ]!
 }
 
 input CreateUserInput {

@@ -2,6 +2,7 @@ package br.edu.ufcg.genus.models;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -39,7 +41,23 @@ public class Subject {
 		CascadeType.MERGE
 	},
 	mappedBy = "subjects")
-	private Set<User> teachers = new HashSet<>();
+	private Set<User> teachers;
+	
+	/*@ManyToMany(fetch = FetchType.EAGER,
+	cascade = {
+		CascadeType.PERSIST,
+		CascadeType.MERGE
+	},
+	mappedBy = "subjectsStudent")
+	private Set<User> students;*/
+	
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, orphanRemoval = true)
+	private Set<StudentSubject> students;
+
+
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
+	@Column(name="forum", nullable=false)
+	private Set<Discussion> forum;
 	
 	//list of students/ StudentSubject
 	//forum
@@ -47,13 +65,15 @@ public class Subject {
 	//teachers
 	
 	public Subject() {
+		this.students = new HashSet<>();
 		this.teachers = new HashSet<>();
+		this.forum = new LinkedHashSet<>();
 	}
 	
 	public Subject(Grade owner, String name) {
+		this();
 		this.grade = owner;
 		this.name = name;
-		this.teachers = new HashSet<>();
 	}
 
 	public Long getId() {
@@ -80,14 +100,52 @@ public class Subject {
 		this.teachers = teachers;
 	}
 
+	public void setStudents(Set<StudentSubject> students) {
+		this.students = students;
+	}
+
 	public boolean addTeacher(User teacher) {
 		return this.teachers.add(teacher);
+	}
+	
+	public boolean addStudent(StudentSubject student) {
+		return this.students.add(student);
+	}
+	
+	public boolean addDiscussion(Discussion discussion) {
+		return this.forum.add(discussion);
+	}
+
+	public Set<Discussion> getForum() {
+		return forum;
+	}
+
+	public void setForum(Set<Discussion> forum) {
+		this.forum = forum;
 	}
 
 	public List<User> getTeachers() {
 		List<User> result = new ArrayList<>();
 		for (User teacher : teachers) {
 			result.add(teacher);
+		}
+		return result;
+	}
+
+	public List<StudentSubject> getStudents() {
+		List<StudentSubject> result = new ArrayList<>();
+		for (StudentSubject studentSubject : students) {
+			result.add(studentSubject);
+		}
+		return result;
+	}
+	
+	public List<User> findStudents() {
+		List<User> result = new ArrayList<>();
+		for (StudentSubject studentSubject : students) {
+			if (studentSubject.getSubject().equals(this)) {
+				result.add(studentSubject.getUser());
+			}
 		}
 		return result;
 	}

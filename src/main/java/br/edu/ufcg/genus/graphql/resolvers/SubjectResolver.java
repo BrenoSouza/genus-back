@@ -15,4 +15,8 @@ public class SubjectResolver implements GraphQLResolver<Subject> {
     public Iterable<User> getTeachers(Subject subject) {
         return subject.getTeachers();
     }
+
+    public Iterable<User> getStudents(Subject subject) {
+        return subject.findStudents();
+    }
 }
