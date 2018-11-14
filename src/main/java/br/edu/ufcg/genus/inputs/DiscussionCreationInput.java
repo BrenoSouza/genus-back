@@ -9,6 +9,12 @@ public class DiscussionCreationInput {
 	public DiscussionCreationInput() {
 		
 	}
+	
+	public DiscussionCreationInput(String title, Long subjectId, String content) {
+		this.title = title;
+		this.subjectId = subjectId;
+		this.content = content;
+	}
 
 	public String getTitle() {
 		return title;

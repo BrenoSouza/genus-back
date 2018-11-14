@@ -1,0 +1,22 @@
+type Evaluation {
+  id: ID!
+  name: String!
+  result: Float!
+  weight: Float!
+}
+
+input EvaluationCreationInput {
+  userId: ID!
+  subjectId: ID!
+  name: String!
+  result: Float!
+  weight: Float!
+}
+
+extend type Query {
+  findEvaluation (id: ID!) : Evaluation
+}
+
+extend type Mutation {
+  createEvaluation (input: EvaluationCreationInput!) : Evaluation!
+}
