@@ -10,7 +10,8 @@ type Reply {
 
 input ReplyCreationInput {
   content: String!
-  forumPostId: ID!
+  discussionId: ID
+  parentId: ID
 }
 
 input UpdateReplyInput {
@@ -27,8 +28,6 @@ extend type Mutation {
   createReply (input: ReplyCreationInput!) : Reply!
   removeReply (replyId: ID!) : Boolean 
   updateReply (input: UpdateReplyInput): Reply
-  replyToDiscussionOrReply (input: ReplyToReplyInput) : Reply
-  replyToReply(input: ReplyToReplyInput) : Reply
 }
 
 extend type Query {

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.inputs.ReplyCreationInput;
-import br.edu.ufcg.genus.inputs.ReplyToReplyInput;
 import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.models.Subject;
@@ -31,34 +30,34 @@ public class ReplyService {
 			.orElseThrow(() -> new InvalidIDException("Reply with passed ID was not found", id));
 	}
 
-	public Reply createReply(ReplyCreationInput input, User user) {
-		Discussion discussion = discussionService.findDiscussionById(input.getForumPostId());
+	private Reply replyToDiscussion(String content, Long discussionId, User user) {
+		Discussion discussion = discussionService.findDiscussionById(discussionId);
 
 		Subject subject = discussion.getSubject();
 		PermissionChecker.checkSubjectPermission(user, subject);
 
-		Reply reply = new Reply(input.getContent(), user, discussion);
+		Reply reply = new Reply(content, user, discussion);
 		discussion.addReply(reply);
 		this.replyRepository.save(reply);
 		return reply;		
 	}
 	
-	public Reply replyToDiscussionOrReply(ReplyToReplyInput input, User user) {
+	public Reply createReply(ReplyCreationInput input, User user) {
 		Reply reply;
-		if (replyRepository.findById(input.getParentId()).orElse(null) == null) {
-			reply = createReply(new ReplyCreationInput(input.getContent(), input.getParentId()), user);
+		if (input.getParentId() == null) {
+			reply = replyToDiscussion(input.getContent(), input.getDiscussionId(), user);
 		} else {
-			reply = replyToReply(input, user);
+			reply = replyToReply(input.getContent(), input.getParentId(), user);
 		}
 		return reply;
 	}
 	
-	public Reply replyToReply(ReplyToReplyInput input, User user) {
-		Reply parent = findReplyById(input.getParentId());
+	private Reply replyToReply(String content, Long parentId, User user) {
+		Reply parent = findReplyById(parentId);
 		Discussion discussion = parent.getDiscussion();
 		Subject subject = discussion.getSubject();
 		PermissionChecker.checkSubjectPermission(user, subject);
-		Reply reply = new Reply(input.getContent(), user, discussion, parent);
+		Reply reply = new Reply(content, user, discussion, parent);
 		discussion.addReply(reply);
 		parent.addReply(reply);
 		this.replyRepository.save(reply);
