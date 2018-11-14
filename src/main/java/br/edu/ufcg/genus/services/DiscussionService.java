@@ -51,8 +51,8 @@ public class DiscussionService {
         if (input.getTitle() != null) {
             discussion.setTitle(input.getTitle());
 		}
-		Date now = new Date();
-		discussion.setLastUpdatedDate(now);
+		//Date now = new Date();
+		//discussion.setLastUpdatedDate(now);
         return discussionRepository.save(discussion);
 	}
 }

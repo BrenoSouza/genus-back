@@ -1,7 +1,8 @@
 type Reply {
   id: ID!
   content: String!
-  date: String!
+  createdAt: String!
+  updatedAt: String!
   creator: User!
   discussion: Discussion!
   parent: Reply
