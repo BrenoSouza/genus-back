@@ -27,6 +27,7 @@ extend type Mutation {
   createReply (input: ReplyCreationInput!) : Reply!
   removeReply (replyId: ID!) : Boolean 
   updateReply (input: UpdateReplyInput): Reply
+  replyToDiscussionOrReply (input: ReplyToReplyInput) : Reply
   replyToReply(input: ReplyToReplyInput) : Reply
 }
 

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +31,7 @@ public class Grade {
 	@Column(nullable = false)
 	private String name;
 
-	@OneToMany(mappedBy="grade", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="grade", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@Column(name="subjects", nullable=false)
 	private Set<Subject> subjects;
 	

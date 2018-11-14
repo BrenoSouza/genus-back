@@ -24,19 +24,13 @@ public class GradeService {
 	private GradeRepository gradeRepository;
 	
 	@Autowired
-	private UserService userService;
-	
-	@Autowired
 	private InstitutionService institutionService;
 	
 	@Autowired
 	private SubjectService subjectService;
 	
-	public Grade createGrade(GradeCreationInput input) {
-		User user = this.userService.findLoggedUser();
-		Institution institution = this.institutionService.findById(input.getInstitutionId())
-				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", input.getInstitutionId()));
-
+	public Grade createGrade(GradeCreationInput input, User user) {
+		Institution institution = this.institutionService.findById(input.getInstitutionId());
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
@@ -56,35 +50,32 @@ public class GradeService {
 	}
 	
     public Iterable<Grade> findGradesByInstitution(Long institutionId) {
-		Institution institution = this.institutionService.findById(institutionId)
-			.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", institutionId));
-
+		Institution institution = this.institutionService.findById(institutionId);
         return institution.getGrades();
 	}
 
-	public Grade updateGrade(UpdateGradeInput input) {
+	public Grade updateGrade(UpdateGradeInput input, User user) {
 		Grade grade = findGradeById(input.getGradeId());
-		checkAdminPermission(grade);
+		checkAdminPermission(grade, user);
 		        if (input.getName() != null) {
             grade.setName(input.getName());
 		}
         return gradeRepository.save(grade);
     }
 	
-	public boolean removeGrade(long gradeId) {
+	public boolean removeGrade(long gradeId, User user) {
 		Grade grade = findGradeById(gradeId);
-		checkAdminPermission(grade);
+		checkAdminPermission(grade, user);
 		for(Subject subject: grade.getSubjects()) { //this should be optimized
-			subjectService.removeSubject(subject.getId());
+			subjectService.removeSubject(subject.getId(), user);
 		}
 		gradeRepository.deleteById(gradeId);				
 		return true;
 	}
 	
-	private void checkAdminPermission(Grade grade) {
+	private void checkAdminPermission(Grade grade, User user) {
 		List<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
-		User user = this.userService.findLoggedUser();
 		long institutionId = grade.getInstitution().getId();
 		PermissionChecker.checkPermission(user, institutionId, permitedRoles);
 	}

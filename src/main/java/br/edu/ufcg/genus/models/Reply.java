@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,7 +39,7 @@ public class Reply {
 	@JoinColumn(name="parent_id", nullable=true)
 	private Reply parent;
 	
-	@OneToMany(mappedBy = "parent", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "parent", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Reply> replies;
 	
 	public Reply () {

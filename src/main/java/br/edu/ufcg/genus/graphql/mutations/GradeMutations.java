@@ -15,6 +15,7 @@ import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.GradeCreationInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.services.GradeService;
+import br.edu.ufcg.genus.services.UserService;
 import br.edu.ufcg.genus.update_inputs.UpdateGradeInput;
 
 public class GradeMutations implements GraphQLMutationResolver {
@@ -23,6 +24,8 @@ public class GradeMutations implements GraphQLMutationResolver {
 	private GradeService gradeService;
 	@Autowired
     private Validator validator;
+	@Autowired
+	private UserService userService;
 
 	public Grade createGrade(GradeCreationInput input) {
 		Set<ConstraintViolation<GradeCreationInput>> violations = validator.validate(input);
@@ -33,7 +36,7 @@ public class GradeMutations implements GraphQLMutationResolver {
             });
             throw new InvalidAttributesException("Invalid attributes passed to creation of a grade.", extensions);
 		}
-		return gradeService.createGrade(input);
+		return gradeService.createGrade(input, userService.findLoggedUser());
 	}
 
 	public Grade updateGrade(UpdateGradeInput input) {
@@ -47,10 +50,10 @@ public class GradeMutations implements GraphQLMutationResolver {
             throw new InvalidAttributesException("Invalidattributes passed", extensions);
         }
 
-        return gradeService.updateGrade(input);
+        return gradeService.updateGrade(input, userService.findLoggedUser());
     }
 	
 	public boolean removeGrade(long gradeId) {
-		return this.gradeService.removeGrade(gradeId);
+		return this.gradeService.removeGrade(gradeId, userService.findLoggedUser());
 	}
 }

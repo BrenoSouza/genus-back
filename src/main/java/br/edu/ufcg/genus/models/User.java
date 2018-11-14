@@ -189,10 +189,6 @@ public class User {
 		return subjects.remove(subject);
 	}
 
-	/*public boolean removeSubjectStudent(Subject subject) {
-		return subjectsStudent.remove(subject);
-	}*/
-
 	public boolean checkStudent(Subject subject) {
 		boolean result = false;
 

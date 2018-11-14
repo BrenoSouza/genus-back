@@ -7,7 +7,6 @@ import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.EvaluationCreationInput;
 import br.edu.ufcg.genus.models.Evaluation;
-import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.StudentSubjectId;
 import br.edu.ufcg.genus.models.Subject;
@@ -30,8 +29,8 @@ public class EvaluationService {
 	@Autowired
 	private SubjectService subjectService;
 	
-	public Evaluation createEvaluation(EvaluationCreationInput input) {
-		checkEvaluationCreation(input);
+	public Evaluation createEvaluation(EvaluationCreationInput input, User user) {
+		checkEvaluationCreation(input, user);
 		
 		StudentSubjectId ssid = new StudentSubjectId(input.getUserId(), input.getSubjectId());
 		StudentSubject studentSubject = studentSubjectRepository.findById(ssid)
@@ -44,8 +43,7 @@ public class EvaluationService {
 		return eval;
 	}
 	
-	private void checkEvaluationCreation(EvaluationCreationInput input) {
-		User user = userService.findLoggedUser();
+	private void checkEvaluationCreation(EvaluationCreationInput input, User user) {
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
 		User student = userService.findUserById(input.getUserId());
 		if (!subject.findStudents().contains(student) || !subject.getTeachers().contains(user)) {
