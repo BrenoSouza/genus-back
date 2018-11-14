@@ -28,7 +28,7 @@ public class ReplyService {
 	
 	public Reply findReplyById(Long id) {
 		return replyRepository.findById(id)
-			.orElseThrow(() -> new InvalidIDException("Discussion with passed ID was not found", id));
+			.orElseThrow(() -> new InvalidIDException("Reply with passed ID was not found", id));
 	}
 
 	public Reply createReply(ReplyCreationInput input, User user) {
@@ -41,6 +41,16 @@ public class ReplyService {
 		discussion.addReply(reply);
 		this.replyRepository.save(reply);
 		return reply;		
+	}
+	
+	public Reply replyToDiscussionOrReply(ReplyToReplyInput input, User user) {
+		Reply reply;
+		if (replyRepository.findById(input.getParentId()).orElse(null) == null) {
+			reply = createReply(new ReplyCreationInput(input.getContent(), input.getParentId()), user);
+		} else {
+			reply = replyToReply(input, user);
+		}
+		return reply;
 	}
 	
 	public Reply replyToReply(ReplyToReplyInput input, User user) {

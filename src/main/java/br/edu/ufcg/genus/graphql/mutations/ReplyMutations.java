@@ -35,6 +35,10 @@ public class ReplyMutations implements GraphQLMutationResolver {
 	public Reply replyToReply(ReplyToReplyInput input) {
 		return replyService.replyToReply(input, userService.findLoggedUser());
 	}
+	
+	public Reply replyToDiscussionOrReply(ReplyToReplyInput input) {
+		return replyService.replyToDiscussionOrReply(input, userService.findLoggedUser());
+	}
 
 	public Boolean removeReply(Long replyId) {
 		return this.replyService.removeReply(replyId, userService.findLoggedUser());
