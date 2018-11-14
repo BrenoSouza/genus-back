@@ -1,6 +1,6 @@
 package br.edu.ufcg.genus.models;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 public class Reply {
 	
@@ -25,11 +28,17 @@ public class Reply {
 	
 	private String content;
 	
-	private Date date;
+	@CreationTimestamp
+	@Column(name="created_at", nullable=false)
+	private Timestamp createdAt;
+	
+	@UpdateTimestamp
+	@Column(name="updated_at", nullable=false)
+	private Timestamp updatedAt;
 	
 	@ManyToOne
     @JoinColumn(name="user_id", nullable=false)
-	private User user;
+	private User creator;
 	
 	@ManyToOne
     @JoinColumn(name="discussion_id", nullable=false)
@@ -43,14 +52,13 @@ public class Reply {
 	private Set<Reply> replies;
 	
 	public Reply () {
-		this.date = new Date();
 		this.replies = new LinkedHashSet<>();
 	}
 	
 	public Reply(String content, User user, Discussion discussion) {
 		this();
 		this.content = content;
-		this.user = user;
+		this.creator = user;
 		this.discussion = discussion;
 	}
 	
@@ -75,20 +83,12 @@ public class Reply {
 		this.content = content;
 	}
 
-	public Date getDate() {
-		return date;
+	public User getCreator() {
+		return creator;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+	public void setCreator(User user) {
+		this.creator = user;
 	}
 
 	public Discussion getDiscussion() {
@@ -115,11 +115,27 @@ public class Reply {
 		this.replies = replies;
 	}
 
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((createdAt == null) ? 0 : createdAt.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -133,10 +149,10 @@ public class Reply {
 		if (getClass() != obj.getClass())
 			return false;
 		Reply other = (Reply) obj;
-		if (date == null) {
-			if (other.date != null)
+		if (createdAt == null) {
+			if (other.createdAt != null)
 				return false;
-		} else if (!date.equals(other.date))
+		} else if (!createdAt.equals(other.createdAt))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -144,6 +160,7 @@ public class Reply {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}	
+	}
+	
 
 }

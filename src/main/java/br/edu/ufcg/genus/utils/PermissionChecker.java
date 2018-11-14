@@ -32,7 +32,7 @@ public class PermissionChecker {
 	
 	public static void checkReplyPermission(User user, Reply reply) {
 		Subject subject = reply.getDiscussion().getSubject();
-		if (!user.checkTeacher(subject) && !reply.getUser().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
+		if (!user.checkTeacher(subject) && !reply.getCreator().equals(user)) throw new NotAuthorizedException("You don't have permission to do this");
 	}
 
 }

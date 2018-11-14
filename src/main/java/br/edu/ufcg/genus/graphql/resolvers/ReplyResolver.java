@@ -9,8 +9,8 @@ import br.edu.ufcg.genus.models.Reply;
 
 public class ReplyResolver implements GraphQLResolver<Reply>{
 	
-	public String getDate(Reply reply) {
+	/*public String getDate(Reply reply) {
 		DateFormat df = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
 		return df.format(reply.getDate());		
-	}
+	}*/
 }
