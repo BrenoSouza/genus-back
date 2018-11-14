@@ -2,7 +2,7 @@ type Reply {
   id: ID!
   content: String!
   date: String!
-  user: User!
+  creator: User!
   discussion: Discussion!
   parent: Reply
   replies: [Reply!]!

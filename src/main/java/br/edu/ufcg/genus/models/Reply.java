@@ -29,7 +29,7 @@ public class Reply {
 	
 	@ManyToOne
     @JoinColumn(name="user_id", nullable=false)
-	private User user;
+	private User creator;
 	
 	@ManyToOne
     @JoinColumn(name="discussion_id", nullable=false)
@@ -50,7 +50,7 @@ public class Reply {
 	public Reply(String content, User user, Discussion discussion) {
 		this();
 		this.content = content;
-		this.user = user;
+		this.creator = user;
 		this.discussion = discussion;
 	}
 	
@@ -83,12 +83,12 @@ public class Reply {
 		this.date = date;
 	}
 
-	public User getUser() {
-		return user;
+	public User getCreator() {
+		return creator;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCreator(User user) {
+		this.creator = user;
 	}
 
 	public Discussion getDiscussion() {
