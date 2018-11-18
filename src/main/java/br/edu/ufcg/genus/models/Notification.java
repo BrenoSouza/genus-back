@@ -34,6 +34,10 @@ public class Notification {
 	@Column(name = "notificaton_type_id")
     private Long notificationTypeId;
 
+	public Notification() {
+
+	}
+	
 	public Notification(String notificationType, Long notificationTypeId, String message, User user) {
 		this.notificationType = notificationType;
 		this.notificationTypeId = notificationTypeId;

@@ -10,3 +10,7 @@ type Notification {
 extend type Query {
   findNotification (input: ID!) : Notification
 }
+
+extend type Mutation {
+  readNotification(input: ID!): Notification
+}

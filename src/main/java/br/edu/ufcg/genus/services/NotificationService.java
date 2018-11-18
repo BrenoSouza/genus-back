@@ -11,10 +11,8 @@ import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.models.Notification;
 import br.edu.ufcg.genus.models.NotificationMessage;
-import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.NotificationRepository;
-import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
 public class NotificationService {
@@ -49,5 +47,13 @@ public class NotificationService {
 	public void createNotification(String notificationType, Long notificationTypeId, String message, User user) {
 		Notification notification = new Notification(notificationType, notificationTypeId, message, user);
 		notificationRepository.save(notification);
+	}
+
+	public Notification readNotification(Long id) {
+		Notification notification = findNotificationById(id);
+
+		notification.setRead(true);
+		notificationRepository.save(notification);
+		return notification;
 	}
 }

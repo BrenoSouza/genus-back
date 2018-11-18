@@ -10,10 +10,10 @@ import br.edu.ufcg.genus.models.NotificationMessage;
 @Controller
 public class NotificationController {
 
-    // @MessageMapping("/notification")
-    // @SendTo("/topic/greetings")
-    // public NotificationMessage greeting(Notification notification) throws Exception {
+    @MessageMapping("/notification")
+    @SendTo("/topic/greetings")
+    public NotificationMessage greeting(Notification notification) throws Exception {
     //     Thread.sleep(3000); // simulated delay
-    //     return new NotificationMessage("Novo post " + notification.getMessage() + "!");
-    // }
+        return new NotificationMessage("Novo post " + notification.getMessage() + "!");
+    }
 }
