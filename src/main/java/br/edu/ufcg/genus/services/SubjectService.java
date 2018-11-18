@@ -26,9 +26,6 @@ public class SubjectService {
 	
 	@Autowired
 	private SubjectService subjectService;
-
-	@Autowired
-    private UserService userService;
 	
 	@Autowired
 	private InstitutionService institutionService;
@@ -39,11 +36,9 @@ public class SubjectService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public Subject createSubject(SubjectCreationInput input) {
+	public Subject createSubject(SubjectCreationInput input, User user) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
-		Institution institution = this.institutionService.findById(grade.getInstitution().getId())
-				.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", grade.getInstitution().getId()));
-		User user = this.userService.findLoggedUser();
+		Institution institution = this.institutionService.findById(grade.getInstitution().getId());
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
@@ -58,27 +53,31 @@ public class SubjectService {
 
 	public Iterable<Subject> findSubjectsByGrade(Long gradeId) {
 		Grade grade = this.gradeService.findGradeById(gradeId);
-
 		return grade.getSubjects();
 	}
 		
 	public Iterable<User> findTeachersBySubject(Long subjectId) {
 		Subject subject = this.subjectService.findSubjectById(subjectId);
         return subject.getTeachers();
+	}
+	
+	public Iterable<User> findStudentsBySubject(Long subjectId) {
+		Subject subject = this.subjectService.findSubjectById(subjectId);
+        return subject.findStudents();
     }
 
-	public Subject updateSubject(UpdateSubjectInput input) {
+	public Subject updateSubject(UpdateSubjectInput input, User user) {
 		Subject subject = findSubjectById(input.getSubjectId());
-		checkAdminPermission(subject);
+		checkAdminPermission(subject, user);
         if (input.getName() != null) {
             subject.setName(input.getName());
 		}
         return subjectRepository.save(subject);
 	}
 	
-	public boolean removeSubject(long id) {
+	public boolean removeSubject(long id, User owner) {
 		Subject subject = findSubjectById(id);
-		checkAdminPermission(subject);
+		checkAdminPermission(subject, owner);
 		for(User user: subject.getTeachers()) {
 			user.removeSubject(subject);
 		}
@@ -87,11 +86,10 @@ public class SubjectService {
 		return true;
 	}
 	
-	private void checkAdminPermission(Subject subject) {
+	private void checkAdminPermission(Subject subject, User user) {
 		List<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		long institutionId = subject.getGrade().getInstitution().getId();
-		User user = this.userService.findLoggedUser();
 		PermissionChecker.checkPermission(user, institutionId, permitedRoles);
 	}
 

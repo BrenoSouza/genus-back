@@ -14,9 +14,7 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
-import br.edu.ufcg.genus.repositories.GradeRepository;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
-import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
 import br.edu.ufcg.genus.services.GradeService;
 import br.edu.ufcg.genus.services.InstitutionService;
@@ -43,14 +41,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	private GradeService gradeService;
 	
 	@Autowired
-	private SubjectService subjectService;
-	
-	@Autowired
-	private GradeRepository gradeRepository;
-	
-	@Autowired
-	private SubjectRepository subjectRepository;
-	
+	private SubjectService subjectService;	
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -59,11 +50,15 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		CreateUserInput prof1Input = new CreateUserInput("professor1", "prof1@gmail.com", "123456");
 		CreateUserInput prof2Input = new CreateUserInput("professor2", "prof2@gmail.com", "123456");
 		CreateUserInput prof3Input = new CreateUserInput("professor3", "prof3@gmail.com", "123456");
+		CreateUserInput stud1Input = new CreateUserInput("aluno1", "alu1@gmail.com", "123456");
+		CreateUserInput stud2Input = new CreateUserInput("aluno2", "alu2@gmail.com", "123456");
 
 		User admin = userService.createUser(adminInput);
 		User prof1 = userService.createUser(prof1Input);
 		User prof2 = userService.createUser(prof2Input);
 		User prof3 = userService.createUser(prof3Input);
+		User stud1 = userService.createUser(stud1Input);
+		User stud2 = userService.createUser(stud2Input);
 
 		Institution institution = new Institution("Escola", "Rua qualquer", "838888888", "escola@gmail.com" );
 		
@@ -77,19 +72,18 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 		institutionService.addUserToInstitution(prof1, institution, UserRole.TEACHER);
 		institutionService.addUserToInstitution(prof2, institution, UserRole.TEACHER);
+		institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud1, institution, UserRole.STUDENT);
+
+		Grade grade = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()), admin);
+		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade.getId()), admin);
 		
-		//Grade grade = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()));
-		//Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade.getId()));
-		
-		Grade grade = new Grade("Serie 1", institution);
+		/*Grade grade = new Grade("Serie 1", institution);
 		gradeRepository.save(grade);
 		Subject subject = new Subject(grade, "Matematica");
-		subjectRepository.save(subject);
+		subjectRepository.save(subject);*/
 		
 		userService.addTeacher(subject.getId(), prof1.getId());
-		
-		
-
 	}
 
 }

@@ -3,8 +3,9 @@ type Discussion {
   title: String!
   creator: User!
   subject: Subject!
-  creationDate: String!
-  lastUpdatedDate: String!
+  createdAt: String!
+  updatedAt: String!
+  content: String!
   replies(page: Int!, size: Int!): [Reply!]!
   replyNumber: Int!
 }
@@ -15,6 +16,17 @@ input DiscussionCreationInput {
   content: String!
 }
 
+input UpdateDiscussionInput {
+  discussionId: ID!
+  title: String
+}
+
 extend type Mutation {
   createDiscussion (input: DiscussionCreationInput!) : Discussion!
+  removeDiscussion (discussionId: ID!) : Boolean 
+  updateDiscussion(input: UpdateDiscussionInput!): Discussion
+}
+
+extend type Query {
+  findDiscussion (id: ID!) : Discussion
 }

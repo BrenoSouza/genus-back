@@ -58,6 +58,9 @@ public class User {
     )
 	private Set<Subject> subjects = new HashSet<>();;
 
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, orphanRemoval = true)
+	private Set<StudentSubject> subjectsStudent = new HashSet<>();
+
 	public User() {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
@@ -85,6 +88,16 @@ public class User {
 		List<Subject> result = new ArrayList<>();
 		for (Subject subject : subjects) {
 			result.add(subject);
+		}
+		return result;
+	}
+
+	public List<Subject> findSubjectsStudent() {
+		List<Subject> result = new ArrayList<>();
+		for(StudentSubject studentSubject : this.subjectsStudent) {
+			if(studentSubject.getUser().equals(this)) {
+				result.add(studentSubject.getSubject());
+			}
 		}
 		return result;
 	}
@@ -152,12 +165,50 @@ public class User {
 		return result;
 	}
 
+	public void setSubjectsStudent(Set<StudentSubject> subjectsStudent) {
+		this.subjectsStudent = subjectsStudent;
+	}
+
+	public List<StudentSubject> getSubjectsStudent() {
+		List<StudentSubject> result = new ArrayList<>();
+		for (StudentSubject subject : subjectsStudent) {
+			result.add(subject);
+		}
+		return result;
+	}
+
 	public void addSubject(Subject subject) {
         subjects.add(subject);
+	}
+
+	public void addSubjectStudent(StudentSubject studentSubject) {
+        subjectsStudent.add(studentSubject);
 	}
 	
 	public boolean removeSubject(Subject subject) {
 		return subjects.remove(subject);
+	}
+
+	public boolean checkStudent(Subject subject) {
+		boolean result = false;
+
+		for (StudentSubject subjectStudent : subjectsStudent) {
+			if (subject.equals(subjectStudent.getSubject())) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	public boolean checkTeacher(Subject subject) {
+		boolean result = false;
+
+		for (Subject subjectTeacher : subjects) {
+			if (subject.equals(subjectTeacher)) {
+				result = true;
+			}
+		}
+		return result;
 	}
 	
 	@Override

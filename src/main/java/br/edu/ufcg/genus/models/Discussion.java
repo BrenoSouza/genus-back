@@ -1,9 +1,10 @@
 package br.edu.ufcg.genus.models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class Discussion {
@@ -30,28 +34,32 @@ public class Discussion {
     @JoinColumn(name="subject_id", nullable=false)
 	private Subject subject;
 	
-	private Date creationDate;
+	@CreationTimestamp
+	@Column(name="created_at", nullable=false)
+	private Timestamp createdAt;
 	
-	private Date lastUpdatedDate;
+	@UpdateTimestamp
+	@Column(name="updated_at", nullable=false)
+	private Timestamp updatedAt;
 	
 	private String title;
 	
-	@OneToMany(mappedBy="discussion", fetch=FetchType.EAGER)
+	private String content;
+	
+	@OneToMany(mappedBy="discussion", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	@Column(name="replies", nullable=false)
 	private List<Reply> replies;
 	
 	public Discussion() {
 		this.replies = new ArrayList<>();
-		Date now = new Date();
-		this.creationDate = now;
-		this.lastUpdatedDate = now;
 	}
 	
-	public Discussion(User creator, Subject subject, String title) {
+	public Discussion(User creator, Subject subject, String title, String content) {
 		this();
 		this.creator = creator;
 		this.subject = subject;
 		this.title = title;
+		this.content = content;
 	}
 	
 	public boolean addReply(Reply reply) {
@@ -82,20 +90,20 @@ public class Discussion {
 		this.subject = subject;
 	}
 
-	public Date getCreationDate() {
-		return creationDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Date getLastUpdatedDate() {
-		return lastUpdatedDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setLastUpdatedDate(Date lastUpdated) {
-		this.lastUpdatedDate = lastUpdated;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public String getTitle() {
@@ -114,13 +122,20 @@ public class Discussion {
 		this.replies = replies;
 	}
 
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
+		result = prime * result + ((createdAt == null) ? 0 : createdAt.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
@@ -133,26 +148,17 @@ public class Discussion {
 		if (getClass() != obj.getClass())
 			return false;
 		Discussion other = (Discussion) obj;
-		if (creationDate == null) {
-			if (other.creationDate != null)
+		if (createdAt == null) {
+			if (other.createdAt != null)
 				return false;
-		} else if (!creationDate.equals(other.creationDate))
+		} else if (!createdAt.equals(other.createdAt))
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
 		return true;
 	}
-	
-	
-	
-	
 
 }

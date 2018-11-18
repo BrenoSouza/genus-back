@@ -26,6 +26,7 @@ public class SubjectMutations implements GraphQLMutationResolver {
 	private UserService userService;
 	@Autowired
     private Validator validator;
+	
 
 	public Subject createSubject(SubjectCreationInput input) {
 		Set<ConstraintViolation<SubjectCreationInput>> violations = validator.validate(input);
@@ -37,11 +38,15 @@ public class SubjectMutations implements GraphQLMutationResolver {
             throw new InvalidAttributesException("Invalid attributes passed to creation of a subject.", extensions);
 		}
 
-		return this.subjectService.createSubject(input);		
+		return this.subjectService.createSubject(input, userService.findLoggedUser());		
 	}
 
 	public Subject addTeacherToSubject(Long subjectId, Long teacherId) {
 		return this.userService.addTeacher(subjectId, teacherId);
+    }
+    
+    public Subject addStudentToSubject(Long subjectId, Long studentId) {
+		return this.userService.addStudent(subjectId, studentId, userService.findLoggedUser());
 	}
 
 	public Subject updateSubject(UpdateSubjectInput input) {
@@ -55,11 +60,11 @@ public class SubjectMutations implements GraphQLMutationResolver {
             throw new InvalidAttributesException("Invalid attributes passed", extensions);
         }
 
-        return subjectService.updateSubject(input);
+        return subjectService.updateSubject(input, userService.findLoggedUser());
     }
     
 	public boolean removeSubject(long subjectId) {
-		return this.subjectService.removeSubject(subjectId);
+		return this.subjectService.removeSubject(subjectId, userService.findLoggedUser());
 	}
 	
 	

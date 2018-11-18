@@ -41,18 +41,20 @@ public class Subject {
 		CascadeType.MERGE
 	},
 	mappedBy = "subjects")
-	private Set<User> teachers = new HashSet<>();
+	private Set<User> teachers;
 	
-	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
+	
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
+	private Set<StudentSubject> students;
+
+
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@Column(name="forum", nullable=false)
 	private Set<Discussion> forum;
 	
-	//list of students/ StudentSubject
-	//forum
-	//material repository
-	//teachers
 	
 	public Subject() {
+		this.students = new HashSet<>();
 		this.teachers = new HashSet<>();
 		this.forum = new LinkedHashSet<>();
 	}
@@ -87,8 +89,16 @@ public class Subject {
 		this.teachers = teachers;
 	}
 
+	public void setStudents(Set<StudentSubject> students) {
+		this.students = students;
+	}
+
 	public boolean addTeacher(User teacher) {
 		return this.teachers.add(teacher);
+	}
+	
+	public boolean addStudent(StudentSubject student) {
+		return this.students.add(student);
 	}
 	
 	public boolean addDiscussion(Discussion discussion) {
@@ -107,6 +117,24 @@ public class Subject {
 		List<User> result = new ArrayList<>();
 		for (User teacher : teachers) {
 			result.add(teacher);
+		}
+		return result;
+	}
+
+	public List<StudentSubject> getStudents() {
+		List<StudentSubject> result = new ArrayList<>();
+		for (StudentSubject studentSubject : students) {
+			result.add(studentSubject);
+		}
+		return result;
+	}
+	
+	public List<User> findStudents() {
+		List<User> result = new ArrayList<>();
+		for (StudentSubject studentSubject : students) {
+			if (studentSubject.getSubject().equals(this)) {
+				result.add(studentSubject.getUser());
+			}
 		}
 		return result;
 	}

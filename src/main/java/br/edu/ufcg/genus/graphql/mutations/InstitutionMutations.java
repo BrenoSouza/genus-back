@@ -17,6 +17,7 @@ import br.edu.ufcg.genus.inputs.RemoveUserFromInstitutionInput;
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.services.InstitutionService;
+import br.edu.ufcg.genus.services.UserService;
 import br.edu.ufcg.genus.update_inputs.UpdateInstitutionInput;
 
 public class InstitutionMutations implements GraphQLMutationResolver {
@@ -25,6 +26,8 @@ public class InstitutionMutations implements GraphQLMutationResolver {
 	private InstitutionService institutionService;
 	@Autowired
     private Validator validator;
+	@Autowired
+	private UserService userService;
 
 	public Institution createInstitution(CreateInstitutionInput input) {
 
@@ -36,11 +39,11 @@ public class InstitutionMutations implements GraphQLMutationResolver {
 			});
             throw new InvalidAttributesException("Invalid attributes passed to creation of an institution.", extensions);
 		}
-		return institutionService.createInstitution(input);
+		return institutionService.createInstitution(input, userService.findLoggedUser());
 	}
 	
 	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input) {
-		return this.institutionService.removeUserFromInstitution(input);
+		return this.institutionService.removeUserFromInstitution(input, userService.findLoggedUser());
 	}
 
 	public Institution updateInstitution(UpdateInstitutionInput input) {
@@ -54,6 +57,6 @@ public class InstitutionMutations implements GraphQLMutationResolver {
             throw new InvalidAttributesException("Invalidattributes passed", extensions);
         }
 
-        return institutionService.updateInstitution(input);
+        return institutionService.updateInstitution(input, userService.findLoggedUser());
     }
 }

@@ -1,16 +1,36 @@
 type Reply {
   id: ID!
   content: String!
-  date: String!
-  user: User!
+  createdAt: String!
+  updatedAt: String!
+  creator: User!
   discussion: Discussion!
+  parent: Reply
+  replies: [Reply!]!
 }
 
 input ReplyCreationInput {
   content: String!
-  forumPostId: ID!
+  discussionId: ID
+  parentId: ID
+}
+
+input UpdateReplyInput {
+  replyId: ID!
+  content: String
+}
+
+input ReplyToReplyInput {
+  parentId: ID!
+  content: String
 }
 
 extend type Mutation {
   createReply (input: ReplyCreationInput!) : Reply!
+  removeReply (replyId: ID!) : Boolean 
+  updateReply (input: UpdateReplyInput): Reply
+}
+
+extend type Query {
+  findReply (id: ID!) : Reply
 }

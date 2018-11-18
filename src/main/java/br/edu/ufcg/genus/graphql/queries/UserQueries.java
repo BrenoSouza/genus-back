@@ -14,7 +14,6 @@ import javax.validation.Validator;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
-import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Subject;
@@ -46,7 +45,7 @@ public class UserQueries implements GraphQLQueryResolver {
 	}
 
     public User findUser(long userId) {
-        return userService.findUserById(userId).orElseThrow(() -> new InvalidIDException("User with passed ID was not found", userId));
+        return userService.findUserById(userId);
     }
 
     public User findLoggedUser() {
@@ -54,11 +53,11 @@ public class UserQueries implements GraphQLQueryResolver {
     }
     
     public UserRole findRole(Long institutionId) {
-    	return userService.findRole(institutionId);
+    	return userService.findRole(institutionId, userService.findLoggedUser());
     }
 
     public Iterable<Subject> findSubjectsByUser(Long userId, Long institutionId) {
-        User user = userService.findUserById(userId).orElseThrow(() -> new InvalidIDException("User with passed ID was not found", userId));
+        User user = userService.findUserById(userId);
 
         Institution institution = this.institutionRepository.findById(institutionId).get();
 		List<Subject> result = new ArrayList<>();
