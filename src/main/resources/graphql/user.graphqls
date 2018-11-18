@@ -4,6 +4,7 @@ type User {
   email: String!
   teacherSubjects: [ Subject! ]!
   studentSubjects: [ Subject! ]!
+  notifications: [ Notification! ]!
 }
 
 input CreateUserInput {

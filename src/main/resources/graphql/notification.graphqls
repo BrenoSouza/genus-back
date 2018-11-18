@@ -1,0 +1,12 @@
+type Notification {
+  id: ID!
+  message: String!
+  notificationType: String!
+  notificationTypeId: ID!
+  read: Boolean!
+  createdAt: String!
+}
+
+extend type Query {
+  findNotification (input: ID!) : Notification
+}

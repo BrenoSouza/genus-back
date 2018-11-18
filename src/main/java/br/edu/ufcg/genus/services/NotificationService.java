@@ -20,7 +20,7 @@ public class NotificationService {
 	@Autowired
 	private NotificationRepository notificationRepository;
 		
-	public Notification findDiscussionById(Long id) {
+	public Notification findNotificationById(Long id) {
 		return notificationRepository.findById(id)
 			.orElseThrow(() -> new InvalidIDException("Notification with passed ID was not found", id));
 	}
