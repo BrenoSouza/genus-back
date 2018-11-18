@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.models.Discussion;
+import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.DiscussionRepository;
@@ -23,6 +24,9 @@ public class DiscussionService {
 	@Autowired
 	private SubjectService subjectService;
 	
+	@Autowired
+	private NotificationService notificationService;
+
 	public Discussion findDiscussionById(Long id) {
 		return discussionRepository.findById(id)
 			.orElseThrow(() -> new InvalidIDException("Discussion with passed ID was not found", id));
@@ -34,6 +38,18 @@ public class DiscussionService {
 		Discussion forumPost = new Discussion(user, subject, input.getTitle(), input.getContent());
 		subject.addDiscussion(forumPost);
 		discussionRepository.save(forumPost);
+
+		for (StudentSubject studentSubject : subject.getStudents()) {
+			if (!studentSubject.getUser().equals(user)) {
+				notificationService.createNotification("NEW_DISCUSSION", null, forumPost.getTitle(), studentSubject.getUser());
+			}
+		}
+
+		for (User teacher : subject.getTeachers()) {
+			if (!teacher.equals(user)) {
+				notificationService.createNotification("NEW_DISCUSSION", null, forumPost.getTitle(), teacher);
+			}
+		}
 		return forumPost;
 	}
 

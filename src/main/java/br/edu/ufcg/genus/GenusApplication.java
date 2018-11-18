@@ -17,6 +17,7 @@ import br.edu.ufcg.genus.graphql.mutations.InstitutionMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
 import br.edu.ufcg.genus.graphql.queries.DiscussionQueries;
+import br.edu.ufcg.genus.graphql.queries.NotificationQueries;
 import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
 import br.edu.ufcg.genus.graphql.queries.ReplyQueries;
@@ -72,6 +73,11 @@ public class GenusApplication {
 	@Bean
 	public UserQueries userQueries() {
 		return new UserQueries();
+	}
+
+	@Bean
+	public NotificationQueries notificationQueries() {
+		return new NotificationQueries();
 	}
 		
 	@Bean
