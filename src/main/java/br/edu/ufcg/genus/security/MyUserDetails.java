@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.UserRepository;
 
@@ -14,6 +16,8 @@ public class MyUserDetails implements UserDetailsService {
 	
 	@Autowired
     private UserRepository userRepository;
+    @Autowired
+	private SimpMessagingTemplate webSocket;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -21,6 +25,10 @@ public class MyUserDetails implements UserDetailsService {
             return new RuntimeException("Usuário com email " + email + " não foi encontrado no repositório.");
         });
 		if (user == null) throw new RuntimeException("Usuário com o email " + email + " não encontrado!");
+		
+		webSocket.convertAndSend("/notify", new String("NEW_DISCUSSION"));
+
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@");
 		
 		return org.springframework.security.core.userdetails.User
 	            .withUsername(email)

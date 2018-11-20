@@ -3,6 +3,7 @@ package br.edu.ufcg.genus.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
@@ -27,6 +28,9 @@ public class DiscussionService {
 	@Autowired
 	private NotificationService notificationService;
 
+	@Autowired
+	private SimpMessagingTemplate webSocket;
+
 	public Discussion findDiscussionById(Long id) {
 		return discussionRepository.findById(id)
 			.orElseThrow(() -> new InvalidIDException("Discussion with passed ID was not found", id));
@@ -50,6 +54,9 @@ public class DiscussionService {
 				notificationService.createNotification("NEW_DISCUSSION", null, forumPost.getTitle(), teacher);
 			}
 		}
+
+		webSocket.convertAndSend("/notify", new String("NEW_DISCUSSION"));
+
 		return forumPost;
 	}
 
