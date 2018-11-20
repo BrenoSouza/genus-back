@@ -24,7 +24,9 @@ public class ReplyService {
 	@Autowired
 	private DiscussionService discussionService;
 	
-	
+	@Autowired
+	private NotificationService notificationService;
+
 	public Reply findReplyById(Long id) {
 		return replyRepository.findById(id)
 			.orElseThrow(() -> new InvalidIDException("Reply with passed ID was not found", id));
@@ -39,6 +41,14 @@ public class ReplyService {
 		Reply reply = new Reply(content, user, discussion);
 		discussion.addReply(reply);
 		this.replyRepository.save(reply);
+
+		Long subjectId = subject.getId();
+		Long gradeId = subject.getGrade().getId();
+		Long institutionId = subject.getGrade().getInstitution().getId();
+
+		notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), discussion.getCreator(),
+												institutionId, gradeId, subjectId, discussionId);
+
 		return reply;		
 	}
 	
@@ -61,6 +71,15 @@ public class ReplyService {
 		discussion.addReply(reply);
 		parent.addReply(reply);
 		this.replyRepository.save(reply);
+
+		Long discussionId = discussion.getId();
+		Long subjectId = subject.getId();
+		Long gradeId = subject.getGrade().getId();
+		Long institutionId = subject.getGrade().getInstitution().getId();
+
+		notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), parent.getCreator(),
+												institutionId, gradeId, subjectId, discussionId);
+
 		return reply;
 	}
 

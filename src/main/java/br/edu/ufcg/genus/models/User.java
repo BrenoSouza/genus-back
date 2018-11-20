@@ -61,9 +61,14 @@ public class User {
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<StudentSubject> subjectsStudent = new HashSet<>();
 
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@Column(name="notifications")
+	private Set<Notification> notifications;
+
 	public User() {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
+		this.notifications = new HashSet<>();
 	}
 	
 	public User(String username, String email, String password) {
@@ -209,6 +214,14 @@ public class User {
 			}
 		}
 		return result;
+	}
+
+	public Set<Notification> getNotifications() {
+		return this.notifications;
+	}
+
+	public void setNotifications(Set<Notification> notifications) {
+		this.notifications = notifications;
 	}
 	
 	@Override
