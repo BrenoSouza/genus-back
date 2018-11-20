@@ -42,7 +42,12 @@ public class ReplyService {
 		discussion.addReply(reply);
 		this.replyRepository.save(reply);
 
-		notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), discussion.getCreator());
+		Long subjectId = subject.getId();
+		Long gradeId = subject.getGrade().getId();
+		Long institutionId = subject.getGrade().getInstitution().getId();
+
+		notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), discussion.getCreator(),
+												institutionId, gradeId, subjectId, discussionId);
 
 		return reply;		
 	}
@@ -67,7 +72,13 @@ public class ReplyService {
 		parent.addReply(reply);
 		this.replyRepository.save(reply);
 
-		notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), reply.getCreator());
+		Long discussionId = discussion.getId();
+		Long subjectId = subject.getId();
+		Long gradeId = subject.getGrade().getId();
+		Long institutionId = subject.getGrade().getInstitution().getId();
+
+		notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), parent.getCreator(),
+												institutionId, gradeId, subjectId, discussionId);
 
 		return reply;
 	}

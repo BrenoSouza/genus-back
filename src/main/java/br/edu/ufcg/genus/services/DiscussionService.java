@@ -37,17 +37,23 @@ public class DiscussionService {
 		PermissionChecker.checkSubjectPermission(user, subject);
 		Discussion forumPost = new Discussion(user, subject, input.getTitle(), input.getContent());
 		subject.addDiscussion(forumPost);
-		discussionRepository.save(forumPost);
+		Discussion discussion = discussionRepository.save(forumPost);
+
+		Long subjectId = subject.getId();
+		Long gradeId = subject.getGrade().getId();
+		Long institutionId = subject.getGrade().getInstitution().getId();
 
 		for (StudentSubject studentSubject : subject.getStudents()) {
 			if (!studentSubject.getUser().equals(user)) {
-				notificationService.createNotification("NEW_DISCUSSION", null, forumPost.getTitle(), studentSubject.getUser());
+				notificationService.createNotification("NEW_DISCUSSION", discussion.getId(), forumPost.getTitle(), studentSubject.getUser(),
+														institutionId, gradeId, subjectId, discussion.getId());
 			}
 		}
 
 		for (User teacher : subject.getTeachers()) {
 			if (!teacher.equals(user)) {
-				notificationService.createNotification("NEW_DISCUSSION", null, forumPost.getTitle(), teacher);
+				notificationService.createNotification("NEW_DISCUSSION", null, forumPost.getTitle(), teacher,
+														institutionId, gradeId, subjectId, discussion.getId());
 			}
 		}
 		return forumPost;

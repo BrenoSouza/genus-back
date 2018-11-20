@@ -5,6 +5,10 @@ type Notification {
   notificationTypeId: ID!
   read: Boolean!
   createdAt: String!
+  institutionId: ID!
+  gradeId: ID!
+  subjectId: ID!
+  discussionId: ID!
 }
 
 extend type Query {

@@ -44,8 +44,9 @@ public class NotificationService {
 			.orElseThrow(() -> new InvalidIDException("Notification with passed ID was not found", id));
 	}
 	
-	public void createNotification(String notificationType, Long notificationTypeId, String message, User user) {
-		Notification notification = new Notification(notificationType, notificationTypeId, message, user);
+	public void createNotification(String notificationType, Long notificationTypeId, String message, User user,
+									Long instituionId, Long gradeId, Long subjectId, Long discussionId) {
+		Notification notification = new Notification(notificationType, notificationTypeId, message, user, instituionId, gradeId, subjectId, discussionId);
 		notificationRepository.save(notification);
 	}
 

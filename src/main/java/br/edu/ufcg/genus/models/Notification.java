@@ -34,15 +34,32 @@ public class Notification {
 	@Column(name = "notificaton_type_id")
     private Long notificationTypeId;
 
+	@Column(name = "institution_id")
+    private Long institutionId;
+
+	@Column(name = "grade_id")
+    private Long gradeId;
+
+	@Column(name = "subject_id")
+    private Long subjectId;
+
+	@Column(name = "discussion_id")
+    private Long discussionId;
+
 	public Notification() {
 
 	}
 	
-	public Notification(String notificationType, Long notificationTypeId, String message, User user) {
+	public Notification(String notificationType, Long notificationTypeId, String message, User user,
+						Long instituionId, Long gradeId, Long subjectId, Long discussionId) {
 		this.notificationType = notificationType;
 		this.notificationTypeId = notificationTypeId;
 		this.message = message;
 		this.user = user;
+		this.institutionId = instituionId;
+		this.gradeId = gradeId;
+		this.subjectId = subjectId;
+		this.discussionId = discussionId;
     }
 
     public String getMessage() {
@@ -80,7 +97,39 @@ public class Notification {
 	public void setUser(User user) {
 		this.user = user;
     }
-    
+	
+	public Long getInstitutionId() {
+		return this.institutionId;
+	}
+
+	public void setInstitutionId(Long institutionId) {
+		this.institutionId = institutionId;
+	}
+
+	public Long getGradeId() {
+		return this.gradeId;
+	}
+
+	public void setGradeId(Long gradeId) {
+		this.gradeId = gradeId;
+	}
+
+	public Long getSubjectId() {
+		return this.subjectId;
+	}
+
+	public void setSubjectId(Long subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	public Long getDiscussionId() {
+		return this.discussionId;
+	}
+
+	public void setDiscussionId(Long subjectId) {
+		this.subjectId = subjectId;
+	}
+
     public boolean getRead() {
         return this.read;
     }
