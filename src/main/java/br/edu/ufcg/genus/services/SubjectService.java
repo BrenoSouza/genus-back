@@ -10,9 +10,11 @@ import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
+import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
+import br.edu.ufcg.genus.repositories.StudentSubjectRepository;
 import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateSubjectInput;
@@ -35,6 +37,13 @@ public class SubjectService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private StudentSubjectRepository studentSubjectRepository;
+	
 	
 	public Subject createSubject(SubjectCreationInput input, User user) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
@@ -91,6 +100,54 @@ public class SubjectService {
 		permitedRoles.add(UserRole.ADMIN);
 		long institutionId = subject.getGrade().getInstitution().getId();
 		PermissionChecker.checkPermission(user, institutionId, permitedRoles);
+	}
+	
+	public List<Subject> addStudentToSubjectsInGrade(Long gradeId, Long studentId, User user) {
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		List<UserRole> permittedRolesStudent = new ArrayList<>();
+		permittedRolesStudent.add(UserRole.STUDENT);
+		
+		User student = userService.findUserById(studentId);
+		Grade grade = gradeService.findGradeById(gradeId);
+		Institution institution = grade.getInstitution();
+		
+		PermissionChecker.checkPermission(user, institution.getId(), permittedRolesOwner);
+        PermissionChecker.checkPermission(student, institution.getId(), permittedRolesStudent);
+        
+        List<Subject> addedSubjects = new ArrayList<>();
+        List<StudentSubject> studentSubjects = new ArrayList<>();
+        for(Subject subject : grade.getSubjects()) {
+        	StudentSubject studentSubject = new StudentSubject(student, subject);
+            boolean result = student.addSubjectStudent(studentSubject);
+            if (result) {
+            	subject.addStudent(studentSubject);
+            	studentSubjects.add(studentSubject);
+                addedSubjects.add(subject);
+            }
+        }
+        
+        this.studentSubjectRepository.saveAll(studentSubjects);
+        this.subjectRepository.saveAll(addedSubjects);
+        return addedSubjects;
+    }
+	
+	public boolean removeInstitutionSubjectsFromUser(Long institutionId, Long studentId, User user) {
+		boolean result = false;
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		
+		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
+		User student = userService.findUserById(studentId);
+		List<StudentSubject> toBeDeleted = new ArrayList<>();
+		for(StudentSubject studentSubject: student.getSubjectsStudent()) {
+			if(institutionId.equals(studentSubject.getSubject().getGrade().getInstitution().getId())) {
+				toBeDeleted.add(studentSubject);
+			}
+		}
+		studentSubjectRepository.deleteAll(toBeDeleted);
+		result = true;
+		return result;
 	}
 
 }

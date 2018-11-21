@@ -186,8 +186,8 @@ public class User {
         subjects.add(subject);
 	}
 
-	public void addSubjectStudent(StudentSubject studentSubject) {
-        subjectsStudent.add(studentSubject);
+	public boolean addSubjectStudent(StudentSubject studentSubject) {
+        return subjectsStudent.add(studentSubject);
 	}
 	
 	public boolean removeSubject(Subject subject) {
