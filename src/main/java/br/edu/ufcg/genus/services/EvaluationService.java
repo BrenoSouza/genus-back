@@ -21,7 +21,7 @@ public class EvaluationService {
 	private EvaluationRepository evaluationRepository;
 	
 	@Autowired
-	private StudentSubjectRepository studentSubjectRepository;
+	private StudentSubjectService studentSubjectService;
 	
 	@Autowired
 	private UserService userService;
@@ -29,20 +29,23 @@ public class EvaluationService {
 	@Autowired
 	private SubjectService subjectService;
 	
+	public Evaluation findEvaluation(Long id) {
+		return evaluationRepository.findById(id)
+				.orElseThrow(() -> new InvalidIDException("Evaluation with passed ID was not found", id));
+	}
+	
 	public Evaluation createEvaluation(EvaluationCreationInput input, User user) {
 		checkEvaluationCreation(input, user);
-		
-		StudentSubjectId ssid = new StudentSubjectId(input.getUserId(), input.getSubjectId());
-		StudentSubject studentSubject = studentSubjectRepository.findById(ssid)
-				.orElseThrow(() -> new InvalidIDException("StudentSubject with passed ID was not found", ssid));
+		StudentSubject studentSubject = studentSubjectService.findStudentSubject(input.getUserId(), input.getSubjectId());
 		
 		Evaluation eval = new Evaluation(input.getName(), input.getResult(), input.getWeight(), studentSubject);
-		studentSubject.addEvaluation(eval);
 		evaluationRepository.save(eval);
-		studentSubjectRepository.save(studentSubject);
+		studentSubject.addEvaluation(eval);
+		studentSubjectService.saveStudentSubject(studentSubject);
 		return eval;
 	}
 	
+	//put this on the permission checker
 	private void checkEvaluationCreation(EvaluationCreationInput input, User user) {
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
 		User student = userService.findUserById(input.getUserId());

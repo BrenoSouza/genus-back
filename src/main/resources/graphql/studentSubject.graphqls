@@ -1,0 +1,10 @@
+type StudentSubject {
+  user: User!
+  subject: Subject!
+  avarage: Float!
+  evaluations: [Evaluation!]!
+}
+
+extend type Query {
+  findStudentSubject(userId: ID!, subjectId: ID!) : StudentSubject!
+}

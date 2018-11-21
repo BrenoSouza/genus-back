@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
 import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
+import br.edu.ufcg.genus.graphql.mutations.EvaluationMutations;
 import br.edu.ufcg.genus.graphql.mutations.DiscussionMutations;
 import br.edu.ufcg.genus.graphql.mutations.ReplyMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
@@ -18,10 +19,12 @@ import br.edu.ufcg.genus.graphql.mutations.NotificationMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
 import br.edu.ufcg.genus.graphql.queries.DiscussionQueries;
+import br.edu.ufcg.genus.graphql.queries.EvaluationQueries;
 import br.edu.ufcg.genus.graphql.queries.NotificationQueries;
 import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
 import br.edu.ufcg.genus.graphql.queries.ReplyQueries;
+import br.edu.ufcg.genus.graphql.queries.StudentSubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import br.edu.ufcg.genus.graphql.queries.UserRoleQueries;
@@ -179,5 +182,20 @@ public class GenusApplication {
 	@Bean
 	public DiscussionQueries discussionQueries() {
 		return new DiscussionQueries();
+	}
+	
+	@Bean
+	public EvaluationMutations evaluationMutations() {
+		return new EvaluationMutations();
+	}
+	
+	@Bean
+	public EvaluationQueries evaluationQueries() {
+		return new EvaluationQueries();
+	}
+	
+	@Bean
+	public StudentSubjectQueries studentSubjectQueries() {
+		return new StudentSubjectQueries();
 	}
 }
