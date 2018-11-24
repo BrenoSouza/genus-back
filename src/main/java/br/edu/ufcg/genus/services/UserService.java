@@ -69,7 +69,6 @@ public class UserService {
     
     public User findLoggedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
         User user = findUserByEmail(email)
             .orElseThrow(() -> new InvalidTokenException("Token is not valid"));
 
@@ -108,7 +107,6 @@ public class UserService {
         Subject subject = this.subjectService.findSubjectById(subjectId);
         Institution institution = subject.getGrade().getInstitution();
         
-        //Use checker here
         PermissionChecker.checkPermission(user, institution.getId(), permittedRolesOwner);
         PermissionChecker.checkPermission(student, institution.getId(), permittedRolesStudent);
         
@@ -120,7 +118,7 @@ public class UserService {
         this.subjectRepository.save(subject);
         return this.subjectService.findSubjectById(subjectId);
     }
-
+    
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
 	}

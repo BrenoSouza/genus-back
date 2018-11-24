@@ -89,6 +89,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 		Grade grade = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()), admin);
 		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade.getId()), admin);
+		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade.getId()), admin);
 		
 		userService.addTeacher(subject.getId(), prof1.getId());
 		userService.addStudent(subject.getId(), stud1.getId(), admin);
