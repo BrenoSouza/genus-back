@@ -41,6 +41,9 @@ public class SubjectService {
 	@Autowired
 	private StudentSubjectRepository studentSubjectRepository;
 	
+	@Autowired
+	private StudentSubjectService studentSubjectService;
+	
 	
 	public Subject createSubject(SubjectCreationInput input, User user) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
@@ -177,6 +180,39 @@ public class SubjectService {
 		}
 		studentSubjectRepository.deleteAll(toBeDeleted);
 		result = true;
+		return result;
+	}
+	
+	public boolean removeStudentFromSubject(Long subjectId, Long studentId, User user) {
+		boolean result = false;
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		Subject subject = findSubjectById(subjectId);
+		Long institutionId = subject.getGrade().getInstitution().getId();
+		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
+		StudentSubject studentSubject = this.studentSubjectService.findStudentSubject(studentId, subjectId);
+		this.studentSubjectRepository.delete(studentSubject);
+		result = true;
+		return result;
+	}
+	
+	public boolean removeTeacherFromSubject(Long subjectId, Long teacherId, User user) {
+		boolean result = false;
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		Subject subject = findSubjectById(subjectId);
+		Long institutionId = subject.getGrade().getInstitution().getId();
+		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
+		User teacher = null;
+		for(User t: subject.getTeachers()) {
+			if (t.getId() == teacherId) {
+				teacher = t;
+				break;
+			}
+		}
+		if (teacher != null) {
+			//SHOULD REMOVE HERE
+		}
 		return result;
 	}
 
