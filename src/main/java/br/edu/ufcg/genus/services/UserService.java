@@ -35,8 +35,6 @@ public class UserService {
 	@Autowired
     private UserRepository userRepository;
     @Autowired
-    private SubjectRepository subjectRepository;
-    @Autowired
 	private SubjectService subjectService;
 	@Autowired
     private PasswordEncoder passwordEncoder;
@@ -44,8 +42,6 @@ public class UserService {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private StudentSubjectRepository studentSubjectRepository;
 	
 	public User createUser (CreateUserInput input) {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
@@ -79,46 +75,17 @@ public class UserService {
         return userRepository.findById(id)
         		.orElseThrow(() -> new InvalidIDException("User with passed ID was not found", id));
     }
-
-    public Subject addTeacher(Long subjectId, Long teacherId) {
-    	User teacher = findUserById(teacherId);
-        Subject subject = this.subjectService.findSubjectById(subjectId);
-        Institution institution = subject.getGrade().getInstitution();
-        
-        List<UserRole> permitedRoles = new ArrayList<>();
-		permitedRoles.add(UserRole.TEACHER);
-		PermissionChecker.checkPermission(teacher, institution.getId(), permitedRoles);
-
-        teacher.addSubject(subject);
-        subject.addTeacher(teacher);
-
-        this.subjectRepository.save(subject);
-        return this.subjectService.findSubjectById(subjectId);
+	
+	public Iterable<User> findTeachersBySubject(Long subjectId) {
+		Subject subject = this.subjectService.findSubjectById(subjectId);
+        return subject.getTeachers();
+	}
+	
+	public Iterable<User> findStudentsBySubject(Long subjectId) {
+		Subject subject = this.subjectService.findSubjectById(subjectId);
+        return subject.findStudents();
     }
 
-    public Subject addStudent(Long subjectId, Long studentId, User user) {
-		List<UserRole> permittedRolesOwner = new ArrayList<>();
-		permittedRolesOwner.add(UserRole.ADMIN);
-		List<UserRole> permittedRolesStudent = new ArrayList<>();
-		permittedRolesStudent.add(UserRole.STUDENT);
-
-        User student = findUserById(studentId);
-
-        Subject subject = this.subjectService.findSubjectById(subjectId);
-        Institution institution = subject.getGrade().getInstitution();
-        
-        PermissionChecker.checkPermission(user, institution.getId(), permittedRolesOwner);
-        PermissionChecker.checkPermission(student, institution.getId(), permittedRolesStudent);
-        
-        StudentSubject studentSubject = new StudentSubject(student, subject);
-        student.addSubjectStudent(studentSubject);
-        subject.addStudent(studentSubject);
-        
-        this.studentSubjectRepository.save(studentSubject);
-        this.subjectRepository.save(subject);
-        return this.subjectService.findSubjectById(subjectId);
-    }
-    
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
 	}

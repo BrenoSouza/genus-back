@@ -15,7 +15,6 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.models.Subject;
-import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.services.SubjectService;
 import br.edu.ufcg.genus.services.UserService;
 import br.edu.ufcg.genus.update_inputs.UpdateSubjectInput;
@@ -44,11 +43,11 @@ public class SubjectMutations implements GraphQLMutationResolver {
 	}
 
 	public Subject addTeacherToSubject(Long subjectId, Long teacherId) {
-		return this.userService.addTeacher(subjectId, teacherId);
+		return this.subjectService.addTeacher(subjectId, teacherId, userService.findLoggedUser());
     }
     
     public Subject addStudentToSubject(Long subjectId, Long studentId) {
-		return this.userService.addStudent(subjectId, studentId, userService.findLoggedUser());
+		return this.subjectService.addStudent(subjectId, studentId, userService.findLoggedUser());
 	}
 
 	public Subject updateSubject(UpdateSubjectInput input) {

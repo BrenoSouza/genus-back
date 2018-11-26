@@ -27,9 +27,6 @@ public class SubjectService {
 	private SubjectRepository subjectRepository;
 	
 	@Autowired
-	private SubjectService subjectService;
-	
-	@Autowired
 	private InstitutionService institutionService;
 	
 	@Autowired
@@ -64,15 +61,48 @@ public class SubjectService {
 		Grade grade = this.gradeService.findGradeById(gradeId);
 		return grade.getSubjects();
 	}
-		
-	public Iterable<User> findTeachersBySubject(Long subjectId) {
-		Subject subject = this.subjectService.findSubjectById(subjectId);
-        return subject.getTeachers();
-	}
 	
-	public Iterable<User> findStudentsBySubject(Long subjectId) {
-		Subject subject = this.subjectService.findSubjectById(subjectId);
-        return subject.findStudents();
+	public Subject addTeacher(Long subjectId, Long teacherId, User user) {
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		List<UserRole> permitedRoles = new ArrayList<>();
+		permitedRoles.add(UserRole.TEACHER);
+		
+    	User teacher = this.userService.findUserById(teacherId);
+        Subject subject = findSubjectById(subjectId);
+        Institution institution = subject.getGrade().getInstitution();
+        
+		PermissionChecker.checkPermission(user, institution.getId(), permittedRolesOwner);
+		PermissionChecker.checkPermission(teacher, institution.getId(), permitedRoles);
+
+        teacher.addSubject(subject);
+        subject.addTeacher(teacher);
+
+        this.subjectRepository.save(subject);
+        return findSubjectById(subjectId);
+    }
+
+    public Subject addStudent(Long subjectId, Long studentId, User user) {
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		List<UserRole> permittedRolesStudent = new ArrayList<>();
+		permittedRolesStudent.add(UserRole.STUDENT);
+
+        User student = this.userService.findUserById(studentId);
+
+        Subject subject = findSubjectById(subjectId);
+        Institution institution = subject.getGrade().getInstitution();
+        
+        PermissionChecker.checkPermission(user, institution.getId(), permittedRolesOwner);
+        PermissionChecker.checkPermission(student, institution.getId(), permittedRolesStudent);
+        
+        StudentSubject studentSubject = new StudentSubject(student, subject);
+        student.addSubjectStudent(studentSubject);
+        subject.addStudent(studentSubject);
+        
+        this.studentSubjectRepository.save(studentSubject);
+        this.subjectRepository.save(subject);
+        return findSubjectById(subjectId);
     }
 
 	public Subject updateSubject(UpdateSubjectInput input, User user) {

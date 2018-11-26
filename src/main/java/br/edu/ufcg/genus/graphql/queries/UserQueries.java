@@ -68,4 +68,12 @@ public class UserQueries implements GraphQLQueryResolver {
 		}
 		return result;
     }
+    
+    public Iterable<User> findTeachersBySubject(Long subjectId) {
+		return this.userService.findTeachersBySubject(subjectId);
+	}
+    
+    public Iterable<User> findStudentsBySubject(Long subjectId) {
+    	return this.userService.findStudentsBySubject(subjectId);
+    }
 }
