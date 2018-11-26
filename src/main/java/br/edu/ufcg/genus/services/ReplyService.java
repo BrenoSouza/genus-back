@@ -46,8 +46,8 @@ public class ReplyService {
 		Long gradeId = subject.getGrade().getId();
 		Long institutionId = subject.getGrade().getInstitution().getId();
 
-		notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), discussion.getCreator(),
-												institutionId, gradeId, subjectId, discussionId);
+		notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), user.getUsername(),
+												discussion.getCreator(), institutionId, gradeId, subjectId, discussionId);
 
 		return reply;		
 	}
@@ -77,8 +77,8 @@ public class ReplyService {
 		Long gradeId = subject.getGrade().getId();
 		Long institutionId = subject.getGrade().getInstitution().getId();
 
-		notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), parent.getCreator(),
-												institutionId, gradeId, subjectId, discussionId);
+		notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), user.getUsername(),
+												parent.getCreator(), institutionId, gradeId, subjectId, discussionId);
 
 		return reply;
 	}

@@ -45,15 +45,15 @@ public class DiscussionService {
 
 		for (StudentSubject studentSubject : subject.getStudents()) {
 			if (!studentSubject.getUser().equals(user)) {
-				notificationService.createNotification("NEW_DISCUSSION", discussion.getId(), forumPost.getTitle(), studentSubject.getUser(),
-														institutionId, gradeId, subjectId, discussion.getId());
+				notificationService.createNotification("NEW_DISCUSSION", discussion.getId(), forumPost.getTitle(), user.getUsername(), 
+														studentSubject.getUser(), institutionId, gradeId, subjectId, discussion.getId());
 			}
 		}
 
 		for (User teacher : subject.getTeachers()) {
 			if (!teacher.equals(user)) {
-				notificationService.createNotification("NEW_DISCUSSION", null, forumPost.getTitle(), teacher,
-														institutionId, gradeId, subjectId, discussion.getId());
+				notificationService.createNotification("NEW_DISCUSSION", discussion.getId(), forumPost.getTitle(), user.getUsername(),
+														teacher, institutionId, gradeId, subjectId, discussion.getId());
 			}
 		}
 		return forumPost;
