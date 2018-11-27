@@ -31,6 +31,9 @@ public class Notification {
 	@Column(name = "notificaton_type")
     private String notificationType;
 
+	@Column(name = "origin_user")
+	private String originUserName;
+	
 	@Column(name = "notificaton_type_id")
     private Long notificationTypeId;
 
@@ -50,11 +53,12 @@ public class Notification {
 
 	}
 	
-	public Notification(String notificationType, Long notificationTypeId, String message, User user,
+	public Notification(String notificationType, Long notificationTypeId, String message, String originUserName, User user,
 						Long instituionId, Long gradeId, Long subjectId, Long discussionId) {
 		this.notificationType = notificationType;
 		this.notificationTypeId = notificationTypeId;
 		this.message = message;
+		this.originUserName = originUserName;
 		this.user = user;
 		this.institutionId = instituionId;
 		this.gradeId = gradeId;
@@ -72,7 +76,11 @@ public class Notification {
 
     public Timestamp getCreatedDate() {
         return this.createdAt;
-    }
+	}
+	
+	public String getOriginUserName() {
+		return this.originUserName;
+	}
 
 	public Long getId() {
 		return id;

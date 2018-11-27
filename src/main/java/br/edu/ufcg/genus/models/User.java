@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,7 +69,7 @@ public class User {
 	public User() {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
-		this.notifications = new HashSet<>();
+		this.notifications = new LinkedHashSet<>();
 	}
 	
 	public User(String username, String email, String password) {

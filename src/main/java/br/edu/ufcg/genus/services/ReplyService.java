@@ -42,13 +42,15 @@ public class ReplyService {
 		discussion.addReply(reply);
 		this.replyRepository.save(reply);
 
-		Long subjectId = subject.getId();
-		Long gradeId = subject.getGrade().getId();
-		Long institutionId = subject.getGrade().getInstitution().getId();
 
-		notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), discussion.getCreator(),
-												institutionId, gradeId, subjectId, discussionId);
-
+		if (!user.equals(discussion.getCreator())) {
+			Long subjectId = subject.getId();
+			Long gradeId = subject.getGrade().getId();
+			Long institutionId = subject.getGrade().getInstitution().getId();
+	
+			notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), user.getUsername(),
+			discussion.getCreator(), institutionId, gradeId, subjectId, discussionId);
+		}
 		return reply;		
 	}
 	
@@ -72,14 +74,16 @@ public class ReplyService {
 		parent.addReply(reply);
 		this.replyRepository.save(reply);
 
-		Long discussionId = discussion.getId();
-		Long subjectId = subject.getId();
-		Long gradeId = subject.getGrade().getId();
-		Long institutionId = subject.getGrade().getInstitution().getId();
+		if (!user.equals(parent.getCreator())) {
+			Long discussionId = discussion.getId();
+			Long subjectId = subject.getId();
+			Long gradeId = subject.getGrade().getId();
+			Long institutionId = subject.getGrade().getInstitution().getId();
 
-		notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), parent.getCreator(),
-												institutionId, gradeId, subjectId, discussionId);
-
+			notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), user.getUsername(),
+												parent.getCreator(), institutionId, gradeId, subjectId, discussionId);
+		}
+		
 		return reply;
 	}
 

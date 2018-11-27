@@ -2,6 +2,7 @@ type Notification {
   id: ID!
   message: String!
   notificationType: String!
+  originUserName: String!
   notificationTypeId: ID!
   read: Boolean!
   createdAt: String!
