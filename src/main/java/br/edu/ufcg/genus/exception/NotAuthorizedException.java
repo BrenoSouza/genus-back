@@ -8,20 +8,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.edu.ufcg.genus.utils.ServerConstants;
+
 public class NotAuthorizedException extends RuntimeException implements GraphQLError {
 
     private static final long serialVersionUID = 1L;
     private Map<String, Object> extensions;
-
+    
+    public NotAuthorizedException() {
+    	this("You don't have permission to do this action");
+    }
+    
     public NotAuthorizedException(String message) {
-        this(message, null);
+    	super(message);
+        this.extensions = new HashMap<>();
+        this.extensions.put(ServerConstants.EXCEPTION_CATEGORY, ExceptionCategory.PERMISSION_DENIED);
     }
 
-    public NotAuthorizedException(String message, Map<String, Object> extensions) {
-        super(message);
-        this.extensions = new HashMap<>();
-        this.extensions.put("PERMISSION_DENIED", "PERMISSION_DENIED");
-    }
 
 	@Override
 	public List<SourceLocation> getLocations() {

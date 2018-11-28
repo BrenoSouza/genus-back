@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 
 import java.util.Set;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 
 import javax.validation.ConstraintViolation;
@@ -33,11 +33,11 @@ public class InstitutionMutations implements GraphQLMutationResolver {
 
         Set<ConstraintViolation<CreateInstitutionInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<CreateInstitutionInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
 			});
-            throw new InvalidAttributesException("Invalid attributes passed to creation of an institution.", extensions);
+            throw new InvalidAttributesException("Invalid attributes passed to creation of an institution.", errors);
 		}
 		return institutionService.createInstitution(input, userService.findLoggedUser());
 	}
@@ -50,11 +50,11 @@ public class InstitutionMutations implements GraphQLMutationResolver {
 
         Set<ConstraintViolation<UpdateInstitutionInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<UpdateInstitutionInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-            throw new InvalidAttributesException("Invalidattributes passed", extensions);
+            throw new InvalidAttributesException("Invalidattributes passed", errors);
         }
 
         return institutionService.updateInstitution(input, userService.findLoggedUser());

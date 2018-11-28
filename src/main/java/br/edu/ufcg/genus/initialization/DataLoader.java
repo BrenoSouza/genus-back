@@ -82,9 +82,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
 		subjectService.addStudent(subject.getId(), stud1.getId(), admin);
 		
-		//Discussion discussion = discussionService.createDiscussion(new DiscussionCreationInput("Novo prof", subject.getId(), "Olá, serei o novo professor desta disciplina!"), prof1);
-		//Reply reply1 = replyService.createReply(new ReplyCreationInput("Nossa primeira aula será amanhã!", discussion.getId(), null), prof1);
-		//Reply reply2 = replyService.createReply(new ReplyCreationInput("Seja bem vindo, professor!", null, reply1.getId()), stud1);
 	}
 
 }
