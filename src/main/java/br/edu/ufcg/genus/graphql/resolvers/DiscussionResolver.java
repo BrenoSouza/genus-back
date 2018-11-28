@@ -1,8 +1,5 @@
 package br.edu.ufcg.genus.graphql.resolvers;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coxautodev.graphql.tools.GraphQLResolver;
@@ -15,16 +12,6 @@ public class DiscussionResolver implements GraphQLResolver<Discussion>{
 	
 	@Autowired
 	private ReplyService replyService;
-	/*
-	public String getCreationDate(Discussion discussion) {
-		DateFormat df = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
-		return df.format(discussion.getCreationDate());
-	}
-	
-	public String getLastUpdatedDate(Discussion discussion) {
-		DateFormat df = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
-		return df.format(discussion.getLastUpdatedDate());
-	}*/
 	
 	public int getReplyNumber(Discussion discussion) {
 		return discussion.getReplyNumber();

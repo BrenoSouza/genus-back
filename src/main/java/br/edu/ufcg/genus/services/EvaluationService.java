@@ -8,11 +8,9 @@ import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.EvaluationCreationInput;
 import br.edu.ufcg.genus.models.Evaluation;
 import br.edu.ufcg.genus.models.StudentSubject;
-import br.edu.ufcg.genus.models.StudentSubjectId;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.EvaluationRepository;
-import br.edu.ufcg.genus.repositories.StudentSubjectRepository;
 
 @Service
 public class EvaluationService {

@@ -1,14 +1,10 @@
 package br.edu.ufcg.genus.services;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
-import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
-import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.models.Notification;
 import br.edu.ufcg.genus.models.NotificationMessage;
 import br.edu.ufcg.genus.models.User;

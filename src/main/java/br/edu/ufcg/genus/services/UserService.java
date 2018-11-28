@@ -1,7 +1,5 @@
 package br.edu.ufcg.genus.services;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +13,13 @@ import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
 import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
-import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.InvalidTokenException;
-import br.edu.ufcg.genus.models.Institution;
-import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserRole;
-import br.edu.ufcg.genus.repositories.StudentSubjectRepository;
-import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserRepository;
 import br.edu.ufcg.genus.security.JwtTokenProvider;
 import br.edu.ufcg.genus.update_inputs.UpdateUserInput;
-import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
 public class UserService {
@@ -55,11 +47,11 @@ public class UserService {
 		try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             User user = userRepository.findByEmail(email)
-            		.orElseThrow(() -> new InvalidCredentialsException("Invalid email or password.", null));
+            		.orElseThrow(() -> new InvalidCredentialsException("Invalid email or password."));
             
             return jwtTokenProvider.createToken(email, user.getRoles());
         } catch (Exception e) {
-            throw new InvalidCredentialsException("Invalid email or password", null);
+            throw new InvalidCredentialsException("Invalid email or password");
         }	
     }
     
@@ -114,9 +106,8 @@ public class UserService {
     }
 
     public boolean updateUserPassword(String password, String newPassword) {
-		List<UserRole> permittedRoles = new ArrayList<>();
         User user = findLoggedUser();
-        if (!this.passwordMatch(user, password)) throw new InvalidPermissionException(permittedRoles);
+        if (!this.passwordMatch(user, password)) throw new InvalidCredentialsException("Invalid Password");
 
         user.setPassword(passwordEncoder.encode(newPassword));
 

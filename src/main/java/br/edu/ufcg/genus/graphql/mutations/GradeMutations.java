@@ -2,8 +2,8 @@ package br.edu.ufcg.genus.graphql.mutations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -30,11 +30,11 @@ public class GradeMutations implements GraphQLMutationResolver {
 	public Grade createGrade(GradeCreationInput input) {
 		Set<ConstraintViolation<GradeCreationInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<GradeCreationInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-            throw new InvalidAttributesException("Invalid attributes passed to creation of a grade.", extensions);
+            throw new InvalidAttributesException("Invalid attributes passed to creation of a grade.", errors);
 		}
 		return gradeService.createGrade(input, userService.findLoggedUser());
 	}
@@ -43,11 +43,11 @@ public class GradeMutations implements GraphQLMutationResolver {
 
         Set<ConstraintViolation<UpdateGradeInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<UpdateGradeInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-            throw new InvalidAttributesException("Invalidattributes passed", extensions);
+            throw new InvalidAttributesException("Invalidattributes passed", errors);
         }
 
         return gradeService.updateGrade(input, userService.findLoggedUser());

@@ -29,7 +29,6 @@ import br.edu.ufcg.genus.graphql.queries.SubjectQueries;
 import br.edu.ufcg.genus.graphql.queries.UserQueries;
 import br.edu.ufcg.genus.graphql.queries.UserRoleQueries;
 import br.edu.ufcg.genus.graphql.resolvers.DiscussionResolver;
-import br.edu.ufcg.genus.graphql.resolvers.ReplyResolver;
 import br.edu.ufcg.genus.graphql.resolvers.GradeResolver;
 import br.edu.ufcg.genus.graphql.resolvers.InstitutionResolver;
 import br.edu.ufcg.genus.graphql.resolvers.UserResolver;
@@ -162,11 +161,6 @@ public class GenusApplication {
 	@Bean
 	public DiscussionMutations discussionMutations() {
 		return new DiscussionMutations();
-	}
-	
-	@Bean
-	public ReplyResolver replyResolver() {
-		return new ReplyResolver();
 	}
 	
 	@Bean

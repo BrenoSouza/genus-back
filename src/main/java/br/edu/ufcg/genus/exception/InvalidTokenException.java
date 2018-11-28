@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.edu.ufcg.genus.utils.ServerConstants;
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
@@ -16,7 +17,7 @@ public class InvalidTokenException extends RuntimeException implements GraphQLEr
     public InvalidTokenException(String message) {
 		this(message, null);
 		this.extensions = new HashMap<>();
-		this.extensions.put("TOKEN_INVALID", "TOKEN_INVALID");
+		this.extensions.put(ServerConstants.EXCEPTION_CATEGORY, ExceptionCategory.INVALID_TOKEN);
     }
 
 	public InvalidTokenException(String message, Map<String, Object> extensions) {

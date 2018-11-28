@@ -8,5 +8,6 @@ public class ServerConstants {
 	public static final int DAY_MILLISECONDS = 3600000 * 24;
 	public static final int ENTRY_CODE_SIZE = 6;
 	public static final String REMOVED = "ESTA RESPOSTA FOI REMOVIDA";
+	public static final String EXCEPTION_CATEGORY = "CATEGORY";
 
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.edu.ufcg.genus.utils.ServerConstants;
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
@@ -13,10 +14,10 @@ public class InvalidCredentialsException extends RuntimeException implements Gra
     private static final long serialVersionUID = 1L;
     private Map<String, Object> extensions;
     
-    public InvalidCredentialsException(String message, Map<String, Object> extensions) {
+    public InvalidCredentialsException(String message) {
         super(message);
         this.extensions = new HashMap<>();
-        this.extensions.put("CREDENTIALS_INVALID", "CREDENTIALS_INVALID");
+        this.extensions.put(ServerConstants.EXCEPTION_CATEGORY, ExceptionCategory.INVALID_CREDENTIALS);
     }
 
     @Override
