@@ -2,9 +2,8 @@ package br.edu.ufcg.genus.graphql.mutations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -15,7 +14,6 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.models.Subject;
-import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.services.SubjectService;
 import br.edu.ufcg.genus.services.UserService;
 import br.edu.ufcg.genus.update_inputs.UpdateSubjectInput;
@@ -33,33 +31,33 @@ public class SubjectMutations implements GraphQLMutationResolver {
 	public Subject createSubject(SubjectCreationInput input) {
 		Set<ConstraintViolation<SubjectCreationInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<SubjectCreationInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-            throw new InvalidAttributesException("Invalid attributes passed to creation of a subject.", extensions);
+            throw new InvalidAttributesException("Invalid attributes passed to creation of a subject.", errors);
 		}
 
 		return this.subjectService.createSubject(input, userService.findLoggedUser());		
 	}
 
 	public Subject addTeacherToSubject(Long subjectId, Long teacherId) {
-		return this.userService.addTeacher(subjectId, teacherId);
+		return this.subjectService.addTeacher(subjectId, teacherId, userService.findLoggedUser());
     }
     
     public Subject addStudentToSubject(Long subjectId, Long studentId) {
-		return this.userService.addStudent(subjectId, studentId, userService.findLoggedUser());
+		return this.subjectService.addStudent(subjectId, studentId, userService.findLoggedUser());
 	}
 
 	public Subject updateSubject(UpdateSubjectInput input) {
 
         Set<ConstraintViolation<UpdateSubjectInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<UpdateSubjectInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-            throw new InvalidAttributesException("Invalid attributes passed", extensions);
+            throw new InvalidAttributesException("Invalid attributes passed", errors);
         }
 
         return subjectService.updateSubject(input, userService.findLoggedUser());
@@ -77,6 +75,12 @@ public class SubjectMutations implements GraphQLMutationResolver {
 		return this.subjectService.removeInstitutionSubjectsFromUser(institutionId, studentId, userService.findLoggedUser());
 	}
 	
+	public boolean removeStudentFromSubject(Long subjectId, Long studentId) {
+		return this.subjectService.removeStudentFromSubject(subjectId, studentId, userService.findLoggedUser());
+	}
 	
+	public boolean removeTeacherFromSubject(Long subjectId, Long teacherId) {
+		return this.subjectService.removeTeacherFromSubject(subjectId, teacherId, userService.findLoggedUser());
+	}
 
 }

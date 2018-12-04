@@ -2,8 +2,8 @@ package br.edu.ufcg.genus.graphql.mutations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -30,11 +30,11 @@ public class UserMutations implements GraphQLMutationResolver {
 		Set<ConstraintViolation<CreateUserInput>> violations = validator.validate(input);
 
 		if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+			List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<CreateUserInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-			throw new InvalidAttributesException("Invalid attributes passed to creation of an user.", extensions);
+			throw new InvalidAttributesException("Invalid attributes passed to creation of an user.", errors);
 		}
 		
 		return userService.createUser(input);
@@ -44,11 +44,11 @@ public class UserMutations implements GraphQLMutationResolver {
 
         Set<ConstraintViolation<UpdateUserInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<UpdateUserInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-            throw new InvalidAttributesException("Invalidattributes passed", extensions);
+            throw new InvalidAttributesException("Invalidattributes passed", errors);
         }
 
         return userService.updateUser(input);
@@ -58,10 +58,10 @@ public class UserMutations implements GraphQLMutationResolver {
 
         if (newPassword.length() < ServerConstants.MIN_LOGIN_FIELD) {
 
-            Map<String, Object> extensions = new HashMap<>();
-            extensions.put("PASSWORD_INVALID_MIN_LENGTH", "PASSWORD_INVALID_MIN_LENGTH");
+        	List<String> errors = new ArrayList<>();
+            errors.add("PASSWORD_INVALID_MIN_LENGTH");
 
-            throw new InvalidAttributesException("Passed password is invalid", extensions);
+            throw new InvalidAttributesException("Passed password is invalid", errors);
         }
 
         return userService.updateUserPassword(password, newPassword);

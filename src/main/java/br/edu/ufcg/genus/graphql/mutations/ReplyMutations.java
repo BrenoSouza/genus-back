@@ -2,8 +2,8 @@ package br.edu.ufcg.genus.graphql.mutations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -39,11 +39,11 @@ public class ReplyMutations implements GraphQLMutationResolver {
 
         Set<ConstraintViolation<UpdateReplyInput>> violations = validator.validate(input);
         if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+        	List<String> errors = new ArrayList<>();
             violations.forEach((ConstraintViolation<UpdateReplyInput> v) -> {
-                extensions.put(v.getMessage(), v.getMessage());
+                errors.add(v.getMessage());
             });
-            throw new InvalidAttributesException("Invalidattributes passed", extensions);
+            throw new InvalidAttributesException("Invalidattributes passed", errors);
         }
 
         return replyService.updateReply(input, userService.findLoggedUser());

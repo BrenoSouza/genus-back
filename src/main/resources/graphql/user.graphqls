@@ -34,6 +34,8 @@ type Query {
   findLoggedUser: User!
   findRole(institutionId: ID!) : UserRole!
   findSubjectsByUser(userId: ID!, institutionId: ID!) : [ Subject! ]!
+  findTeachersBySubject(subjectId: ID!) : [User]!
+  findStudentsBySubject(subjectId: ID!) : [User]!
 }
 
 type Mutation {

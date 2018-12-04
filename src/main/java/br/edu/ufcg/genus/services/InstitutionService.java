@@ -2,7 +2,6 @@ package br.edu.ufcg.genus.services;
 
 import br.edu.ufcg.genus.exception.InvalidCredentialsException;
 import br.edu.ufcg.genus.exception.InvalidIDException;
-import br.edu.ufcg.genus.exception.InvalidPermissionException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class InstitutionService {
 	
 	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input, User user) {
 		if (!this.userService.passwordMatch(user, input.getPassword())) {
-			throw new InvalidCredentialsException("Invalid email or password", null);
+			throw new InvalidCredentialsException("Invalid email or password");
 
 		}
 		Institution institution = findById(input.getInstitutionId());
@@ -120,8 +119,8 @@ public class InstitutionService {
 	private boolean removeOtherFromInstitution(User user, Institution institution, User toBeRemoved) {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
-		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new InvalidPermissionException(permittedRoles);
-		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new RuntimeException("Cannot remove ADMIN");
+		if(!user.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new NotAuthorizedException();
+		if(toBeRemoved.getRole(institution.getId()).equals(UserRole.ADMIN)) throw new NotAuthorizedException();;
 		return removeUserInstitution(toBeRemoved, institution);		
 	}
 	

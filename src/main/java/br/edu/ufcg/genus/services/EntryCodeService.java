@@ -66,7 +66,7 @@ public class EntryCodeService {
 		
 		//Checks if this User is already in the institution
 		if (user.getRole(entryCode.getInstitutionId()) != null) {
-			throw new UserAlreadyInInstitutionException();
+			throw new UserAlreadyInInstitutionException(entryCode.getInstitutionId());
 		}
 		
 		Institution institution = this.institutionService.findById(entryCode.getInstitutionId());

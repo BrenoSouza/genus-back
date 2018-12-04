@@ -169,4 +169,9 @@ public class Subject {
 			return false;
 		return true;
 	}
+
+	public boolean removeTeacher(User teacher) {
+		return teachers.remove(teacher);
+		
+	}
 }

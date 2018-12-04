@@ -6,24 +6,18 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import br.edu.ufcg.genus.inputs.CreateUserInput;
-import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.inputs.GradeCreationInput;
-import br.edu.ufcg.genus.inputs.ReplyCreationInput;
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
-import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
-import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
-import br.edu.ufcg.genus.services.DiscussionService;
 import br.edu.ufcg.genus.services.GradeService;
 import br.edu.ufcg.genus.services.InstitutionService;
-import br.edu.ufcg.genus.services.ReplyService;
 import br.edu.ufcg.genus.services.SubjectService;
 import br.edu.ufcg.genus.services.UserService;
 
@@ -48,12 +42,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	
 	@Autowired
 	private SubjectService subjectService;	
-	
-	@Autowired
-	private DiscussionService discussionService;
-	
-	@Autowired
-	private ReplyService replyService;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -91,12 +79,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade.getId()), admin);
 		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade.getId()), admin);
 		
-		userService.addTeacher(subject.getId(), prof1.getId());
-		userService.addStudent(subject.getId(), stud1.getId(), admin);
+		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
+		subjectService.addStudent(subject.getId(), stud1.getId(), admin);
 		
-		//Discussion discussion = discussionService.createDiscussion(new DiscussionCreationInput("Novo prof", subject.getId(), "Olá, serei o novo professor desta disciplina!"), prof1);
-		//Reply reply1 = replyService.createReply(new ReplyCreationInput("Nossa primeira aula será amanhã!", discussion.getId(), null), prof1);
-		//Reply reply2 = replyService.createReply(new ReplyCreationInput("Seja bem vindo, professor!", null, reply1.getId()), stud1);
 	}
 
 }
