@@ -3,6 +3,7 @@ package br.edu.ufcg.genus.models;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -30,7 +31,7 @@ public class StudentSubject {
 	@Column(name = "avarage")
 	private Double avarage;
 	
-	@OneToMany(mappedBy="studentSubject", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="studentSubject", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@Column(name="evaluations", nullable=false)
 	private Set<Evaluation> evaluations;
 	
