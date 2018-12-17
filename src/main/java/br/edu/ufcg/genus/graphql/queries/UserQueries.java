@@ -3,9 +3,7 @@ package br.edu.ufcg.genus.graphql.queries;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -14,7 +12,6 @@ import javax.validation.Validator;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
-import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Subject;
@@ -36,11 +33,11 @@ public class UserQueries implements GraphQLQueryResolver {
         Set<ConstraintViolation<AuthenticationInput>> violations = validator.validate(input);
 
 		if (violations.size() > 0) {
-            Map<String, Object> extensions = new HashMap<>();
+			List<String> errors = new ArrayList<>();
         	for (ConstraintViolation<AuthenticationInput> v : violations) {
-                extensions.put(v.getMessage(), v.getInvalidValue());
+                errors.add(v.getMessage());
         	}
-            throw new InvalidAttributesException("Invalid attributes passed to login.", extensions);
+            throw new InvalidAttributesException("Invalid attributes passed to login.", errors);
         }
 		return userService.login(input);		
 	}
@@ -54,7 +51,7 @@ public class UserQueries implements GraphQLQueryResolver {
     }
     
     public UserRole findRole(Long institutionId) {
-    	return userService.findRole(institutionId);
+    	return userService.findRole(institutionId, userService.findLoggedUser());
     }
 
     public Iterable<Subject> findSubjectsByUser(Long userId, Long institutionId) {
@@ -68,5 +65,13 @@ public class UserQueries implements GraphQLQueryResolver {
 			}
 		}
 		return result;
+    }
+    
+    public Iterable<User> findTeachersBySubject(Long subjectId) {
+		return this.userService.findTeachersBySubject(subjectId);
+	}
+    
+    public Iterable<User> findStudentsBySubject(Long subjectId) {
+    	return this.userService.findStudentsBySubject(subjectId);
     }
 }

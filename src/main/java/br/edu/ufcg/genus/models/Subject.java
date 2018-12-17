@@ -43,26 +43,15 @@ public class Subject {
 	mappedBy = "subjects")
 	private Set<User> teachers;
 	
-	/*@ManyToMany(fetch = FetchType.EAGER,
-	cascade = {
-		CascadeType.PERSIST,
-		CascadeType.MERGE
-	},
-	mappedBy = "subjectsStudent")
-	private Set<User> students;*/
 	
-	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
 	private Set<StudentSubject> students;
 
 
-	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@Column(name="forum", nullable=false)
 	private Set<Discussion> forum;
 	
-	//list of students/ StudentSubject
-	//forum
-	//material repository
-	//teachers
 	
 	public Subject() {
 		this.students = new HashSet<>();
@@ -179,5 +168,10 @@ public class Subject {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public boolean removeTeacher(User teacher) {
+		return teachers.remove(teacher);
+		
 	}
 }

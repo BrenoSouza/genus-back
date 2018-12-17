@@ -14,9 +14,7 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
-import br.edu.ufcg.genus.repositories.GradeRepository;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
-import br.edu.ufcg.genus.repositories.SubjectRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
 import br.edu.ufcg.genus.services.GradeService;
 import br.edu.ufcg.genus.services.InstitutionService;
@@ -43,14 +41,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	private GradeService gradeService;
 	
 	@Autowired
-	private SubjectService subjectService;
-	
-	@Autowired
-	private GradeRepository gradeRepository;
-	
-	@Autowired
-	private SubjectRepository subjectRepository;
-	
+	private SubjectService subjectService;	
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -84,15 +75,13 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud1, institution, UserRole.STUDENT);
 
-		//Grade grade = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()));
-		//Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade.getId()));
+		Grade grade = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()), admin);
+		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade.getId()), admin);
+		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade.getId()), admin);
 		
-		Grade grade = new Grade("Serie 1", institution);
-		gradeRepository.save(grade);
-		Subject subject = new Subject(grade, "Matematica");
-		subjectRepository.save(subject);
+		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
+		subjectService.addStudent(subject.getId(), stud1.getId(), admin);
 		
-		userService.addTeacher(subject.getId(), prof1.getId());
 	}
 
 }

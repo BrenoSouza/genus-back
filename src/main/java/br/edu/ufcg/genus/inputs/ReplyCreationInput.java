@@ -3,15 +3,17 @@ package br.edu.ufcg.genus.inputs;
 public class ReplyCreationInput {
 	
 	private String content;
-	private Long forumPostId;
+	private Long discussionId;
+	private Long parentId;
 	
 	public ReplyCreationInput() {
 		
 	}
 	
-	public ReplyCreationInput(String content, Long id) {
+	public ReplyCreationInput(String content, Long discId, Long pid) {
 		this.content = content;
-		this.forumPostId = id;
+		this.discussionId = discId;
+		this.parentId = pid;
 	}
 
 	public String getContent() {
@@ -22,20 +24,28 @@ public class ReplyCreationInput {
 		this.content = content;
 	}
 
-	public Long getForumPostId() {
-		return forumPostId;
+	public Long getDiscussionId() {
+		return discussionId;
 	}
 
-	public void setForumPostId(Long forumPostId) {
-		this.forumPostId = forumPostId;
+	public void setDiscussionId(Long discussionId) {
+		this.discussionId = discussionId;
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
-		result = prime * result + ((forumPostId == null) ? 0 : forumPostId.hashCode());
+		result = prime * result + ((discussionId == null) ? 0 : discussionId.hashCode());
+		result = prime * result + ((parentId == null) ? 0 : parentId.hashCode());
 		return result;
 	}
 
@@ -48,19 +58,18 @@ public class ReplyCreationInput {
 		if (getClass() != obj.getClass())
 			return false;
 		ReplyCreationInput other = (ReplyCreationInput) obj;
-		if (content == null) {
-			if (other.content != null)
+		if (discussionId == null) {
+			if (other.discussionId != null)
 				return false;
-		} else if (!content.equals(other.content))
+		} else if (!discussionId.equals(other.discussionId))
 			return false;
-		if (forumPostId == null) {
-			if (other.forumPostId != null)
+		if (parentId == null) {
+			if (other.parentId != null)
 				return false;
-		} else if (!forumPostId.equals(other.forumPostId))
+		} else if (!parentId.equals(other.parentId))
 			return false;
 		return true;
 	}
-	
 	
 
 }

@@ -2,6 +2,7 @@ package br.edu.ufcg.genus.graphql.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLResolver;
 
+import br.edu.ufcg.genus.models.Notification;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 
@@ -13,5 +14,9 @@ public class UserResolver implements GraphQLResolver<User> {
 
     public Iterable<Subject> getTeacherSubjects(User user) {
         return user.getSubjects();
+    }
+
+    public Iterable<Notification> getNotifications(User user) {
+        return user.getNotifications();
     }
 }

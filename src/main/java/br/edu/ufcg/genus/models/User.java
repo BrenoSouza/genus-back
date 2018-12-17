@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,9 +62,14 @@ public class User {
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<StudentSubject> subjectsStudent = new HashSet<>();
 
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@Column(name="notifications")
+	private Set<Notification> notifications;
+
 	public User() {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
+		this.notifications = new LinkedHashSet<>();
 	}
 	
 	public User(String username, String email, String password) {
@@ -181,17 +187,13 @@ public class User {
         subjects.add(subject);
 	}
 
-	public void addSubjectStudent(StudentSubject studentSubject) {
-        subjectsStudent.add(studentSubject);
+	public boolean addSubjectStudent(StudentSubject studentSubject) {
+        return subjectsStudent.add(studentSubject);
 	}
 	
 	public boolean removeSubject(Subject subject) {
 		return subjects.remove(subject);
 	}
-
-	/*public boolean removeSubjectStudent(Subject subject) {
-		return subjectsStudent.remove(subject);
-	}*/
 
 	public boolean checkStudent(Subject subject) {
 		boolean result = false;
@@ -213,6 +215,14 @@ public class User {
 			}
 		}
 		return result;
+	}
+
+	public Set<Notification> getNotifications() {
+		return this.notifications;
+	}
+
+	public void setNotifications(Set<Notification> notifications) {
+		this.notifications = notifications;
 	}
 	
 	@Override

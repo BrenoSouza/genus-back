@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.ExpiredEntryCodeException;
 import br.edu.ufcg.genus.exception.InvalidEntryCodeException;
-import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.UserAlreadyInInstitutionException;
 import br.edu.ufcg.genus.inputs.CreateAdvancedEntryCodeInput;
 import br.edu.ufcg.genus.inputs.CreateEntryCodeInput;
@@ -31,15 +30,11 @@ public class EntryCodeService {
 	@Autowired
 	private InstitutionService institutionService;
 	
-	@Autowired
-	private UserService userService;
-	
 	public Optional<EntryCode> findEntryCode(String code) {
 		return this.entryCodeRepository.findByCode(code);				
 	}
 	
-	public String createEntryCode(CreateEntryCodeInput input) {
-		User user = this.userService.findLoggedUser();
+	public String createEntryCode(CreateEntryCodeInput input, User user) {
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, input.getInstitutionId(), permitedRoles);
@@ -49,8 +44,7 @@ public class EntryCodeService {
 		return entryCode.getCode();
 	}
 	
-	public String createAdvancedEntryCode(CreateAdvancedEntryCodeInput input) {
-		User user = this.userService.findLoggedUser();
+	public String createAdvancedEntryCode(CreateAdvancedEntryCodeInput input, User user) {
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, input.getInstitutionId(), permitedRoles);
@@ -60,7 +54,7 @@ public class EntryCodeService {
 		return entryCode.getCode();
 	}
 	
-	public Institution joinInstitution(String code) {
+	public Institution joinInstitution(String code, User user) {
 		EntryCode entryCode = findEntryCode(code).orElseThrow(() -> new InvalidEntryCodeException());
 		
 		//Checks expiration
@@ -71,12 +65,11 @@ public class EntryCodeService {
 		}
 		
 		//Checks if this User is already in the institution
-		User user = this.userService.findLoggedUser();
 		if (user.getRole(entryCode.getInstitutionId()) != null) {
-			throw new UserAlreadyInInstitutionException();
+			throw new UserAlreadyInInstitutionException(entryCode.getInstitutionId());
 		}
 		
-		Institution institution = this.institutionService.findById(entryCode.getInstitutionId()).orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", entryCode.getInstitutionId()));
+		Institution institution = this.institutionService.findById(entryCode.getInstitutionId());
 		this.institutionService.addUserToInstitution(user, institution, entryCode.getRole());
 		if (entryCode.consumeUse() <= 0 ) {
 			this.entryCodeRepository.delete(entryCode);

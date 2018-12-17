@@ -7,13 +7,10 @@ import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.EvaluationCreationInput;
 import br.edu.ufcg.genus.models.Evaluation;
-import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.StudentSubject;
-import br.edu.ufcg.genus.models.StudentSubjectId;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.EvaluationRepository;
-import br.edu.ufcg.genus.repositories.StudentSubjectRepository;
 
 @Service
 public class EvaluationService {
@@ -22,7 +19,7 @@ public class EvaluationService {
 	private EvaluationRepository evaluationRepository;
 	
 	@Autowired
-	private StudentSubjectRepository studentSubjectRepository;
+	private StudentSubjectService studentSubjectService;
 	
 	@Autowired
 	private UserService userService;
@@ -30,22 +27,24 @@ public class EvaluationService {
 	@Autowired
 	private SubjectService subjectService;
 	
-	public Evaluation createEvaluation(EvaluationCreationInput input) {
-		checkEvaluationCreation(input);
-		
-		StudentSubjectId ssid = new StudentSubjectId(input.getUserId(), input.getSubjectId());
-		StudentSubject studentSubject = studentSubjectRepository.findById(ssid)
-				.orElseThrow(() -> new InvalidIDException("StudentSubject with passed ID was not found", ssid));
+	public Evaluation findEvaluation(Long id) {
+		return evaluationRepository.findById(id)
+				.orElseThrow(() -> new InvalidIDException("Evaluation with passed ID was not found", id));
+	}
+	
+	public Evaluation createEvaluation(EvaluationCreationInput input, User user) {
+		checkEvaluationCreation(input, user);
+		StudentSubject studentSubject = studentSubjectService.findStudentSubject(input.getUserId(), input.getSubjectId());
 		
 		Evaluation eval = new Evaluation(input.getName(), input.getResult(), input.getWeight(), studentSubject);
-		studentSubject.addEvaluation(eval);
 		evaluationRepository.save(eval);
-		studentSubjectRepository.save(studentSubject);
+		studentSubject.addEvaluation(eval);
+		studentSubjectService.saveStudentSubject(studentSubject);
 		return eval;
 	}
 	
-	private void checkEvaluationCreation(EvaluationCreationInput input) {
-		User user = userService.findLoggedUser();
+	//put this on the permission checker
+	private void checkEvaluationCreation(EvaluationCreationInput input, User user) {
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
 		User student = userService.findUserById(input.getUserId());
 		if (!subject.findStudents().contains(student) || !subject.getTeachers().contains(user)) {
