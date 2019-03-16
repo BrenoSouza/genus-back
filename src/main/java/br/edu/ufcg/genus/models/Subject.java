@@ -94,10 +94,12 @@ public class Subject {
 	}
 
 	public boolean addTeacher(User teacher) {
+		this.grade.addTeacher(teacher);
 		return this.teachers.add(teacher);
 	}
 	
 	public boolean addStudent(StudentSubject student) {
+		this.grade.addStudent(student.getUser());
 		return this.students.add(student);
 	}
 	

@@ -82,6 +82,7 @@ public class SubjectService {
         subject.addTeacher(teacher);
 
         this.subjectRepository.save(subject);
+        this.gradeService.saveGradeInRepository(subject.getGrade());
         return findSubjectById(subjectId);
     }
 
@@ -105,6 +106,7 @@ public class SubjectService {
         
         this.studentSubjectRepository.save(studentSubject);
         this.subjectRepository.save(subject);
+        this.gradeService.saveGradeInRepository(subject.getGrade());
         return findSubjectById(subjectId);
     }
 

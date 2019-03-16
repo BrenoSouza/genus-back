@@ -5,6 +5,7 @@ import com.coxautodev.graphql.tools.GraphQLResolver;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.models.Subject;
+import br.edu.ufcg.genus.models.User;
 
 public class GradeResolver implements GraphQLResolver<Grade> {
 
@@ -14,5 +15,13 @@ public class GradeResolver implements GraphQLResolver<Grade> {
 
     public Institution getInstitution(Grade grade) {
         return grade.getInstitution();
+    }
+    
+    public Iterable<User> getStudents(Grade grade) {
+    	return grade.getStudents().keySet();
+    }
+    
+    public Iterable<User> getTeachers(Grade grade) {
+    	return grade.getTeachers().keySet();
     }
 }

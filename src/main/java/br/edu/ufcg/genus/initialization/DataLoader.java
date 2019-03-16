@@ -80,7 +80,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade.getId()), admin);
 		
 		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
+		subjectService.addTeacher(subject2.getId(), prof1.getId(), admin);
+		subjectService.addTeacher(subject2.getId(), prof2.getId(), admin);
+		
 		subjectService.addStudent(subject.getId(), stud1.getId(), admin);
+		subjectService.addStudent(subject2.getId(), stud1.getId(), admin);
+		subjectService.addStudent(subject2.getId(), stud2.getId(), admin);
 		
 	}
 
