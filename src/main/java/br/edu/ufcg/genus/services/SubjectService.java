@@ -193,8 +193,11 @@ public class SubjectService {
 		Long institutionId = subject.getGrade().getInstitution().getId();
 		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
 		StudentSubject studentSubject = this.studentSubjectService.findStudentSubject(studentId, subjectId);
+		User student = studentSubject.getUser();
 		this.studentSubjectRepository.delete(studentSubject);
 		result = true;
+		subject.getGrade().removeStudent(student);
+		this.gradeService.saveGradeInRepository(subject.getGrade());
 		return result;
 	}
 	
