@@ -145,13 +145,8 @@ public class InstitutionService {
 	}
 	
 	private void removeSubjectsFromUser(User user, Institution institution) {
-		for (Subject subject : user.getSubjects()) {
-			if (subject.getGrade().getInstitution().equals(institution)) {
-				user.removeSubject(subject);
-			}
-		}
-		this.userService.saveUserInRepository(user);
 		User loggedUser = userService.findLoggedUser();
+		this.subjectService.removeTeacherFromInstitutionSubjects(institution.getId(), user.getId(), loggedUser);
 		this.subjectService.removeInstitutionSubjectsFromUser(institution.getId(), user.getId(), loggedUser);
 	}
 

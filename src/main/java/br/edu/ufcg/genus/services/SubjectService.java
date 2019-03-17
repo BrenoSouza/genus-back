@@ -191,6 +191,31 @@ public class SubjectService {
 		return result;
 	}
 	
+	public boolean removeTeacherFromInstitutionSubjects(Long institutionId, Long teacherId, User user) {
+		boolean result = false;
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		
+		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
+		User teacher = userService.findUserById(teacherId);
+		Set<Grade> gradesToBeUpdated = new HashSet<>();
+		List<Subject> subjectsToBeUpdated = new ArrayList<>();
+		for(Subject subject : teacher.getSubjects()) {
+			if(institutionId.equals(subject.getGrade().getInstitution().getId())) {
+				subject.removeTeacher(teacher);
+				result = teacher.removeSubject(subject);
+				subjectsToBeUpdated.add(subject);
+				gradesToBeUpdated.add(subject.getGrade());
+			}
+		}
+		
+		subjectRepository.saveAll(subjectsToBeUpdated);
+		userService.saveUserInRepository(teacher);
+		this.gradeService.saveGradresInRepository(gradesToBeUpdated);
+		
+		return result;
+	}
+	
 	public boolean removeStudentFromSubject(Long subjectId, Long studentId, User user) {
 		boolean result = false;
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
@@ -223,10 +248,7 @@ public class SubjectService {
 			}
 		}
 		if (teacher != null) {
-			System.out.println(subject.removeTeacher(teacher));
-			for(Subject sub : teacher.getSubjects()) {
-				System.out.println(sub.getName());
-			}
+			subject.removeTeacher(teacher);
 			result = teacher.removeSubject(subject);
 			subjectRepository.save(subject);
 			userService.saveUserInRepository(teacher);
