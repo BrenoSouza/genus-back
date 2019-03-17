@@ -48,6 +48,10 @@ public class GradeService {
 		this.gradeRepository.save(grade);
 	}
 	
+	public void saveGradresInRepository(Iterable<Grade> grades) {
+		this.gradeRepository.saveAll(grades);
+	}
+	
 	public void addSubjectToGrade(Grade grade, Subject newSubject) {
 		grade.addSubject(newSubject);
 		this.gradeRepository.save(grade);

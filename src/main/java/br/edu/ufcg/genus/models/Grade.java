@@ -89,6 +89,14 @@ public class Grade {
 		removeUser(teacher, teachers);
 	}
 	
+	public Integer completlyRemoveTeacher(User teacher) {
+		return teachers.remove(teacher);
+	}
+	
+	public Integer completlyRemoveStudent(User student) {
+		return students.remove(student);
+	}
+	
 	private void addUser(User user, Map<User, Integer> map) {
 		Integer qnt = map.get(user);
 		if (qnt == null) {

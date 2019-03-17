@@ -192,6 +192,7 @@ public class User {
 	}
 	
 	public boolean removeSubject(Subject subject) {
+		subject.getGrade().removeTeacher(this);
 		return subjects.remove(subject);
 	}
 

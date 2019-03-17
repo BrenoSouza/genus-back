@@ -115,12 +115,8 @@ public class Subject {
 		this.forum = forum;
 	}
 
-	public List<User> getTeachers() {
-		List<User> result = new ArrayList<>();
-		for (User teacher : teachers) {
-			result.add(teacher);
-		}
-		return result;
+	public Set<User> getTeachers() {
+		return this.teachers;
 	}
 
 	public List<StudentSubject> getStudents() {
@@ -146,7 +142,6 @@ public class Subject {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -163,11 +158,6 @@ public class Subject {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
