@@ -1,7 +1,9 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,8 +82,9 @@ public class SubjectService {
 
         teacher.addSubject(subject);
         subject.addTeacher(teacher);
-
+        
         this.subjectRepository.save(subject);
+        this.gradeService.saveGradeInRepository(subject.getGrade());
         return findSubjectById(subjectId);
     }
 
@@ -105,6 +108,7 @@ public class SubjectService {
         
         this.studentSubjectRepository.save(studentSubject);
         this.subjectRepository.save(subject);
+        this.gradeService.saveGradeInRepository(subject.getGrade());
         return findSubjectById(subjectId);
     }
 
@@ -173,13 +177,42 @@ public class SubjectService {
 		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
 		User student = userService.findUserById(studentId);
 		List<StudentSubject> toBeDeleted = new ArrayList<>();
+		Set<Grade> toBeUpdated = new HashSet<>();
 		for(StudentSubject studentSubject: student.getSubjectsStudent()) {
 			if(institutionId.equals(studentSubject.getSubject().getGrade().getInstitution().getId())) {
+				studentSubject.getSubject().getGrade().completlyRemoveStudent(student);
+				toBeUpdated.add(studentSubject.getSubject().getGrade());
 				toBeDeleted.add(studentSubject);
 			}
 		}
-		studentSubjectRepository.deleteAll(toBeDeleted);
+		this.studentSubjectRepository.deleteAll(toBeDeleted);
+		this.gradeService.saveGradresInRepository(toBeUpdated);
 		result = true;
+		return result;
+	}
+	
+	public boolean removeTeacherFromInstitutionSubjects(Long institutionId, Long teacherId, User user) {
+		boolean result = false;
+		List<UserRole> permittedRolesOwner = new ArrayList<>();
+		permittedRolesOwner.add(UserRole.ADMIN);
+		
+		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
+		User teacher = userService.findUserById(teacherId);
+		Set<Grade> gradesToBeUpdated = new HashSet<>();
+		List<Subject> subjectsToBeUpdated = new ArrayList<>();
+		for(Subject subject : teacher.getSubjects()) {
+			if(institutionId.equals(subject.getGrade().getInstitution().getId())) {
+				subject.removeTeacher(teacher);
+				result = teacher.removeSubject(subject);
+				subjectsToBeUpdated.add(subject);
+				gradesToBeUpdated.add(subject.getGrade());
+			}
+		}
+		
+		subjectRepository.saveAll(subjectsToBeUpdated);
+		userService.saveUserInRepository(teacher);
+		this.gradeService.saveGradresInRepository(gradesToBeUpdated);
+		
 		return result;
 	}
 	
@@ -190,9 +223,13 @@ public class SubjectService {
 		Subject subject = findSubjectById(subjectId);
 		Long institutionId = subject.getGrade().getInstitution().getId();
 		PermissionChecker.checkPermission(user, institutionId, permittedRolesOwner);
+		
 		StudentSubject studentSubject = this.studentSubjectService.findStudentSubject(studentId, subjectId);
+		User student = studentSubject.getUser();
 		this.studentSubjectRepository.delete(studentSubject);
 		result = true;
+		subject.getGrade().removeStudent(student);
+		this.gradeService.saveGradeInRepository(subject.getGrade());
 		return result;
 	}
 	
@@ -211,7 +248,11 @@ public class SubjectService {
 			}
 		}
 		if (teacher != null) {
-			//SHOULD REMOVE HERE
+			subject.removeTeacher(teacher);
+			result = teacher.removeSubject(subject);
+			subjectRepository.save(subject);
+			userService.saveUserInRepository(teacher);
+			this.gradeService.saveGradeInRepository(subject.getGrade());
 		}
 		return result;
 	}

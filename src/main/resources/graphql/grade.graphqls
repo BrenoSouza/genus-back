@@ -3,6 +3,8 @@ type Grade {
   name: String!
   institution: Institution!
   subjects: [ Subject! ]!
+  students: [ User! ]!
+  teachers: [ User! ]!
 }
 
 input GradeCreationInput {

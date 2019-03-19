@@ -37,6 +37,9 @@ public class InstitutionService {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private SubjectService subjectService;
+	
     public Institution findById(Long id) {
         return institutionRepository.findById(id)
         		.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", id));
@@ -142,12 +145,9 @@ public class InstitutionService {
 	}
 	
 	private void removeSubjectsFromUser(User user, Institution institution) {
-		for (Subject subject : user.getSubjects()) {
-			if (subject.getGrade().getInstitution().equals(institution)) {
-				user.removeSubject(subject);
-			}
-		}
-		this.userService.saveUserInRepository(user);
+		User loggedUser = userService.findLoggedUser();
+		this.subjectService.removeTeacherFromInstitutionSubjects(institution.getId(), user.getId(), loggedUser);
+		this.subjectService.removeInstitutionSubjectsFromUser(institution.getId(), user.getId(), loggedUser);
 	}
 
 	public Institution updateInstitution(UpdateInstitutionInput input, User user) {
