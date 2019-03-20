@@ -102,6 +102,9 @@ public class InstitutionService {
 		
 		User toBeRemoved = userService.findUserById(input.getToBeRemovedId());
 		
+		toBeRemoved.setLastInstitutionId(-1);
+		userService.saveUserInRepository(toBeRemoved);
+		
 		boolean result = false;
 		if (user.equals(toBeRemoved)) {
 			result = removeSelfFromInstitution(user, institution);
