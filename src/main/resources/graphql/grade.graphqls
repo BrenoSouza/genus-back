@@ -5,6 +5,8 @@ type Grade {
   subjects: [ Subject! ]!
   students: [ User! ]!
   teachers: [ User! ]!
+  qntStudents: Int!
+  qntTeachers: Int!
 }
 
 input GradeCreationInput {
