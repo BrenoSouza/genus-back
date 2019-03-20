@@ -1,12 +1,18 @@
 package br.edu.ufcg.genus.inputs;
 
+import javax.validation.constraints.Positive;
+
 import br.edu.ufcg.genus.models.UserRole;
 
 public class CreateAdvancedEntryCodeInput {
 	
 	private long institutionId;
 	private UserRole role;
+	
+	@Positive
 	private int uses;
+	
+	@Positive
 	private int days;
 	
 	public CreateAdvancedEntryCodeInput () {
