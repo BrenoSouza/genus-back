@@ -5,6 +5,7 @@ type User {
   teacherSubjects: [ Subject! ]!
   studentSubjects: [ Subject! ]!
   notifications: [ Notification! ]!
+  lastInstitutionId: ID!
 }
 
 input CreateUserInput {
@@ -42,4 +43,5 @@ type Mutation {
   createUser(input: CreateUserInput!) : User
   updateUser(input: UpdateUserInput!): User
   updateUserPassword(password: String!, newPassword: String!): Boolean
+  changeLastInstitution(lastInstitutionId : ID!) : User!
 }
