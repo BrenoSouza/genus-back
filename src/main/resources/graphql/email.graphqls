@@ -1,0 +1,11 @@
+input SendEmailInput {
+  subject: String
+  text: String
+}
+
+extend type Query {
+  sendEmailToTeachers(input: SendEmailInput!, institutionId: ID!) : Boolean
+  sendEmailToStudents(input: SendEmailInput!, institutionId: ID!) : Boolean
+  sendEmailToGradeStudents(input: SendEmailInput!, gradeId: ID!) : Boolean
+  sendEmailToSubjectStudents(input: SendEmailInput!, subjectId: ID!) : Boolean
+}
