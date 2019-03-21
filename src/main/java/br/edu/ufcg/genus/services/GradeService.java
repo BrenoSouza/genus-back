@@ -81,6 +81,15 @@ public class GradeService {
 		return true;
 	}
 	
+	public boolean removeEveryStudentFromGrade(long gradeId, User user) {
+		Grade grade = findGradeById(gradeId);
+		boolean result = true;
+		for (Subject sub : grade.getSubjects()) {
+			result = result && subjectService.removeEveryStudentFromSubject(sub.getId(), user);
+		}
+		return result;
+	}
+	
 	private void checkAdminPermission(Grade grade, User user) {
 		List<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);

@@ -233,6 +233,15 @@ public class SubjectService {
 		return result;
 	}
 	
+	public boolean removeEveryStudentFromSubject(Long subjectId, User user) {
+		boolean result = true;
+		Subject subject = findSubjectById(subjectId);
+		for(StudentSubject studSub : subject.getStudents()) {
+			result = result && removeStudentFromSubject(subjectId, studSub.getUser().getId(), user);
+		}
+		return result;
+	}
+	
 	public boolean removeTeacherFromSubject(Long subjectId, Long teacherId, User user) {
 		boolean result = false;
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
