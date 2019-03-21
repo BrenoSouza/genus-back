@@ -5,6 +5,7 @@ type Subject {
   teachers: [ User! ]!
   students: [ User! ]!
   forum: [Discussion!]!
+  studentSubjects: [StudentSubject!]!
 }
 
 input SubjectCreationInput {
