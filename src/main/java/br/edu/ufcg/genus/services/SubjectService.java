@@ -265,5 +265,18 @@ public class SubjectService {
 		}
 		return result;
 	}
+	
+	public Subject moveStudentsFromSubject(Long fromId, Long toId, User user) {
+		List<Long> studentIds = new ArrayList<>();
+		Subject sub = findSubjectById(fromId);
+		for(StudentSubject studSub: sub.getStudents()) {
+			studentIds.add(studSub.getUser().getId());
+		}
+		removeEveryStudentFromSubject(fromId, user);
+		for(Long id: studentIds) {
+			addStudent(toId, id, user);
+		}
+		return findSubjectById(toId);
+	}
 
 }

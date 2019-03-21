@@ -33,4 +33,5 @@ extend type Mutation {
   removeStudentFromSubject (subjectId: ID!, studentId: ID!) : Boolean
   removeTeacherFromSubject (subjectId: ID!, teacherId: ID!) : Boolean
   removeEveryStudentFromSubject(subjectId: ID!) : Boolean
+  moveStudentsFromSubject(fromId: ID!, toId: ID!) : Subject
 }

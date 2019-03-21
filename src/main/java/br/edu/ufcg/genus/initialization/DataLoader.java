@@ -80,9 +80,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud1, institution, UserRole.STUDENT);
 
-		Grade grade = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()), admin);
-		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade.getId()), admin);
-		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade.getId()), admin);
+		Grade grade1 = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()), admin);
+		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade1.getId()), admin);
+		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade1.getId()), admin);
 		
 		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
 		//subjectService.addTeacher(subject.getId(), prof2.getId(), admin);
@@ -97,6 +97,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		EvaluationCreationInput ceInput2 = new EvaluationCreationInput(new Long(5), new Long(9), "Prova 2", 9.0, 6.0);
 		evaluationService.createEvaluation(ceInput1, prof1);
 		evaluationService.createEvaluation(ceInput2, prof1);
+		
+		Grade grade2 = gradeService.createGrade(new GradeCreationInput("2 Serie", institution.getId()), admin);
+		Subject subject3 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade2.getId()), admin);
 		
 	}
 
