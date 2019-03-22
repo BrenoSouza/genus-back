@@ -48,7 +48,7 @@ public class EmailQueries implements GraphQLQueryResolver {
 		List<UserRole> permitedRoles = new ArrayList<>();
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institutionId, permitedRoles);
-		return emailService.sendEmailToTeachers(institutionId, user, input.getSubject(), input.getText());	
+		return emailService.sendEmailToStudents(institutionId, user, input.getSubject(), input.getText());	
 		
 	}
 	

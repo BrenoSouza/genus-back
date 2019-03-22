@@ -87,8 +87,8 @@ public class SubjectMutations implements GraphQLMutationResolver {
 		return this.subjectService.removeEveryStudentFromSubject(subjectId, userService.findLoggedUser());
 	}
 	
-	public Subject moveStudentsFromSubject(Long fromId, Long toId) {
-		return this.subjectService.moveStudentsFromSubject(fromId, toId, userService.findLoggedUser());
+	public Subject copyStudentsFromSubject(Long fromId, Long toId) {
+		return this.subjectService.copyStudentsFromSubject(fromId, toId, userService.findLoggedUser());
 	}
 
 }
