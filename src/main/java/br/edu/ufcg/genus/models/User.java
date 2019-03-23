@@ -43,6 +43,9 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 	
+	@Column(nullable = false)
+	private long lastInstitutionId;
+	
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
@@ -70,6 +73,7 @@ public class User {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
 		this.notifications = new LinkedHashSet<>();
+		this.lastInstitutionId = -1;
 	}
 	
 	public User(String username, String email, String password) {
@@ -161,6 +165,14 @@ public class User {
 
 	public void setSubjects(Set<Subject> subjects) {
 		this.subjects = subjects;
+	}
+
+	public long getLastInstitutionId() {
+		return lastInstitutionId;
+	}
+
+	public void setLastInstitutionId(long lastInstitutionId) {
+		this.lastInstitutionId = lastInstitutionId;
 	}
 
 	public List<Subject> getSubjects() {

@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -42,8 +43,12 @@ public class Discussion {
 	@Column(name="updated_at", nullable=false)
 	private Timestamp updatedAt;
 	
+	@Lob
+	@Column
 	private String title;
 	
+	@Lob
+	@Column
 	private String content;
 	
 	@OneToMany(mappedBy="discussion", fetch=FetchType.EAGER, cascade = CascadeType.ALL)

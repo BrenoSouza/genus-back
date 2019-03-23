@@ -5,6 +5,7 @@ type Subject {
   teachers: [ User! ]!
   students: [ User! ]!
   forum: [Discussion!]!
+  studentSubjects: [StudentSubject!]!
 }
 
 input SubjectCreationInput {
@@ -31,4 +32,6 @@ extend type Mutation {
   removeInstitutionSubjectsFromUser (institutionId: ID!, studentId: ID!) : Boolean
   removeStudentFromSubject (subjectId: ID!, studentId: ID!) : Boolean
   removeTeacherFromSubject (subjectId: ID!, teacherId: ID!) : Boolean
+  removeEveryStudentFromSubject(subjectId: ID!) : Boolean
+  copyStudentsFromSubject(fromId: ID!, toId: ID!) : Subject
 }

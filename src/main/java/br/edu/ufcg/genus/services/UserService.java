@@ -39,6 +39,12 @@ public class UserService {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		return this.userRepository.save(newUser);
 	}
+	
+	public User changeLastInstitution(Long lastInstitutionId) {
+		User user = findLoggedUser();
+		user.setLastInstitutionId(lastInstitutionId);
+		return this.userRepository.save(user);
+	}
 
 	public String login (AuthenticationInput input) {
         String email = input.getEmail();

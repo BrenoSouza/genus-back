@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 
 import br.edu.ufcg.genus.inputs.EvaluationCreationInput;
+import br.edu.ufcg.genus.inputs.EvaluationEditInput;
 import br.edu.ufcg.genus.models.Evaluation;
 import br.edu.ufcg.genus.services.EvaluationService;
 import br.edu.ufcg.genus.services.UserService;
@@ -18,6 +19,10 @@ public class EvaluationMutations implements GraphQLMutationResolver {
 	
 	public Evaluation createEvaluation(EvaluationCreationInput input) {
 		return evaluationService.createEvaluation(input, userService.findLoggedUser());
+	}
+	
+	public Evaluation editEvaluation(EvaluationEditInput input) {
+		return evaluationService.editEvaluation(input, userService.findLoggedUser());
 	}
 
 }

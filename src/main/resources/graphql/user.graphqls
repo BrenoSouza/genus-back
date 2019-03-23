@@ -4,7 +4,9 @@ type User {
   email: String!
   teacherSubjects: [ Subject! ]!
   studentSubjects: [ Subject! ]!
+  studentSubjectRelations: [StudentSubject!]!
   notifications: [ Notification! ]!
+  lastInstitutionId: ID!
 }
 
 input CreateUserInput {
@@ -42,4 +44,5 @@ type Mutation {
   createUser(input: CreateUserInput!) : User
   updateUser(input: UpdateUserInput!): User
   updateUserPassword(password: String!, newPassword: String!): Boolean
+  changeLastInstitution(lastInstitutionId : ID!) : User!
 }

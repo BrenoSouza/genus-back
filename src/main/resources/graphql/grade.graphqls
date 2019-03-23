@@ -5,6 +5,8 @@ type Grade {
   subjects: [ Subject! ]!
   students: [ User! ]!
   teachers: [ User! ]!
+  qntStudents: Int!
+  qntTeachers: Int!
 }
 
 input GradeCreationInput {
@@ -25,4 +27,5 @@ extend type Mutation {
   createGrade (input : GradeCreationInput!) : Grade
   updateGrade(input: UpdateGradeInput!): Grade
   removeGrade(gradeId: ID!) : Boolean
+  removeEveryStudentFromGrade(gradeId: ID!) : Boolean
 }

@@ -24,4 +24,12 @@ public class GradeResolver implements GraphQLResolver<Grade> {
     public Iterable<User> getTeachers(Grade grade) {
     	return grade.getTeachers().keySet();
     }
+    
+    public Integer getQntTeachers(Grade grade) {
+    	return grade.getTeachers().size();
+    }
+    
+    public Integer getQntStudents(Grade grade) {
+    	return grade.getStudents().size();
+    }
 }

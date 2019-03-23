@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.exception.NotAuthorizedException;
 import br.edu.ufcg.genus.inputs.EvaluationCreationInput;
+import br.edu.ufcg.genus.inputs.EvaluationEditInput;
 import br.edu.ufcg.genus.models.Evaluation;
 import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
@@ -43,6 +44,25 @@ public class EvaluationService {
 		return eval;
 	}
 	
+	public Evaluation editEvaluation(EvaluationEditInput input, User user) {
+		Evaluation eval = findEvaluation(input.getEvaluationId());
+		checkEvaluationEdit(eval, user);
+		updateStudentSubject(input, eval);
+		eval.setName(input.getName());
+		eval.setResult(input.getResult());
+		eval.setWeight(input.getWeight());
+		Evaluation updated = evaluationRepository.save(eval);
+		return updated;
+	}
+	
+	private void updateStudentSubject(EvaluationEditInput input, Evaluation eval) {
+		StudentSubject studentSubject = eval.getStudentSubject();
+		double newAvarage = studentSubject.getAvarage() - (eval.getResult() * eval.getWeight());
+		newAvarage += input.getWeight() * input.getResult();
+		studentSubject.setAvarage(newAvarage);
+		studentSubjectService.saveStudentSubject(eval.getStudentSubject());
+	}
+	
 	//put this on the permission checker
 	private void checkEvaluationCreation(EvaluationCreationInput input, User user) {
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
@@ -51,5 +71,14 @@ public class EvaluationService {
 			throw new NotAuthorizedException("Logged user isn't a teacher to the subject or the user being evaluated isn't a student of this subject");
 		}
 	}
+	
+	private void checkEvaluationEdit(Evaluation eval, User user) {
+		Subject subject = eval.getStudentSubject().getSubject();
+		if(!subject.getTeachers().contains(user)) {
+			throw new NotAuthorizedException("Logged user isn't a teacher to the subject");
+		}
+	}
+	
+	
 
 }

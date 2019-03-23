@@ -66,4 +66,8 @@ public class UserMutations implements GraphQLMutationResolver {
 
         return userService.updateUserPassword(password, newPassword);
     }
+    
+    public User changeLastInstitution(Long lastInstitutionId) {
+    	return userService.changeLastInstitution(lastInstitutionId);
+    }
 }
