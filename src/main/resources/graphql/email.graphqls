@@ -3,9 +3,13 @@ input SendEmailInput {
   text: String
 }
 
+enum EmailType{
+  TO_ALL_STUDENTS
+  TO_ALL_TEACHERS
+  TO_ALL_GRADE_STUDENTS
+  TO_ALL_SUBJECT_STUDENTS
+}
+
 extend type Query {
-  sendEmailToTeachers(input: SendEmailInput!, institutionId: ID!) : Boolean
-  sendEmailToStudents(input: SendEmailInput!, institutionId: ID!) : Boolean
-  sendEmailToGradeStudents(input: SendEmailInput!, gradeId: ID!) : Boolean
-  sendEmailToSubjectStudents(input: SendEmailInput!, subjectId: ID!) : Boolean
+  sendEmail(input: SendEmailInput!, id: ID!, type: EmailType!) : Boolean
 }
