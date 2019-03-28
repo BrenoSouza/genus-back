@@ -6,20 +6,26 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import br.edu.ufcg.genus.inputs.CreateUserInput;
+import br.edu.ufcg.genus.inputs.DiscussionCreationInput;
 import br.edu.ufcg.genus.inputs.EvaluationCreationInput;
 import br.edu.ufcg.genus.inputs.GradeCreationInput;
+import br.edu.ufcg.genus.inputs.ReplyCreationInput;
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
+import br.edu.ufcg.genus.models.Discussion;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
+import br.edu.ufcg.genus.models.Reply;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
 import br.edu.ufcg.genus.repositories.InstitutionRepository;
 import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
+import br.edu.ufcg.genus.services.DiscussionService;
 import br.edu.ufcg.genus.services.EvaluationService;
 import br.edu.ufcg.genus.services.GradeService;
 import br.edu.ufcg.genus.services.InstitutionService;
+import br.edu.ufcg.genus.services.ReplyService;
 import br.edu.ufcg.genus.services.SubjectService;
 import br.edu.ufcg.genus.services.UserService;
 
@@ -47,6 +53,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	
 	@Autowired
 	private EvaluationService evaluationService;
+	
+	@Autowired
+	private DiscussionService discussionService;
+	
+	@Autowired
+	private ReplyService replyService;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -229,7 +241,18 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addStudent(subject26.getId(), stud2.getId(), admin);
 		subjectService.addStudent(subject18.getId(), stud2.getId(), admin);
 		subjectService.addStudent(subject11.getId(), stud2.getId(), admin);
-		subjectService.addStudent(subject6.getId(), stud2.getId(), admin);	
+		subjectService.addStudent(subject6.getId(), stud2.getId(), admin);
+		
+		//discussion
+		
+		DiscussionCreationInput discussionInput = new DiscussionCreationInput("Duvida da atividade 1", subject.getId(), "Pessoal, estou com duvida na questao 6 da atividade 1. Alguem pode me explicar como faz essa divisao?");
+		Discussion discussion = discussionService.createDiscussion(discussionInput, stud1);
+		ReplyCreationInput replyInput1 = new ReplyCreationInput("Tem um exemplo muito parecido na pagina 56!", discussion.getId(), null);
+		Reply reply = replyService.createReply(replyInput1, prof1);
+		ReplyCreationInput replyInput2 = new ReplyCreationInput("Obrigado!", discussion.getId(), reply.getId());
+		replyService.createReply(replyInput2, stud1);
+		
+		
 		
 	}
 

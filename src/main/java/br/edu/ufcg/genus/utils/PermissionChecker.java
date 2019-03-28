@@ -30,7 +30,7 @@ public class PermissionChecker {
 	}
 	
 	public static void checkSubjectPermission(User user, Subject subject) {
-		if (!user.checkStudent(subject) && !user.checkTeacher(subject)) {
+		if (!subject.getTeachers().contains(user) && !subject.findStudents().contains(user)) {
 			throw new NotAuthorizedException();
 		}
 	}
