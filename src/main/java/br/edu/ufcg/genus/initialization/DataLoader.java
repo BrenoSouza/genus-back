@@ -51,12 +51,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 
-		CreateUserInput adminInput = new CreateUserInput("administrador", "admin@gmail.com", "123456");
-		CreateUserInput prof1Input = new CreateUserInput("professor1", "prof1@gmail.com", "123456");
-		CreateUserInput prof2Input = new CreateUserInput("professor2", "prof2@gmail.com", "123456");
-		CreateUserInput prof3Input = new CreateUserInput("professor3", "prof3@gmail.com", "123456");
-		CreateUserInput stud1Input = new CreateUserInput("aluno1", "alu1@gmail.com", "123456");
-		CreateUserInput stud2Input = new CreateUserInput("aluno2", "alu2@gmail.com", "123456");
+		CreateUserInput adminInput = new CreateUserInput("Julio Silva", "admin@gmail.com", "123456");
+		CreateUserInput prof1Input = new CreateUserInput("Samuel Gomes", "prof1@gmail.com", "123456");
+		CreateUserInput prof2Input = new CreateUserInput("Bianca Alves", "prof2@gmail.com", "123456");
+		CreateUserInput prof3Input = new CreateUserInput("Marina Lima", "prof3@gmail.com", "123456");
+		CreateUserInput stud1Input = new CreateUserInput("Thiago Pinto", "alu1@gmail.com", "123456");
+		CreateUserInput stud2Input = new CreateUserInput("Amanda Martins", "alu2@gmail.com", "123456");
 
 		User admin = userService.createUser(adminInput);
 		User prof1 = userService.createUser(prof1Input);
@@ -65,7 +65,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		User stud1 = userService.createUser(stud1Input);
 		User stud2 = userService.createUser(stud2Input);
 
-		Institution institution = new Institution("Escola", "Rua qualquer", "838888888", "escola@gmail.com" );
+		Institution institution = new Institution("Escola Álvaro Cardoso", "Rua Julio Santos", "8333229851", "escola_alvaro_cardoso@gmail.com" );
 		
 		institutionRepository.save(institution);
 
@@ -77,15 +77,15 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 		institutionService.addUserToInstitution(prof1, institution, UserRole.TEACHER);
 		institutionService.addUserToInstitution(prof2, institution, UserRole.TEACHER);
+		institutionService.addUserToInstitution(prof3, institution, UserRole.TEACHER);
 		institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud1, institution, UserRole.STUDENT);
 
-		Grade grade1 = gradeService.createGrade(new GradeCreationInput("1 Serie", institution.getId()), admin);
+		Grade grade1 = gradeService.createGrade(new GradeCreationInput("1ª Serie", institution.getId()), admin);
 		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matematica", grade1.getId()), admin);
 		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade1.getId()), admin);
 		
 		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
-		//subjectService.addTeacher(subject.getId(), prof2.getId(), admin);
 		subjectService.addTeacher(subject2.getId(), prof1.getId(), admin);
 		subjectService.addTeacher(subject2.getId(), prof2.getId(), admin);
 		
@@ -98,8 +98,138 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		evaluationService.createEvaluation(ceInput1, prof1);
 		evaluationService.createEvaluation(ceInput2, prof1);
 		
-		Grade grade2 = gradeService.createGrade(new GradeCreationInput("2 Serie", institution.getId()), admin);
+		Grade grade2 = gradeService.createGrade(new GradeCreationInput("2ª Serie", institution.getId()), admin);
 		Subject subject3 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade2.getId()), admin);
+		
+		
+		CreateUserInput admin2Input = new CreateUserInput("Lucia Cardoso", "admin2@gmail.com", "123456");
+		CreateUserInput prof4Input = new CreateUserInput("Giovana Azevedo", "prof4@gmail.com", "123456");
+		CreateUserInput prof5Input = new CreateUserInput("Maria Barbosa", "prof5@gmail.com", "123456");
+		CreateUserInput stud3Input = new CreateUserInput("Pedro Rocha", "alu3@gmail.com", "123456");
+		CreateUserInput stud4Input = new CreateUserInput("Carlos Lima", "alu4@gmail.com", "123456");
+		CreateUserInput stud5Input = new CreateUserInput("Luiz Azevedo", "alu5@gmail.com", "123456");
+		CreateUserInput stud6Input = new CreateUserInput("Camila Santos", "alu6@gmail.com", "123456");
+		CreateUserInput stud7Input = new CreateUserInput("Jose Araujo", "alu7@gmail.com", "123456");
+		CreateUserInput stud8Input = new CreateUserInput("Clara Oliveira", "alu8@gmail.com", "123456");
+		CreateUserInput stud9Input = new CreateUserInput("Bruna Ferreira", "alu9@gmail.com", "123456");
+		CreateUserInput stud10Input = new CreateUserInput("Aline Correia", "alu10@gmail.com", "123456");
+		
+		User admin2 = userService.createUser(admin2Input);
+		User prof4 = userService.createUser(prof4Input);
+		User prof5 = userService.createUser(prof5Input);
+		User stud3 = userService.createUser(stud3Input);
+		User stud4 = userService.createUser(stud4Input);
+		User stud5 = userService.createUser(stud5Input);
+		User stud6 = userService.createUser(stud6Input);
+		User stud7 = userService.createUser(stud7Input);
+		User stud8 = userService.createUser(stud8Input);
+		User stud9 = userService.createUser(stud9Input);
+		User stud10 = userService.createUser(stud10Input);
+		
+		institutionService.addUserToInstitution(admin2, institution, UserRole.ADMIN);
+		institutionService.addUserToInstitution(prof4, institution, UserRole.TEACHER);
+		institutionService.addUserToInstitution(prof5, institution, UserRole.TEACHER);
+		institutionService.addUserToInstitution(stud3, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud4, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud5, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud6, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud7, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud8, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud9, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud10, institution, UserRole.STUDENT);
+		
+		//grade1
+		Subject subject4 = subjectService.createSubject(new SubjectCreationInput("Historia", grade1.getId()), admin);
+		Subject subject5 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade1.getId()), admin);
+		Subject subject6 = subjectService.createSubject(new SubjectCreationInput("Ciencia", grade1.getId()), admin);
+		
+		//grade2
+		Subject subject7 = subjectService.createSubject(new SubjectCreationInput("Algebra", grade2.getId()), admin);
+		Subject subject8 = subjectService.createSubject(new SubjectCreationInput("Portugues", grade2.getId()), admin);
+		Subject subject9 = subjectService.createSubject(new SubjectCreationInput("Historia", grade2.getId()), admin);
+		Subject subject10 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade2.getId()), admin);
+		Subject subject11 = subjectService.createSubject(new SubjectCreationInput("Ciencia", grade2.getId()), admin);
+		
+		//grade3
+		Grade grade3 = gradeService.createGrade(new GradeCreationInput("3ª Serie", institution.getId()), admin);
+		Subject subject12 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade3.getId()), admin);
+		Subject subject13 = subjectService.createSubject(new SubjectCreationInput("Algebra", grade3.getId()), admin);
+		Subject subject14 = subjectService.createSubject(new SubjectCreationInput("Gramatica", grade3.getId()), admin);
+		Subject subject15 = subjectService.createSubject(new SubjectCreationInput("Historia", grade3.getId()), admin);
+		Subject subject16 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade3.getId()), admin);
+		Subject subject17 = subjectService.createSubject(new SubjectCreationInput("Ciencia", grade3.getId()), admin);
+		Subject subject18 = subjectService.createSubject(new SubjectCreationInput("Literatura", grade3.getId()), admin);
+		
+		//grade4
+		Grade grade4 = gradeService.createGrade(new GradeCreationInput("4ª Serie", institution.getId()), admin);
+		Subject subject19 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade4.getId()), admin);
+		Subject subject20 = subjectService.createSubject(new SubjectCreationInput("Algebra", grade4.getId()), admin);
+		Subject subject21 = subjectService.createSubject(new SubjectCreationInput("Gramatica", grade4.getId()), admin);
+		Subject subject22 = subjectService.createSubject(new SubjectCreationInput("Historia", grade4.getId()), admin);
+		Subject subject23 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade4.getId()), admin);
+		Subject subject24 = subjectService.createSubject(new SubjectCreationInput("Biologia", grade4.getId()), admin);
+		Subject subject25 = subjectService.createSubject(new SubjectCreationInput("Literatura", grade4.getId()), admin);
+		Subject subject26 = subjectService.createSubject(new SubjectCreationInput("Filosofia", grade4.getId()), admin);
+		
+		//prof1
+		subjectService.addTeacher(subject4.getId(), prof1.getId(), admin);
+		subjectService.addTeacher(subject5.getId(), prof1.getId(), admin);
+		subjectService.addTeacher(subject6.getId(), prof1.getId(), admin);
+		
+		//prof2
+		subjectService.addTeacher(subject3.getId(), prof2.getId(), admin);
+		subjectService.addTeacher(subject7.getId(), prof2.getId(), admin);
+		subjectService.addTeacher(subject16.getId(), prof2.getId(), admin);
+		subjectService.addTeacher(subject17.getId(), prof2.getId(), admin);
+		subjectService.addTeacher(subject20.getId(), prof2.getId(), admin);
+		subjectService.addTeacher(subject21.getId(), prof2.getId(), admin);
+		
+		//prof3
+		subjectService.addTeacher(subject3.getId(), prof3.getId(), admin);
+		subjectService.addTeacher(subject7.getId(), prof3.getId(), admin);
+		subjectService.addTeacher(subject8.getId(), prof3.getId(), admin);
+		subjectService.addTeacher(subject9.getId(), prof3.getId(), admin);
+		subjectService.addTeacher(subject10.getId(), prof3.getId(), admin);
+		subjectService.addTeacher(subject11.getId(), prof3.getId(), admin);
+		
+		//prof4
+		subjectService.addTeacher(subject12.getId(), prof4.getId(), admin);
+		subjectService.addTeacher(subject13.getId(), prof4.getId(), admin);
+		subjectService.addTeacher(subject14.getId(), prof4.getId(), admin);
+		subjectService.addTeacher(subject15.getId(), prof4.getId(), admin);
+		subjectService.addTeacher(subject16.getId(), prof4.getId(), admin);
+		subjectService.addTeacher(subject17.getId(), prof4.getId(), admin);
+		subjectService.addTeacher(subject18.getId(), prof4.getId(), admin);
+		
+		//prof5
+		subjectService.addTeacher(subject19.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject20.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject21.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject22.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject23.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject24.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject25.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject26.getId(), prof5.getId(), admin);
+		
+		//students - subject
+		subjectService.addStudentToSubjectsInGrade(grade1.getId(), stud3.getId(), admin);
+		subjectService.addStudentToSubjectsInGrade(grade1.getId(), stud4.getId(), admin);
+		subjectService.addStudentToSubjectsInGrade(grade2.getId(), stud5.getId(), admin);
+		subjectService.addStudentToSubjectsInGrade(grade2.getId(), stud6.getId(), admin);
+		subjectService.addStudentToSubjectsInGrade(grade3.getId(), stud7.getId(), admin);
+		subjectService.addStudentToSubjectsInGrade(grade3.getId(), stud8.getId(), admin);
+		subjectService.addStudentToSubjectsInGrade(grade4.getId(), stud9.getId(), admin);
+		subjectService.addStudentToSubjectsInGrade(grade4.getId(), stud10.getId(), admin);
+		
+		subjectService.addStudent(subject19.getId(), stud1.getId(), admin);
+		subjectService.addStudent(subject12.getId(), stud1.getId(), admin);
+		subjectService.addStudent(subject7.getId(), stud1.getId(), admin);
+		subjectService.addStudent(subject4.getId(), stud1.getId(), admin);
+		
+		subjectService.addStudent(subject26.getId(), stud2.getId(), admin);
+		subjectService.addStudent(subject18.getId(), stud2.getId(), admin);
+		subjectService.addStudent(subject11.getId(), stud2.getId(), admin);
+		subjectService.addStudent(subject6.getId(), stud2.getId(), admin);	
 		
 	}
 
