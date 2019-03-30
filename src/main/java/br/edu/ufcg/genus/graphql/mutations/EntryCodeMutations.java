@@ -14,7 +14,6 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.CreateAdvancedEntryCodeInput;
 import br.edu.ufcg.genus.inputs.CreateEntryCodeInput;
-import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
 import br.edu.ufcg.genus.models.Institution;
 import br.edu.ufcg.genus.services.EntryCodeService;
 import br.edu.ufcg.genus.services.UserService;

@@ -16,7 +16,6 @@ import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
 import br.edu.ufcg.genus.inputs.RemoveUserFromInstitutionInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
-import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
