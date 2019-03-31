@@ -166,7 +166,7 @@ public class SubjectService {
         
         this.studentSubjectRepository.saveAll(studentSubjects);
         this.subjectRepository.saveAll(addedSubjects);
-				this.gradeService.saveGradeInRepository(grade);
+        this.gradeService.saveGradeInRepository(grade);
         return addedSubjects;
     }
 	
