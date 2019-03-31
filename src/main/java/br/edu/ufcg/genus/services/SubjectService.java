@@ -94,7 +94,7 @@ public class SubjectService {
 		List<UserRole> permittedRolesStudent = new ArrayList<>();
 		permittedRolesStudent.add(UserRole.STUDENT);
 
-        User student = this.userService.findUserById(studentId);
+        User student = userService.findUserById(studentId);
 
         Subject subject = findSubjectById(subjectId);
         Institution institution = subject.getGrade().getInstitution();
@@ -166,6 +166,7 @@ public class SubjectService {
         
         this.studentSubjectRepository.saveAll(studentSubjects);
         this.subjectRepository.saveAll(addedSubjects);
+				this.gradeService.saveGradeInRepository(grade);
         return addedSubjects;
     }
 	
