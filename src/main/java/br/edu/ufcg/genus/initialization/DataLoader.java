@@ -105,8 +105,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addStudent(subject2.getId(), stud1.getId(), admin);
 		subjectService.addStudent(subject2.getId(), stud2.getId(), admin);
 		
-		EvaluationCreationInput ceInput1 = new EvaluationCreationInput(new Long(5), new Long(9), "Prova 1", 6.0, 4.0);
-		EvaluationCreationInput ceInput2 = new EvaluationCreationInput(new Long(5), new Long(9), "Prova 2", 9.0, 6.0);
+		EvaluationCreationInput ceInput1 = new EvaluationCreationInput(stud1.getId(), subject.getId(), "Prova 1", 6.0, 4.0);
+		EvaluationCreationInput ceInput2 = new EvaluationCreationInput(stud1.getId(), subject.getId(), "Prova 2", 9.0, 6.0);
 		evaluationService.createEvaluation(ceInput1, prof1);
 		evaluationService.createEvaluation(ceInput2, prof1);
 		
@@ -252,6 +252,15 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		ReplyCreationInput replyInput2 = new ReplyCreationInput("Obrigado!", discussion.getId(), reply.getId());
 		replyService.createReply(replyInput2, stud1);
 		
+		//evaluation
+		EvaluationCreationInput ceInput3 = new EvaluationCreationInput(stud3.getId(), subject.getId(), "Prova 1", 3.0, 4.0);
+		EvaluationCreationInput ceInput4 = new EvaluationCreationInput(stud3.getId(), subject.getId(), "Prova 2", 10.0, 6.0);
+		EvaluationCreationInput ceInput5 = new EvaluationCreationInput(stud4.getId(), subject.getId(), "Prova 1", 5.0, 4.0);
+		EvaluationCreationInput ceInput6 = new EvaluationCreationInput(stud4.getId(), subject.getId(), "Prova 2", 6.0, 6.0);
+		evaluationService.createEvaluation(ceInput3, prof1);
+		evaluationService.createEvaluation(ceInput4, prof1);
+		evaluationService.createEvaluation(ceInput5, prof1);
+		evaluationService.createEvaluation(ceInput6, prof1);
 		
 		
 	}
