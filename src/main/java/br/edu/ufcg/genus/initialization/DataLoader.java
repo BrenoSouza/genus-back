@@ -245,12 +245,14 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		
 		//discussion
 		
+		/*
 		DiscussionCreationInput discussionInput = new DiscussionCreationInput("Dúvida da atividade 1", subject.getId(), "Pessoal, estou com dúvida na questão 6 da atividade 1. Alguem pode me explicar como faz essa divisão?");
 		Discussion discussion = discussionService.createDiscussion(discussionInput, stud1);
 		ReplyCreationInput replyInput1 = new ReplyCreationInput("Tem um exemplo muito parecido na página 56!", discussion.getId(), null);
 		Reply reply = replyService.createReply(replyInput1, prof1);
 		ReplyCreationInput replyInput2 = new ReplyCreationInput("Obrigado!", discussion.getId(), reply.getId());
 		replyService.createReply(replyInput2, stud1);
+		*/
 		
 		//evaluation
 		EvaluationCreationInput ceInput3 = new EvaluationCreationInput(stud3.getId(), subject.getId(), "Prova 1", 3.0, 0.4);
