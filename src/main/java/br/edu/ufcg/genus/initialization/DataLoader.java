@@ -72,10 +72,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 		User admin = userService.createUser(adminInput);
 		User prof1 = userService.createUser(prof1Input);
-		User prof2 = userService.createUser(prof2Input);
-		User prof3 = userService.createUser(prof3Input);
+		//User prof2 = userService.createUser(prof2Input);
+		//User prof3 = userService.createUser(prof3Input);
 		User stud1 = userService.createUser(stud1Input);
-		User stud2 = userService.createUser(stud2Input);
+		//User stud2 = userService.createUser(stud2Input);
 
 		Institution institution = new Institution("Escola Álvaro Cardoso", "Rua Julio Santos", "8333229851", "escola_alvaro_cardoso@genus.com" );
 		
@@ -88,30 +88,30 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		userService.saveUserInRepository(admin);
 
 		institutionService.addUserToInstitution(prof1, institution, UserRole.TEACHER);
-		institutionService.addUserToInstitution(prof2, institution, UserRole.TEACHER);
-		institutionService.addUserToInstitution(prof3, institution, UserRole.TEACHER);
-		institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
+		//institutionService.addUserToInstitution(prof2, institution, UserRole.TEACHER);
+		//institutionService.addUserToInstitution(prof3, institution, UserRole.TEACHER);
+		//institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud1, institution, UserRole.STUDENT);
 
 		Grade grade1 = gradeService.createGrade(new GradeCreationInput("1ª Série", institution.getId()), admin);
 		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matemática", grade1.getId()), admin);
-		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Português", grade1.getId()), admin);
+		//Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Português", grade1.getId()), admin);
 		
 		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
-		subjectService.addTeacher(subject2.getId(), prof1.getId(), admin);
-		subjectService.addTeacher(subject2.getId(), prof2.getId(), admin);
+		//subjectService.addTeacher(subject2.getId(), prof1.getId(), admin);
+		//subjectService.addTeacher(subject2.getId(), prof2.getId(), admin);
 		
 		subjectService.addStudent(subject.getId(), stud1.getId(), admin);
-		subjectService.addStudent(subject2.getId(), stud1.getId(), admin);
-		subjectService.addStudent(subject2.getId(), stud2.getId(), admin);
+		//subjectService.addStudent(subject2.getId(), stud1.getId(), admin);
+		//subjectService.addStudent(subject2.getId(), stud2.getId(), admin);
 		
-		EvaluationCreationInput ceInput1 = new EvaluationCreationInput(stud1.getId(), subject.getId(), "Prova 1", 6.0, 4.0);
-		EvaluationCreationInput ceInput2 = new EvaluationCreationInput(stud1.getId(), subject.getId(), "Prova 2", 9.0, 6.0);
+		EvaluationCreationInput ceInput1 = new EvaluationCreationInput(stud1.getId(), subject.getId(), "Prova 1", 6.0, 0.4);
+		EvaluationCreationInput ceInput2 = new EvaluationCreationInput(stud1.getId(), subject.getId(), "Prova 2", 9.0, 0.6);
 		evaluationService.createEvaluation(ceInput1, prof1);
 		evaluationService.createEvaluation(ceInput2, prof1);
 		
-		Grade grade2 = gradeService.createGrade(new GradeCreationInput("2ª Série", institution.getId()), admin);
-		Subject subject3 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade2.getId()), admin);
+		//Grade grade2 = gradeService.createGrade(new GradeCreationInput("2ª Série", institution.getId()), admin);
+		//Subject subject3 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade2.getId()), admin);
 		
 		
 		CreateUserInput admin2Input = new CreateUserInput("Lucia Cardoso", "lucia_cardoso@genus.com", "123456");
@@ -127,8 +127,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		CreateUserInput stud10Input = new CreateUserInput("Aline Correia", "aline_correia@genus.com", "123456");
 		
 		User admin2 = userService.createUser(admin2Input);
-		User prof4 = userService.createUser(prof4Input);
-		User prof5 = userService.createUser(prof5Input);
+		//User prof4 = userService.createUser(prof4Input);
+		//User prof5 = userService.createUser(prof5Input);
 		User stud3 = userService.createUser(stud3Input);
 		User stud4 = userService.createUser(stud4Input);
 		User stud5 = userService.createUser(stud5Input);
@@ -138,20 +138,20 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		User stud9 = userService.createUser(stud9Input);
 		User stud10 = userService.createUser(stud10Input);
 		
-		institutionService.addUserToInstitution(admin2, institution, UserRole.ADMIN);
+		/*institutionService.addUserToInstitution(admin2, institution, UserRole.ADMIN);
 		institutionService.addUserToInstitution(prof4, institution, UserRole.TEACHER);
-		institutionService.addUserToInstitution(prof5, institution, UserRole.TEACHER);
+		institutionService.addUserToInstitution(prof5, institution, UserRole.TEACHER);*/
 		institutionService.addUserToInstitution(stud3, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud4, institution, UserRole.STUDENT);
-		institutionService.addUserToInstitution(stud5, institution, UserRole.STUDENT);
+		/*institutionService.addUserToInstitution(stud5, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud6, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud7, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud8, institution, UserRole.STUDENT);
 		institutionService.addUserToInstitution(stud9, institution, UserRole.STUDENT);
-		institutionService.addUserToInstitution(stud10, institution, UserRole.STUDENT);
+		institutionService.addUserToInstitution(stud10, institution, UserRole.STUDENT);*/
 		
 		//grade1
-		Subject subject4 = subjectService.createSubject(new SubjectCreationInput("História", grade1.getId()), admin);
+		/*Subject subject4 = subjectService.createSubject(new SubjectCreationInput("História", grade1.getId()), admin);
 		Subject subject5 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade1.getId()), admin);
 		Subject subject6 = subjectService.createSubject(new SubjectCreationInput("Ciência", grade1.getId()), admin);
 		
@@ -182,9 +182,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		Subject subject24 = subjectService.createSubject(new SubjectCreationInput("Biologia", grade4.getId()), admin);
 		Subject subject25 = subjectService.createSubject(new SubjectCreationInput("Literatura", grade4.getId()), admin);
 		Subject subject26 = subjectService.createSubject(new SubjectCreationInput("Filosofia", grade4.getId()), admin);
-		
+		*/
 		//prof1
-		subjectService.addTeacher(subject4.getId(), prof1.getId(), admin);
+		/*subjectService.addTeacher(subject4.getId(), prof1.getId(), admin);
 		subjectService.addTeacher(subject5.getId(), prof1.getId(), admin);
 		subjectService.addTeacher(subject6.getId(), prof1.getId(), admin);
 		
@@ -221,12 +221,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addTeacher(subject23.getId(), prof5.getId(), admin);
 		subjectService.addTeacher(subject24.getId(), prof5.getId(), admin);
 		subjectService.addTeacher(subject25.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject26.getId(), prof5.getId(), admin);
+		subjectService.addTeacher(subject26.getId(), prof5.getId(), admin);*/
 		
 		//students - subject
 		subjectService.addStudentToSubjectsInGrade(grade1.getId(), stud3.getId(), admin);
 		subjectService.addStudentToSubjectsInGrade(grade1.getId(), stud4.getId(), admin);
-		subjectService.addStudentToSubjectsInGrade(grade2.getId(), stud5.getId(), admin);
+		/*subjectService.addStudentToSubjectsInGrade(grade2.getId(), stud5.getId(), admin);
 		subjectService.addStudentToSubjectsInGrade(grade2.getId(), stud6.getId(), admin);
 		subjectService.addStudentToSubjectsInGrade(grade3.getId(), stud7.getId(), admin);
 		subjectService.addStudentToSubjectsInGrade(grade3.getId(), stud8.getId(), admin);
@@ -241,7 +241,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addStudent(subject26.getId(), stud2.getId(), admin);
 		subjectService.addStudent(subject18.getId(), stud2.getId(), admin);
 		subjectService.addStudent(subject11.getId(), stud2.getId(), admin);
-		subjectService.addStudent(subject6.getId(), stud2.getId(), admin);
+		subjectService.addStudent(subject6.getId(), stud2.getId(), admin);*/
 		
 		//discussion
 		
@@ -253,10 +253,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		replyService.createReply(replyInput2, stud1);
 		
 		//evaluation
-		EvaluationCreationInput ceInput3 = new EvaluationCreationInput(stud3.getId(), subject.getId(), "Prova 1", 3.0, 4.0);
-		EvaluationCreationInput ceInput4 = new EvaluationCreationInput(stud3.getId(), subject.getId(), "Prova 2", 10.0, 6.0);
-		EvaluationCreationInput ceInput5 = new EvaluationCreationInput(stud4.getId(), subject.getId(), "Prova 1", 5.0, 4.0);
-		EvaluationCreationInput ceInput6 = new EvaluationCreationInput(stud4.getId(), subject.getId(), "Prova 2", 6.0, 6.0);
+		EvaluationCreationInput ceInput3 = new EvaluationCreationInput(stud3.getId(), subject.getId(), "Prova 1", 3.0, 0.4);
+		EvaluationCreationInput ceInput4 = new EvaluationCreationInput(stud3.getId(), subject.getId(), "Prova 2", 10.0, 0.6);
+		EvaluationCreationInput ceInput5 = new EvaluationCreationInput(stud4.getId(), subject.getId(), "Prova 1", 5.0, 0.4);
+		EvaluationCreationInput ceInput6 = new EvaluationCreationInput(stud4.getId(), subject.getId(), "Prova 2", 6.0, 0.6);
 		evaluationService.createEvaluation(ceInput3, prof1);
 		evaluationService.createEvaluation(ceInput4, prof1);
 		evaluationService.createEvaluation(ceInput5, prof1);
