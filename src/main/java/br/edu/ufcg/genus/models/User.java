@@ -68,11 +68,16 @@ public class User {
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
 	@Column(name="notifications")
 	private Set<Notification> notifications;
+	
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@Column(name="evaluationResults", nullable=false)
+	private Set<EvaluationResult> evaluationResults;
 
 	public User() {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
 		this.notifications = new LinkedHashSet<>();
+		this.evaluationResults = new LinkedHashSet<>();
 		this.lastInstitutionId = -1;
 	}
 	
@@ -121,6 +126,10 @@ public class User {
 			}
 		}
 		return result;
+	}
+	
+	public boolean addEvaluationResult(EvaluationResult evaluationResult) {
+		return this.evaluationResults.add(evaluationResult);
 	}
 
 	public long getId() {
@@ -173,6 +182,18 @@ public class User {
 
 	public void setLastInstitutionId(long lastInstitutionId) {
 		this.lastInstitutionId = lastInstitutionId;
+	}
+
+	public Set<EvaluationResult> getEvaluationResults() {
+		return evaluationResults;
+	}
+
+	public void setEvaluationResults(Set<EvaluationResult> evaluationResults) {
+		this.evaluationResults = evaluationResults;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public List<Subject> getSubjects() {

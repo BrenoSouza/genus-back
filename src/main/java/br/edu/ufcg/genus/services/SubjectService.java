@@ -274,4 +274,8 @@ public class SubjectService {
 		return findSubjectById(toId);
 	}
 
+	public void saveSubjectInRepository(Subject subject) {
+		this.subjectRepository.save(subject);
+	}
+
 }

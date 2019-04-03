@@ -52,10 +52,15 @@ public class Subject {
 	@Column(name="forum", nullable=false)
 	private Set<Discussion> forum;
 	
+	@OneToMany(mappedBy="subject", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@Column(name="evaluation", nullable=false)
+	private Set<Evaluation> evaluations;
+	
 	
 	public Subject() {
 		this.students = new HashSet<>();
 		this.teachers = new HashSet<>();
+		this.evaluations = new LinkedHashSet<>();
 		this.forum = new LinkedHashSet<>();
 	}
 	
@@ -92,6 +97,14 @@ public class Subject {
 	public void setStudents(Set<StudentSubject> students) {
 		this.students = students;
 	}
+	
+	public Set<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+
+	public void setEvaluations(Set<Evaluation> evaluations) {
+		this.evaluations = evaluations;
+	}
 
 	public boolean addTeacher(User teacher) {
 		this.grade.addTeacher(teacher);
@@ -101,6 +114,10 @@ public class Subject {
 	public boolean addStudent(StudentSubject student) {
 		this.grade.addStudent(student.getUser());
 		return this.students.add(student);
+	}
+	
+	public boolean addEvaluation(Evaluation evaluation) {
+		return this.evaluations.add(evaluation);
 	}
 	
 	public boolean addDiscussion(Discussion discussion) {
@@ -142,7 +159,6 @@ public class Subject {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		//result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 

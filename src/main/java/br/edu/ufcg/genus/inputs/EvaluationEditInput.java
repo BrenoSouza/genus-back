@@ -4,17 +4,15 @@ public class EvaluationEditInput {
 	
 	private long evaluationId;
 	private String name;
-	private Double result;
 	private Double weight;
 	
 	public EvaluationEditInput() {
 		
 	}
 	
-	public EvaluationEditInput(long evaluationId, String name, Double result, Double weight) {
+	public EvaluationEditInput(long evaluationId, String name, Double weight) {
 		this.evaluationId = evaluationId;
 		this.name = name;
-		this.result = result;
 		this.weight = weight;
 	}
 
@@ -34,14 +32,6 @@ public class EvaluationEditInput {
 		this.name = name;
 	}
 
-	public Double getResult() {
-		return result;
-	}
-
-	public void setResult(Double result) {
-		this.result = result;
-	}
-
 	public Double getWeight() {
 		return weight;
 	}
@@ -56,7 +46,6 @@ public class EvaluationEditInput {
 		int result = 1;
 		result = prime * result + (int) (evaluationId ^ (evaluationId >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
 		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		return result;
 	}
@@ -77,11 +66,6 @@ public class EvaluationEditInput {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (result == null) {
-			if (other.result != null)
-				return false;
-		} else if (!result.equals(other.result))
-			return false;
 		if (weight == null) {
 			if (other.weight != null)
 				return false;
@@ -89,6 +73,7 @@ public class EvaluationEditInput {
 			return false;
 		return true;
 	}
+	
 	
 	
 

@@ -4,8 +4,8 @@ type User {
   email: String!
   teacherSubjects: [ Subject! ]!
   studentSubjects: [ Subject! ]!
-  studentSubjectRelations: [StudentSubject!]!
   notifications: [ Notification! ]!
+  evaluationResults : [EvaluationResult!]!
   lastInstitutionId: ID!
 }
 

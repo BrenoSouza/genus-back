@@ -1,0 +1,21 @@
+type EvaluationResult {
+	id: ID!
+	result: Float!
+	user: User!
+	evaluation: Evaluation!
+}
+
+input CreateEvaluationResultInput {
+	evaluationId : ID!
+	studentId: ID!
+	result: Float!
+}
+
+extend type Query {
+  findEvaluationResult (id: ID!) : EvaluationResult!
+}
+
+extend type Mutation {
+  createEvaluationResults (inputs: [CreateEvaluationResultInput!]!) : [EvaluationResult!]!
+  editEvaluationResult (resultId : ID!, newResult: Float!) : EvaluationResult!
+}
