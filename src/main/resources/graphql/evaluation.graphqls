@@ -1,22 +1,19 @@
 type Evaluation {
   id: ID!
   name: String!
-  result: Float!
   weight: Float!
+  evaluationResults : [EvaluationResult!]!
 }
 
 input EvaluationCreationInput {
-  userId: ID!
   subjectId: ID!
   name: String!
-  result: Float!
   weight: Float!
 }
 
 input EvaluationEditInput {
   evaluationId: ID!
   name: String!
-  result: Float!
   weight: Float!
 }
 

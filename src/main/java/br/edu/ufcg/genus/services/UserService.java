@@ -45,6 +45,10 @@ public class UserService {
 		user.setLastInstitutionId(lastInstitutionId);
 		return this.userRepository.save(user);
 	}
+	
+	public void saveUsers(Iterable<User> users) {
+		this.userRepository.saveAll(users);
+	}
 
 	public String login (AuthenticationInput input) {
         String email = input.getEmail();

@@ -44,5 +44,17 @@ public class PermissionChecker {
 		Subject subject = reply.getDiscussion().getSubject();
 		if (!user.checkTeacher(subject) && !reply.getCreator().equals(user)) throw new NotAuthorizedException();
 	}
+	
+	public static void checkEvaluationPermission(Subject subject, User user) {
+		if(!subject.getTeachers().contains(user)) {
+			throw new NotAuthorizedException("Logged user isn't a teacher to the subject");
+		}
+	}
+	
+	public static void checkIsSubjectStudent(Subject subject, User user) {
+		if(! subject.findStudents().contains(user)) {
+			throw new NotAuthorizedException("User isn't a student to the subject");
+		}
+	}
 
 }

@@ -1,16 +1,10 @@
 package br.edu.ufcg.genus.models;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity(name = "StudentSubject")
@@ -28,16 +22,9 @@ public class StudentSubject {
     @MapsId("subjectId")
 	private Subject subject;
 	
-	@Column(name = "avarage")
-	private Double avarage;
-	
-	@OneToMany(mappedBy="studentSubject", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
-	@Column(name="evaluations", nullable=false)
-	private Set<Evaluation> evaluations;
 	
 	public StudentSubject() {
-		this.avarage = new Double(0.0);
-		this.evaluations = new LinkedHashSet<>();
+		
 	}
 	
 	public StudentSubject(User user, Subject subject) {
@@ -47,14 +34,6 @@ public class StudentSubject {
 		this.id = new StudentSubjectId(user.getId(), subject.getId());
 	}
 	
-	public boolean addEvaluation(Evaluation evaluation) {
-		boolean added = this.evaluations.add(evaluation);
-		if (added) {
-			this.avarage += evaluation.getResult() * evaluation.getWeight(); 
-		}
-		return added;
-	}
-
 	public StudentSubjectId getId() {
 		return id;
 	}
@@ -73,22 +52,6 @@ public class StudentSubject {
 
 	public void setSubject(Subject subject) {
 		this.subject = subject;
-	}
-
-	public Double getAvarage() {
-		return avarage;
-	}
-
-	public void setAvarage(Double avarage) {
-		this.avarage = avarage;
-	}
-
-	public Set<Evaluation> getEvaluations() {
-		return evaluations;
-	}
-
-	public void setEvaluations(Set<Evaluation> evaluations) {
-		this.evaluations = evaluations;
 	}
 
 	@Override
