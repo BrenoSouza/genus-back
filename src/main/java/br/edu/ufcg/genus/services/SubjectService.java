@@ -188,6 +188,7 @@ public class SubjectService {
         for(StudentSubject studSub : studentSubjects) {
         	fillEvaluationResults(studSub.getUser(), studSub.getSubject(), user);
         }
+        //this.subjectRepository.saveAll(addedSubjects);
         return addedSubjects;
     }
 	

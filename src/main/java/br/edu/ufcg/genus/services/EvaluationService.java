@@ -42,7 +42,7 @@ public class EvaluationService {
 		subject.addEvaluation(eval);
 		subjectService.saveSubjectInRepository(subject);
 		evaluationResultService.fillEvaluation(eval, input.getResultInputs(), user);
-		return eval;
+		return findEvaluation(eval.getId());
 	}
 	
 	public Evaluation editEvaluation(EvaluationEditInput input, User user) {

@@ -46,8 +46,9 @@ public class PermissionChecker {
 	}
 	
 	public static void checkEvaluationPermission(Subject subject, User user) {
-		if(!subject.getTeachers().contains(user)) {
-			throw new NotAuthorizedException("Logged user isn't a teacher to the subject");
+		UserRole role = user.getRole(subject.getGrade().getInstitution().getId());
+		if(!subject.getTeachers().contains(user) && !(role.equals(UserRole.ADMIN))) {
+			throw new NotAuthorizedException("Logged user isn't a teacher to the subject or an admin in the institution");
 		}
 	}
 	

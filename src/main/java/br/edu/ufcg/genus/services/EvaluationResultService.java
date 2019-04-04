@@ -95,9 +95,11 @@ public class EvaluationResultService {
 	}
 
 	public void addSubjectEvaluationResults(User student, Subject subject, User user) {
+		List<EvaluationResult> results = new ArrayList<>();
 		for(Evaluation eval : subject.getEvaluations()) {
-			createEvaluationResult(student, eval, 0.0, user);
+			results.add(createEvaluationResult(student, eval, 0.0, user));
 		}
+		this.evaluationResultRepository.saveAll(results);
 		
 	}
 	
