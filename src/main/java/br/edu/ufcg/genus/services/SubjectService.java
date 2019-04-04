@@ -1,6 +1,7 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -111,6 +112,13 @@ public class SubjectService {
         this.gradeService.saveGradeInRepository(subject.getGrade());
         return findSubjectById(subjectId);
     }
+    
+    public Subject addStudents(Long subjectId, Collection<Long> studentsIds, User user) {
+    	for(Long studentId: studentsIds) {
+    		addStudent(subjectId, studentId, user);
+    	}
+    	return findSubjectById(subjectId);
+    }
 
 	public Subject updateSubject(UpdateSubjectInput input, User user) {
 		Subject subject = findSubjectById(input.getSubjectId());
@@ -174,6 +182,13 @@ public class SubjectService {
         this.subjectRepository.saveAll(addedSubjects);
         return addedSubjects;
     }
+	
+	public Grade addStudentsToSubjectsInGrade(Long gradeId, Collection<Long> studentsIds, User user) {
+		for(Long studentId: studentsIds) {
+			addStudentToSubjectsInGrade(gradeId, studentId, user);
+    	}
+    	return gradeService.findGradeById(gradeId);
+	}
 	
 	public boolean removeInstitutionSubjectsFromUser(Long institutionId, Long studentId, User user) {
 		boolean result = false;
