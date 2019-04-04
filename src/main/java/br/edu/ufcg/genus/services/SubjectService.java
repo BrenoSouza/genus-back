@@ -98,7 +98,7 @@ public class SubjectService {
 		List<UserRole> permittedRolesStudent = new ArrayList<>();
 		permittedRolesStudent.add(UserRole.STUDENT);
 
-        User student = this.userService.findUserById(studentId);
+        User student = userService.findUserById(studentId);
 
         Subject subject = findSubjectById(subjectId);
         Institution institution = subject.getGrade().getInstitution();
@@ -188,7 +188,7 @@ public class SubjectService {
         for(StudentSubject studSub : studentSubjects) {
         	fillEvaluationResults(studSub.getUser(), studSub.getSubject(), user);
         }
-        //this.subjectRepository.saveAll(addedSubjects);
+    
         return addedSubjects;
     }
 	
