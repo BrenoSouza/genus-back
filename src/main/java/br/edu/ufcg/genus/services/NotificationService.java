@@ -17,6 +17,9 @@ public class NotificationService {
 	private NotificationRepository notificationRepository;
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	private EmailService emailService;
+	
 	
 	/**
 	 * Send notification to users subscribed on channel "/user/queue/notify".
@@ -32,6 +35,7 @@ public class NotificationService {
 		"/queue/notify", 
 		notification
 	  );
+	  
 	  return;
 	}
 
@@ -44,6 +48,7 @@ public class NotificationService {
 									User user, Long instituionId, Long gradeId, Long subjectId, Long discussionId) {
 		Notification notification = new Notification(notificationType, notificationTypeId, message, originUserName, user, instituionId, gradeId, subjectId, discussionId);
 		notificationRepository.save(notification);
+		emailService.sendNotificationEmail(notification);
 	}
 
 	public Notification readNotification(Long id) {

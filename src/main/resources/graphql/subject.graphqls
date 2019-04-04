@@ -6,6 +6,8 @@ type Subject {
   students: [ User! ]!
   forum: [Discussion!]!
   evaluations: [Evaluation!]!
+  mimeType: String
+  photo: String
 }
 
 input SubjectCreationInput {
@@ -16,6 +18,8 @@ input SubjectCreationInput {
 input UpdateSubjectInput {
   subjectId: ID!
   name: String
+  mimeType: String
+  photo: String
 }
 
 extend type Query {

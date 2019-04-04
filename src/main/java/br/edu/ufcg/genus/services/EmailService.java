@@ -10,17 +10,19 @@ import org.springframework.stereotype.Component;
 
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
+import br.edu.ufcg.genus.models.Notification;
 import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
+import br.edu.ufcg.genus.utils.RunnableEmailSender;
 
 @Component
 public class EmailService {
 	
 	@Autowired
-    public JavaMailSender emailSender;
+    private JavaMailSender emailSender;
 	
 	@Autowired
 	private InstitutionService institutionService;
@@ -32,6 +34,8 @@ public class EmailService {
         message.setSubject(subject); 
         message.setText(text + textEnding);
         emailSender.send(message);
+        //RunnableEmailSender sender = new RunnableEmailSender(message);
+        //(new Thread(sender)).start();
         return true;
 	}
 	
@@ -76,6 +80,14 @@ public class EmailService {
 		}
 		String textEnding = "\n\n Mensagem enviada por " + sender.getUsername() + " para todos os estudantes na disciplina " + subjectObj.getName() + " da instituicao " + subjectObj.getGrade().getInstitution().getName();
 		return sendSimpleMessage(toArray(studentEmails), subject, text, textEnding);
+	}
+	
+	public void sendNotificationEmail(Notification notification) {
+		String[] to = {notification.getUser().getEmail()};
+		String subject = "Nova Notificação no site Genus: " + notification.getNotificationType();
+		String text = notification.getMessage();
+		String ending = "\n\n Mensagem enviada automaticamente pelo site Genus.";
+		sendSimpleMessage(to, subject, text, ending);
 	}
 	
 	private String[] toArray(List<String> list) {

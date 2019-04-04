@@ -2,6 +2,7 @@ type Evaluation {
   id: ID!
   name: String!
   weight: Float!
+  subject: Subject!
   evaluationResults : [EvaluationResult!]!
 }
 

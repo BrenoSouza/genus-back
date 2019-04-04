@@ -64,7 +64,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 
 		CreateUserInput adminInput = new CreateUserInput("Julio Silva", "julio_silva@genus.com", "123456");
-		CreateUserInput prof1Input = new CreateUserInput("Samuel Gomes", "samuel_gomes@genus.com", "123456");
+		CreateUserInput prof1Input = new CreateUserInput("Samuel Gomes", "samuel_gomes@gmail.com", "123456");
 		CreateUserInput prof2Input = new CreateUserInput("Bianca Alves", "bianca_alves@genus.com", "123456");
 		CreateUserInput prof3Input = new CreateUserInput("Marina Lima", "marina_lima@genus.com", "123456");
 		CreateUserInput stud1Input = new CreateUserInput("Thiago Pinto", "thiago_pinto@genus.com", "123456");

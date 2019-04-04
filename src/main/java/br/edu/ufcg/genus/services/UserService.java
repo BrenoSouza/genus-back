@@ -111,6 +111,11 @@ public class UserService {
         if (input.getUsername() != null) {
             user.setUsername(input.getUsername());
         }
+        
+        if (input.getMimeType() != null && input.getPhoto() != null) {
+			user.setMimeType(input.getMimeType());
+			user.setPhoto(input.getPhoto());
+		}
 
         return userRepository.save(user);
     }

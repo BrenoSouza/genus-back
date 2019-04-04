@@ -118,6 +118,12 @@ public class SubjectService {
         if (input.getName() != null) {
             subject.setName(input.getName());
 		}
+        
+        if (input.getMimeType() != null && input.getPhoto() != null) {
+			subject.setMimeType(input.getMimeType());
+			subject.setPhoto(input.getPhoto());
+		}
+        
         return subjectRepository.save(subject);
 	}
 	

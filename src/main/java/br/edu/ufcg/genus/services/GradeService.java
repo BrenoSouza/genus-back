@@ -65,9 +65,15 @@ public class GradeService {
 	public Grade updateGrade(UpdateGradeInput input, User user) {
 		Grade grade = findGradeById(input.getGradeId());
 		checkAdminPermission(grade, user);
-		        if (input.getName() != null) {
+		if (input.getName() != null) {
             grade.setName(input.getName());
 		}
+		
+		if (input.getMimeType() != null && input.getPhoto() != null) {
+			grade.setMimeType(input.getMimeType());
+			grade.setPhoto(input.getPhoto());
+		}
+		
         return gradeRepository.save(grade);
     }
 	

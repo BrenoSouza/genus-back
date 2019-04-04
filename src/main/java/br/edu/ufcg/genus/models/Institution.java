@@ -40,10 +40,20 @@ public class Institution {
 	
 	@OneToMany(mappedBy="institution", fetch=FetchType.EAGER, orphanRemoval = true)
 	private Set<UserInstitution> users;
+	
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name="photo", nullable=true)
+	private byte[] photo;
+	
+	@Column(name="mime_type", nullable=true)
+	private String mimeType;
 
 	public Institution() {
 		this.grades = new HashSet<>();
 		this.users = new HashSet<>();
+		this.photo = null;
+		this.mimeType = null;
 	}
 	
 	public Institution(String name, String address, String phone, String email) {
@@ -122,6 +132,22 @@ public class Institution {
 
 	public void setUsers(Set<UserInstitution> users) {
 		this.users = users;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@Override

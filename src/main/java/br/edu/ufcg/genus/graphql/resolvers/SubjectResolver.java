@@ -1,5 +1,7 @@
 package br.edu.ufcg.genus.graphql.resolvers;
 
+import javax.xml.bind.DatatypeConverter;
+
 import com.coxautodev.graphql.tools.GraphQLResolver;
 
 import br.edu.ufcg.genus.models.Grade;
@@ -23,5 +25,11 @@ public class SubjectResolver implements GraphQLResolver<Subject> {
     
     public Iterable<StudentSubject> getStudentSubjects(Subject subject) {
     	return subject.getStudents();
+    }
+    
+    public String getPhoto(User user) {
+    	String result = null;
+    	if (user.getPhoto() != null) result = DatatypeConverter.printBase64Binary(user.getPhoto());
+        return result;
     }
 }
