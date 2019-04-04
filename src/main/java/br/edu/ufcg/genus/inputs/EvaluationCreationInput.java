@@ -5,6 +5,7 @@ public class EvaluationCreationInput {
 	private Long subjectId;
 	private String name;
 	private Double weight;
+	private Iterable<CreateEvaluationResultInput> resultInputs;
 	
 	public EvaluationCreationInput () {
 		
@@ -38,6 +39,14 @@ public class EvaluationCreationInput {
 
 	public void setWeight(Double weight) {
 		this.weight = weight;
+	}
+
+	public Iterable<CreateEvaluationResultInput> getResultInputs() {
+		return resultInputs;
+	}
+
+	public void setResultInputs(Iterable<CreateEvaluationResultInput> resultInputs) {
+		this.resultInputs = resultInputs;
 	}
 
 	@Override

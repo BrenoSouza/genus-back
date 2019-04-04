@@ -12,6 +12,7 @@ import br.edu.ufcg.genus.models.EvaluationResult;
 
 import br.edu.ufcg.genus.services.EvaluationResultService;
 import br.edu.ufcg.genus.services.UserService;
+import br.edu.ufcg.genus.update_inputs.UpdateEvaluationResult;
 
 public class EvaluationResultMutations implements GraphQLMutationResolver {
 	
@@ -25,8 +26,8 @@ public class EvaluationResultMutations implements GraphQLMutationResolver {
 		return this.evaluationResultService.createEvaluationResults(inputs, userService.findLoggedUser());
 	}
 	
-	public EvaluationResult editEvaluationResult(Long resultId, Double newResult) {
-		return this.evaluationResultService.editEvaluationResult(resultId, newResult, userService.findLoggedUser());
+	public Iterable<EvaluationResult> updateEvaluationResults(Collection<UpdateEvaluationResult> inputs) {
+		return this.evaluationResultService.updateEvaluationResults(inputs, userService.findLoggedUser());
 	}
 	
 	

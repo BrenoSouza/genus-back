@@ -10,6 +10,7 @@ input EvaluationCreationInput {
   subjectId: ID!
   name: String!
   weight: Float!
+  resultInputs: [CreateEvaluationResultInput]
 }
 
 input EvaluationEditInput {

@@ -13,8 +13,10 @@ import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.inputs.CreateEvaluationResultInput;
 import br.edu.ufcg.genus.models.Evaluation;
 import br.edu.ufcg.genus.models.EvaluationResult;
+import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.EvaluationResultRepository;
+import br.edu.ufcg.genus.update_inputs.UpdateEvaluationResult;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
@@ -67,12 +69,36 @@ public class EvaluationResultService {
 		return evaluationResult;
 	}
 	
-	public EvaluationResult editEvaluationResult(Long resultId, Double newResult, User user) {
-		EvaluationResult eval = findEvaluationResult(resultId);
+	public Collection<EvaluationResult> updateEvaluationResults(Collection<UpdateEvaluationResult> inputs, User user) {
+		List<EvaluationResult> results = new ArrayList<>();
+		for(UpdateEvaluationResult input : inputs) {
+			results.add(updateEvaluationResult(input, user));
+		}
+		return results;
+	}
+	
+	private EvaluationResult updateEvaluationResult(UpdateEvaluationResult input, User user) {
+		EvaluationResult eval = findEvaluationResult(input.getResultId());
 		PermissionChecker.checkEvaluationPermission(eval.getEvaluation().getSubject(), user);
-		eval.setResult(newResult);
+		eval.setResult(input.getNewResult());
 		this.evaluationResultRepository.save(eval);
 		return eval;
+	}
+
+	public void fillEvaluation(Evaluation eval, Iterable<CreateEvaluationResultInput> iterable, User user) {
+		List<CreateEvaluationResultInput> inputs = new ArrayList<>();
+		for(CreateEvaluationResultInput idlessInput : iterable) {
+			inputs.add(new CreateEvaluationResultInput(eval.getId(), idlessInput.getStudentId(), idlessInput.getResult()));
+		}
+		createEvaluationResults(inputs, user);
+		
+	}
+
+	public void addSubjectEvaluationResults(User student, Subject subject, User user) {
+		for(Evaluation eval : subject.getEvaluations()) {
+			createEvaluationResult(student, eval, 0.0, user);
+		}
+		
 	}
 	
 	

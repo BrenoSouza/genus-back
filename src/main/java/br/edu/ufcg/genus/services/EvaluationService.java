@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.services;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class EvaluationService {
 	@Autowired
 	private SubjectService subjectService;
 	
+	@Autowired
+	private EvaluationResultService evaluationResultService;
+	
 	public Evaluation findEvaluation(Long id) {
 		return evaluationRepository.findById(id)
 				.orElseThrow(() -> new InvalidIDException("Evaluation with passed ID was not found", id));
@@ -30,13 +34,14 @@ public class EvaluationService {
 		this.evaluationRepository.saveAll(evaluations);
 	}
 	
-	public Evaluation createEvaluation(EvaluationCreationInput input, User user) {
+	public Evaluation createEvaluation(EvaluationCreationInput input ,User user) {
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
 		PermissionChecker.checkEvaluationPermission(subject, user);
 		Evaluation eval = new Evaluation(input.getName(), input.getWeight(), subject);
 		evaluationRepository.save(eval);
 		subject.addEvaluation(eval);
 		subjectService.saveSubjectInRepository(subject);
+		evaluationResultService.fillEvaluation(eval, input.getResultInputs(), user);
 		return eval;
 	}
 	

@@ -47,6 +47,9 @@ public class SubjectService {
 	@Autowired
 	private StudentSubjectService studentSubjectService;
 	
+	@Autowired
+	private EvaluationResultService evaluationResultService;
+	
 	
 	public Subject createSubject(SubjectCreationInput input, User user) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
@@ -110,6 +113,7 @@ public class SubjectService {
         this.studentSubjectRepository.save(studentSubject);
         this.subjectRepository.save(subject);
         this.gradeService.saveGradeInRepository(subject.getGrade());
+        fillEvaluationResults(student, subject, user);
         return findSubjectById(subjectId);
     }
     
@@ -181,6 +185,9 @@ public class SubjectService {
         this.studentSubjectRepository.saveAll(studentSubjects);
         this.subjectRepository.saveAll(addedSubjects);
         this.gradeService.saveGradeInRepository(grade);
+        for(StudentSubject studSub : studentSubjects) {
+        	fillEvaluationResults(studSub.getUser(), studSub.getSubject(), user);
+        }
         return addedSubjects;
     }
 	
@@ -298,6 +305,10 @@ public class SubjectService {
 
 	public void saveSubjectInRepository(Subject subject) {
 		this.subjectRepository.save(subject);
+	}
+	
+	private void fillEvaluationResults(User student, Subject subject, User user) {
+		this.evaluationResultService.addSubjectEvaluationResults(student, subject, user);
 	}
 
 }
