@@ -16,7 +16,6 @@ import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
-import br.edu.ufcg.genus.utils.RunnableEmailSender;
 
 @Component
 public class EmailService {
@@ -82,10 +81,16 @@ public class EmailService {
 		return sendSimpleMessage(toArray(studentEmails), subject, text, textEnding);
 	}
 	
-	public void sendNotificationEmail(Notification notification) {
-		String[] to = {notification.getUser().getEmail()};
-		String subject = "Nova Notificação no site Genus: " + notification.getNotificationType();
-		String text = notification.getMessage();
+	public void sendNotificationEmail(List<String> emails, String notificationType, String message) {
+		String[] to = toArray(emails);
+		String subject = "Nova Notificação no site Genus: " + notificationType;
+		String preText = "";
+		if (notificationType.equals("Nova resposta em uma discussão")) {
+			preText = "Nova Resposta: ";
+		} else {
+			preText = "Título da nova discussão: ";
+		}
+		String text = preText + "\'" + message + "\'";
 		String ending = "\n\n Mensagem enviada automaticamente pelo site Genus.";
 		sendSimpleMessage(to, subject, text, ending);
 	}

@@ -1,5 +1,8 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -47,9 +50,11 @@ public class ReplyService {
 			Long subjectId = subject.getId();
 			Long gradeId = subject.getGrade().getId();
 			Long institutionId = subject.getGrade().getInstitution().getId();
-	
+			
+			List<User> usersToNotify = new ArrayList<>();
+			usersToNotify.add(discussion.getCreator());
 			notificationService.createNotification("REPLY_DISCUSSION", discussionId, discussion.getTitle(), user.getUsername(),
-			discussion.getCreator(), institutionId, gradeId, subjectId, discussionId);
+					usersToNotify, institutionId, gradeId, subjectId, discussionId);
 		}
 		return reply;		
 	}
@@ -79,9 +84,12 @@ public class ReplyService {
 			Long subjectId = subject.getId();
 			Long gradeId = subject.getGrade().getId();
 			Long institutionId = subject.getGrade().getInstitution().getId();
+			
+			List<User> usersToNotify = new ArrayList<>();
+			usersToNotify.add(parent.getCreator());
 
 			notificationService.createNotification("REPLY_REPLY", parentId, reply.getContent(), user.getUsername(),
-												parent.getCreator(), institutionId, gradeId, subjectId, discussionId);
+					usersToNotify, institutionId, gradeId, subjectId, discussionId);
 		}
 		
 		return reply;

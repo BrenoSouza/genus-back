@@ -1,5 +1,8 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -45,10 +48,17 @@ public class NotificationService {
 	}
 	
 	public void createNotification(String notificationType, Long notificationTypeId, String message, String originUserName,
-									User user, Long instituionId, Long gradeId, Long subjectId, Long discussionId) {
-		Notification notification = new Notification(notificationType, notificationTypeId, message, originUserName, user, instituionId, gradeId, subjectId, discussionId);
-		notificationRepository.save(notification);
-		emailService.sendNotificationEmail(notification);
+									List<User> usersToNotify, Long instituionId, Long gradeId, Long subjectId, Long discussionId) {
+		List<String> emails = new ArrayList<>();
+		for(User user: usersToNotify) {
+			Notification notification = new Notification(notificationType, notificationTypeId, message, originUserName, user, instituionId, gradeId, subjectId, discussionId);
+			notificationRepository.save(notification);
+			emails.add(user.getEmail());
+		}
+		String convertedNotificationType = "Nova resposta em uma discussão";
+		if(notificationType.equals("NEW_DISCUSSION")) convertedNotificationType = "Nova discussão";
+		
+		emailService.sendNotificationEmail(emails, convertedNotificationType, message);
 	}
 
 	public Notification readNotification(Long id) {
