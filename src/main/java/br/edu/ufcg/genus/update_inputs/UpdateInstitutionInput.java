@@ -21,6 +21,10 @@ public class UpdateInstitutionInput {
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "PHONE_INVALID_MIN_LENGTH")
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "PHONE_INVALID_MAX_LENGTH")
 	private String phone;
+	
+	private byte[] photo;
+	
+	private String mimeType;
 
 	public UpdateInstitutionInput () {
 		
@@ -57,6 +61,22 @@ public class UpdateInstitutionInput {
 	public void setInstitutionId(Long institutionId) {
         this.institutionId = institutionId;
     }
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

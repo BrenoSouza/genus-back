@@ -170,6 +170,11 @@ public class InstitutionService {
 		if (input.getPhone() != null) {
             institution.setPhone(input.getPhone());
         }
+		
+		if (input.getMimeType() != null && input.getPhoto() != null) {
+			institution.setMimeType(input.getMimeType());
+			institution.setPhoto(input.getPhoto());
+		}
 
         return institutionRepository.save(institution);
     }

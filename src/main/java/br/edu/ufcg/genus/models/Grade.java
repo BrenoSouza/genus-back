@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -17,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
@@ -56,10 +58,20 @@ public class Grade {
     @JoinColumn(name="institution_id", nullable=false)
 	private Institution institution;
 	
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name="photo", nullable=true)
+	private byte[] photo;
+	
+	@Column(name="mime_type", nullable=true)
+	private String mimeType;
+	
 	public Grade() {
 		this.subjects = new HashSet<>();
 		this.students = new HashMap<>();
 		this.teachers = new HashMap<>();
+		this.photo = null;
+		this.mimeType = null;
 	}
 	
 	public Grade(String name, Institution institution) {
@@ -149,6 +161,22 @@ public class Grade {
 
 	public Map<User, Integer> getTeachers() {
 		return teachers;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@Override

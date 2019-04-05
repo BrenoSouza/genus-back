@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -56,12 +58,22 @@ public class Subject {
 	@Column(name="evaluation", nullable=false)
 	private Set<Evaluation> evaluations;
 	
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name="photo", nullable=true)
+	private byte[] photo;
+	
+	@Column(name="mime_type", nullable=true)
+	private String mimeType;
+	
 	
 	public Subject() {
 		this.students = new HashSet<>();
 		this.teachers = new HashSet<>();
 		this.evaluations = new LinkedHashSet<>();
 		this.forum = new LinkedHashSet<>();
+		this.photo = null;
+		this.mimeType = null;
 	}
 	
 	public Subject(Grade owner, String name) {
@@ -134,6 +146,22 @@ public class Subject {
 
 	public Set<User> getTeachers() {
 		return this.teachers;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	public List<StudentSubject> getStudents() {

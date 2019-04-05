@@ -6,9 +6,14 @@ type EvaluationResult {
 }
 
 input CreateEvaluationResultInput {
-	evaluationId : ID!
+	evaluationId : ID
 	studentId: ID!
 	result: Float!
+}
+
+input UpdateEvaluationResult {
+	resultId : ID!
+	newResult : Float!
 }
 
 extend type Query {
@@ -17,5 +22,5 @@ extend type Query {
 
 extend type Mutation {
   createEvaluationResults (inputs: [CreateEvaluationResultInput!]!) : [EvaluationResult!]!
-  editEvaluationResult (resultId : ID!, newResult: Float!) : EvaluationResult!
+  updateEvaluationResults (inputs: [UpdateEvaluationResult!]!) : [EvaluationResult!]!
 }

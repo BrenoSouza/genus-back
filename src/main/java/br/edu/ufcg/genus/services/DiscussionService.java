@@ -1,5 +1,8 @@
 package br.edu.ufcg.genus.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,20 +43,21 @@ public class DiscussionService {
 		Long subjectId = subject.getId();
 		Long gradeId = subject.getGrade().getId();
 		Long institutionId = subject.getGrade().getInstitution().getId();
-
+		
+		List<User> usersToNotify = new ArrayList<>();
 		for (StudentSubject studentSubject : subject.getStudents()) {
 			if (!studentSubject.getUser().equals(user)) {
-				notificationService.createNotification("NEW_DISCUSSION", discussion.getId(), forumPost.getTitle(), user.getUsername(), 
-														studentSubject.getUser(), institutionId, gradeId, subjectId, discussion.getId());
+				usersToNotify.add(studentSubject.getUser());
 			}
 		}
 
 		for (User teacher : subject.getTeachers()) {
 			if (!teacher.equals(user)) {
-				notificationService.createNotification("NEW_DISCUSSION", discussion.getId(), forumPost.getTitle(), user.getUsername(),
-														teacher, institutionId, gradeId, subjectId, discussion.getId());
+				usersToNotify.add(teacher);
 			}
 		}
+		notificationService.createNotification("NEW_DISCUSSION", discussion.getId(), forumPost.getTitle(), user.getUsername(), 
+				usersToNotify, institutionId, gradeId, subjectId, discussion.getId());
 		return forumPost;
 	}
 

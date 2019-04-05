@@ -7,6 +7,8 @@ type User {
   notifications: [ Notification! ]!
   evaluationResults : [EvaluationResult!]!
   lastInstitutionId: ID!
+  mimeType: String
+  photo: String
 }
 
 input CreateUserInput {
@@ -17,6 +19,8 @@ input CreateUserInput {
 
 input UpdateUserInput {
   username: String
+  mimeType: String
+  photo: String
 }
 
 input AuthenticationInput {

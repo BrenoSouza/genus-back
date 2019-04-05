@@ -62,7 +62,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-
+		
 		CreateUserInput adminInput = new CreateUserInput("Julio Silva", "julio_silva@genus.com", "123456");
 		CreateUserInput prof1Input = new CreateUserInput("Samuel Gomes", "samuel_gomes@genus.com", "123456");
 		CreateUserInput prof2Input = new CreateUserInput("Bianca Alves", "bianca_alves@genus.com", "123456");
@@ -76,7 +76,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		User prof3 = userService.createUser(prof3Input);
 		User stud1 = userService.createUser(stud1Input);
 		User stud2 = userService.createUser(stud2Input);
-
+		
+		
 		Institution institution = new Institution("Escola Álvaro Cardoso", "Rua Julio Santos", "8333229851", "escola_alvaro_cardoso@genus.com" );
 		
 		institutionRepository.save(institution);
@@ -240,12 +241,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		
 		//discussion
 		
-		DiscussionCreationInput discussionInput = new DiscussionCreationInput("Dúvida da atividade 1", subject.getId(), "Pessoal, estou com dúvida na questão 6 da atividade 1. Alguem pode me explicar como faz essa divisão?");
+		/*DiscussionCreationInput discussionInput = new DiscussionCreationInput("Dúvida da atividade 1", subject.getId(), "Pessoal, estou com dúvida na questão 6 da atividade 1. Alguem pode me explicar como faz essa divisão?");
 		Discussion discussion = discussionService.createDiscussion(discussionInput, stud1);
 		ReplyCreationInput replyInput1 = new ReplyCreationInput("Tem um exemplo muito parecido na página 56!", discussion.getId(), null);
 		Reply reply = replyService.createReply(replyInput1, prof1);
 		ReplyCreationInput replyInput2 = new ReplyCreationInput("Obrigado!", discussion.getId(), reply.getId());
-		replyService.createReply(replyInput2, stud1);
+		replyService.createReply(replyInput2, stud1);*/
 		
 		
 	}

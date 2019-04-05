@@ -8,6 +8,8 @@ type Institution {
   admins : [User] !
   teachers : [User] !
   students : [User] !
+  mimeType: String
+  photo: String
 }
 
 input CreateInstitutionInput {
@@ -22,6 +24,8 @@ input UpdateInstitutionInput {
   name: String
   phone: String
   address: String
+  mimeType: String
+  photo: String
 }
 
 input GetUsersFromInstitutionByRoleInput {

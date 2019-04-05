@@ -13,6 +13,10 @@ public class UpdateSubjectInput {
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "NAME_INVALID_MIN_LENGTH")
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "NAME_INVALID_MAX_LENGTH")
 	private String name;
+	
+	private byte[] photo;
+	
+	private String mimeType;
 
 	public UpdateSubjectInput () {
         
@@ -33,6 +37,22 @@ public class UpdateSubjectInput {
 	public void setSubjectId(Long subjectId) {
         this.subjectId = subjectId;
     }
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

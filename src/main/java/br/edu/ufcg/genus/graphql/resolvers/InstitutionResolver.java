@@ -2,6 +2,8 @@ package br.edu.ufcg.genus.graphql.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLResolver;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
@@ -33,5 +35,11 @@ public class InstitutionResolver implements GraphQLResolver<Institution> {
     public Iterable<User> getStudents(Institution institution) {
     	GetUsersFromInstitutionByRoleInput input = new GetUsersFromInstitutionByRoleInput(institution.getId(), UserRole.STUDENT);
     	return this.institutionService.getUsersFromInstitutionByRole(input);
+    }
+    
+    public String getPhoto(User user) {
+    	String result = null;
+    	if (user.getPhoto() != null) result = DatatypeConverter.printBase64Binary(user.getPhoto());
+        return result;
     }
 }
