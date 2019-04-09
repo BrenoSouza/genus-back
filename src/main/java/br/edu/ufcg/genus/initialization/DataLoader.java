@@ -168,17 +168,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		Subject subject17 = subjectService.createSubject(new SubjectCreationInput("Ciência", grade3.getId()), admin);
 		Subject subject18 = subjectService.createSubject(new SubjectCreationInput("Literatura", grade3.getId()), admin);
 		
-		//grade4
-		Grade grade4 = gradeService.createGrade(new GradeCreationInput("4ª Série", institution.getId()), admin);
-		Subject subject19 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade4.getId()), admin);
-		Subject subject20 = subjectService.createSubject(new SubjectCreationInput("Álgebra", grade4.getId()), admin);
-		Subject subject21 = subjectService.createSubject(new SubjectCreationInput("Gramática", grade4.getId()), admin);
-		Subject subject22 = subjectService.createSubject(new SubjectCreationInput("História", grade4.getId()), admin);
-		Subject subject23 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade4.getId()), admin);
-		Subject subject24 = subjectService.createSubject(new SubjectCreationInput("Biologia", grade4.getId()), admin);
-		Subject subject25 = subjectService.createSubject(new SubjectCreationInput("Literatura", grade4.getId()), admin);
-		Subject subject26 = subjectService.createSubject(new SubjectCreationInput("Filosofia", grade4.getId()), admin);
-		
 		//prof1
 		subjectService.addTeacher(subject4.getId(), prof1.getId(), admin);
 		subjectService.addTeacher(subject5.getId(), prof1.getId(), admin);
@@ -189,8 +178,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addTeacher(subject7.getId(), prof2.getId(), admin);
 		subjectService.addTeacher(subject16.getId(), prof2.getId(), admin);
 		subjectService.addTeacher(subject17.getId(), prof2.getId(), admin);
-		subjectService.addTeacher(subject20.getId(), prof2.getId(), admin);
-		subjectService.addTeacher(subject21.getId(), prof2.getId(), admin);
 		
 		//prof3
 		subjectService.addTeacher(subject3.getId(), prof3.getId(), admin);
@@ -209,16 +196,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addTeacher(subject17.getId(), prof4.getId(), admin);
 		subjectService.addTeacher(subject18.getId(), prof4.getId(), admin);
 		
-		//prof5
-		subjectService.addTeacher(subject19.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject20.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject21.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject22.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject23.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject24.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject25.getId(), prof5.getId(), admin);
-		subjectService.addTeacher(subject26.getId(), prof5.getId(), admin);
-		
 		//students - subject
 		subjectService.addStudentToSubjectsInGrade(grade1.getId(), stud3.getId(), admin);
 		subjectService.addStudentToSubjectsInGrade(grade1.getId(), stud4.getId(), admin);
@@ -226,15 +203,11 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addStudentToSubjectsInGrade(grade2.getId(), stud6.getId(), admin);
 		subjectService.addStudentToSubjectsInGrade(grade3.getId(), stud7.getId(), admin);
 		subjectService.addStudentToSubjectsInGrade(grade3.getId(), stud8.getId(), admin);
-		subjectService.addStudentToSubjectsInGrade(grade4.getId(), stud9.getId(), admin);
-		subjectService.addStudentToSubjectsInGrade(grade4.getId(), stud10.getId(), admin);
 		
-		subjectService.addStudent(subject19.getId(), stud1.getId(), admin);
 		subjectService.addStudent(subject12.getId(), stud1.getId(), admin);
 		subjectService.addStudent(subject7.getId(), stud1.getId(), admin);
 		subjectService.addStudent(subject4.getId(), stud1.getId(), admin);
 		
-		subjectService.addStudent(subject26.getId(), stud2.getId(), admin);
 		subjectService.addStudent(subject18.getId(), stud2.getId(), admin);
 		subjectService.addStudent(subject11.getId(), stud2.getId(), admin);
 		subjectService.addStudent(subject6.getId(), stud2.getId(), admin);
