@@ -65,9 +65,15 @@ public class GradeService {
 	public Grade updateGrade(UpdateGradeInput input, User user) {
 		Grade grade = findGradeById(input.getGradeId());
 		checkAdminPermission(grade, user);
-		        if (input.getName() != null) {
+		if (input.getName() != null) {
             grade.setName(input.getName());
 		}
+		
+		if (input.getMimeType() != null && input.getPhoto() != null) {
+			grade.setMimeType(input.getMimeType());
+			grade.setPhoto(input.getPhoto());
+		}
+		
         return gradeRepository.save(grade);
     }
 	
@@ -79,6 +85,15 @@ public class GradeService {
 		}
 		gradeRepository.deleteById(gradeId);				
 		return true;
+	}
+	
+	public boolean removeEveryStudentFromGrade(long gradeId, User user) {
+		Grade grade = findGradeById(gradeId);
+		boolean result = true;
+		for (Subject sub : grade.getSubjects()) {
+			result = result && subjectService.removeEveryStudentFromSubject(sub.getId(), user);
+		}
+		return result;
 	}
 	
 	private void checkAdminPermission(Grade grade, User user) {

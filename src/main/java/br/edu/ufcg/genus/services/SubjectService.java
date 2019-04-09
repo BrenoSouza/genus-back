@@ -1,6 +1,7 @@
 package br.edu.ufcg.genus.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,9 @@ public class SubjectService {
 	
 	@Autowired
 	private StudentSubjectService studentSubjectService;
+	
+	@Autowired
+	private EvaluationResultService evaluationResultService;
 	
 	
 	public Subject createSubject(SubjectCreationInput input, User user) {
@@ -94,7 +98,7 @@ public class SubjectService {
 		List<UserRole> permittedRolesStudent = new ArrayList<>();
 		permittedRolesStudent.add(UserRole.STUDENT);
 
-        User student = this.userService.findUserById(studentId);
+        User student = userService.findUserById(studentId);
 
         Subject subject = findSubjectById(subjectId);
         Institution institution = subject.getGrade().getInstitution();
@@ -109,7 +113,15 @@ public class SubjectService {
         this.studentSubjectRepository.save(studentSubject);
         this.subjectRepository.save(subject);
         this.gradeService.saveGradeInRepository(subject.getGrade());
+        fillEvaluationResults(student, subject, user);
         return findSubjectById(subjectId);
+    }
+    
+    public Subject addStudents(Long subjectId, Collection<Long> studentsIds, User user) {
+    	for(Long studentId: studentsIds) {
+    		addStudent(subjectId, studentId, user);
+    	}
+    	return findSubjectById(subjectId);
     }
 
 	public Subject updateSubject(UpdateSubjectInput input, User user) {
@@ -118,6 +130,12 @@ public class SubjectService {
         if (input.getName() != null) {
             subject.setName(input.getName());
 		}
+        
+        if (input.getMimeType() != null && input.getPhoto() != null) {
+			subject.setMimeType(input.getMimeType());
+			subject.setPhoto(input.getPhoto());
+		}
+        
         return subjectRepository.save(subject);
 	}
 	
@@ -166,8 +184,20 @@ public class SubjectService {
         
         this.studentSubjectRepository.saveAll(studentSubjects);
         this.subjectRepository.saveAll(addedSubjects);
+        this.gradeService.saveGradeInRepository(grade);
+        for(StudentSubject studSub : studentSubjects) {
+        	fillEvaluationResults(studSub.getUser(), studSub.getSubject(), user);
+        }
+    
         return addedSubjects;
     }
+	
+	public Grade addStudentsToSubjectsInGrade(Long gradeId, Collection<Long> studentsIds, User user) {
+		for(Long studentId: studentsIds) {
+			addStudentToSubjectsInGrade(gradeId, studentId, user);
+    	}
+    	return gradeService.findGradeById(gradeId);
+	}
 	
 	public boolean removeInstitutionSubjectsFromUser(Long institutionId, Long studentId, User user) {
 		boolean result = false;
@@ -233,6 +263,15 @@ public class SubjectService {
 		return result;
 	}
 	
+	public boolean removeEveryStudentFromSubject(Long subjectId, User user) {
+		boolean result = true;
+		Subject subject = findSubjectById(subjectId);
+		for(StudentSubject studSub : subject.getStudents()) {
+			result = result && removeStudentFromSubject(subjectId, studSub.getUser().getId(), user);
+		}
+		return result;
+	}
+	
 	public boolean removeTeacherFromSubject(Long subjectId, Long teacherId, User user) {
 		boolean result = false;
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
@@ -255,6 +294,22 @@ public class SubjectService {
 			this.gradeService.saveGradeInRepository(subject.getGrade());
 		}
 		return result;
+	}
+	
+	public Subject copyStudentsFromSubject(Long fromId, Long toId, User user) {
+		Subject sub = findSubjectById(fromId);
+		for (StudentSubject studSub: sub.getStudents()) {
+			addStudent(toId, studSub.getUser().getId(), user);
+		}
+		return findSubjectById(toId);
+	}
+
+	public void saveSubjectInRepository(Subject subject) {
+		this.subjectRepository.save(subject);
+	}
+	
+	private void fillEvaluationResults(User student, Subject subject, User user) {
+		this.evaluationResultService.addSubjectEvaluationResults(student, subject, user);
 	}
 
 }

@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -26,6 +27,8 @@ public class Reply {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
+	@Lob
+	@Column
 	private String content;
 	
 	@CreationTimestamp

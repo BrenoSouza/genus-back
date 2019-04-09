@@ -1,0 +1,15 @@
+input SendEmailInput {
+  subject: String
+  text: String
+}
+
+enum EmailType{
+  TO_ALL_STUDENTS
+  TO_ALL_TEACHERS
+  TO_ALL_GRADE_STUDENTS
+  TO_ALL_SUBJECT_STUDENTS
+}
+
+extend type Query {
+  sendEmail(input: SendEmailInput!, id: ID!, type: EmailType!) : Boolean
+}

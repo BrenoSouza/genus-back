@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -16,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -43,6 +45,9 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 	
+	@Column(nullable = false)
+	private long lastInstitutionId;
+	
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<Role> roles;
 	
@@ -65,11 +70,27 @@ public class User {
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
 	@Column(name="notifications")
 	private Set<Notification> notifications;
+	
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@Column(name="evaluationResults", nullable=false)
+	private Set<EvaluationResult> evaluationResults;
+	
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	@Column(name="photo", nullable=true)
+	private byte[] photo;
+	
+	@Column(name="mime_type", nullable=true)
+	private String mimeType;
 
 	public User() {
 		this.institutions = new HashSet<>();
 		this.subjects = new HashSet<>();
 		this.notifications = new LinkedHashSet<>();
+		this.evaluationResults = new LinkedHashSet<>();
+		this.lastInstitutionId = -1;
+		this.photo = null;
+		this.mimeType = null;
 	}
 	
 	public User(String username, String email, String password) {
@@ -118,6 +139,10 @@ public class User {
 		}
 		return result;
 	}
+	
+	public boolean addEvaluationResult(EvaluationResult evaluationResult) {
+		return this.evaluationResults.add(evaluationResult);
+	}
 
 	public long getId() {
 		return id;
@@ -161,6 +186,42 @@ public class User {
 
 	public void setSubjects(Set<Subject> subjects) {
 		this.subjects = subjects;
+	}
+
+	public long getLastInstitutionId() {
+		return lastInstitutionId;
+	}
+
+	public void setLastInstitutionId(long lastInstitutionId) {
+		this.lastInstitutionId = lastInstitutionId;
+	}
+
+	public Set<EvaluationResult> getEvaluationResults() {
+		return evaluationResults;
+	}
+
+	public void setEvaluationResults(Set<EvaluationResult> evaluationResults) {
+		this.evaluationResults = evaluationResults;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	public List<Subject> getSubjects() {

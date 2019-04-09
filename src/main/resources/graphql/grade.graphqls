@@ -5,6 +5,10 @@ type Grade {
   subjects: [ Subject! ]!
   students: [ User! ]!
   teachers: [ User! ]!
+  qntStudents: Int!
+  qntTeachers: Int!
+  mimeType: String
+  photo: String
 }
 
 input GradeCreationInput {
@@ -15,6 +19,8 @@ input GradeCreationInput {
 input UpdateGradeInput {
   gradeId: ID!
   name: String
+  mimeType: String
+  photo: String
 }
 
 extend type Query {
@@ -25,4 +31,5 @@ extend type Mutation {
   createGrade (input : GradeCreationInput!) : Grade
   updateGrade(input: UpdateGradeInput!): Grade
   removeGrade(gradeId: ID!) : Boolean
+  removeEveryStudentFromGrade(gradeId: ID!) : Boolean
 }

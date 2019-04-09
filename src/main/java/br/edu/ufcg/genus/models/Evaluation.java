@@ -1,13 +1,18 @@
 package br.edu.ufcg.genus.models;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Evaluation {
@@ -20,28 +25,30 @@ public class Evaluation {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "result")
-	private Double result;
-	
 	@Column(name = "weight")
 	private Double weight;
 	
 	@ManyToOne
-    @JoinColumns({
-    	@JoinColumn(name = "studentSubject_user_id", referencedColumnName = "user_id"),
-    	@JoinColumn(name = "studentSubject_subject_id", referencedColumnName = "subject_id")    	
-    })
-	private StudentSubject studentSubject;
+    @JoinColumn(name="subject_id", nullable=false)
+	private Subject subject;
+	
+	@OneToMany(mappedBy="evaluation", fetch=FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@Column(name="evaluationResults", nullable=false)
+	private Set<EvaluationResult> evaluationResults;
 	
 	public Evaluation() {
-		
+		this.evaluationResults = new LinkedHashSet<>();
 	}
 	
-	public Evaluation(String name, Double result, Double weight, StudentSubject studentSubject) {
+	public Evaluation(String name, Double weight, Subject subject) {
+		this();
 		this.name = name;
-		this.result = result;
 		this.weight = weight;
-		this.studentSubject = studentSubject;
+		this.subject = subject;
+	}
+	
+	public boolean addEvaluationResult(EvaluationResult evaluationResult) {
+		return this.evaluationResults.add(evaluationResult);
 	}
 
 	public Long getId() {
@@ -56,14 +63,6 @@ public class Evaluation {
 		this.name = name;
 	}
 
-	public Double getResult() {
-		return result;
-	}
-
-	public void setResult(Double result) {
-		this.result = result;
-	}
-
 	public Double getWeight() {
 		return weight;
 	}
@@ -72,12 +71,12 @@ public class Evaluation {
 		this.weight = weight;
 	}
 
-	public StudentSubject getStudentSubject() {
-		return studentSubject;
+	public Subject getSubject() {
+		return subject;
 	}
 
-	public void setStudentSubject(StudentSubject studentSubject) {
-		this.studentSubject = studentSubject;
+	public void setSubject(Subject subject) {
+		this.subject = subject;
 	}
 
 	@Override

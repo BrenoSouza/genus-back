@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import br.edu.ufcg.genus.exception.GraphQLErrorAdapter;
 import br.edu.ufcg.genus.graphql.mutations.EntryCodeMutations;
 import br.edu.ufcg.genus.graphql.mutations.EvaluationMutations;
+import br.edu.ufcg.genus.graphql.mutations.EvaluationResultMutations;
 import br.edu.ufcg.genus.graphql.mutations.DiscussionMutations;
 import br.edu.ufcg.genus.graphql.mutations.ReplyMutations;
 import br.edu.ufcg.genus.graphql.mutations.GradeMutations;
@@ -19,7 +20,9 @@ import br.edu.ufcg.genus.graphql.mutations.NotificationMutations;
 import br.edu.ufcg.genus.graphql.mutations.SubjectMutations;
 import br.edu.ufcg.genus.graphql.mutations.UserMutations;
 import br.edu.ufcg.genus.graphql.queries.DiscussionQueries;
+import br.edu.ufcg.genus.graphql.queries.EmailQueries;
 import br.edu.ufcg.genus.graphql.queries.EvaluationQueries;
+import br.edu.ufcg.genus.graphql.queries.EvaluationResultQueries;
 import br.edu.ufcg.genus.graphql.queries.NotificationQueries;
 import br.edu.ufcg.genus.graphql.queries.GradeQueries;
 import br.edu.ufcg.genus.graphql.queries.InstitutionQueries;
@@ -191,5 +194,20 @@ public class GenusApplication {
 	@Bean
 	public StudentSubjectQueries studentSubjectQueries() {
 		return new StudentSubjectQueries();
+	}
+	
+	@Bean
+	public EmailQueries emailQueries() {
+		return new EmailQueries();
+	}
+	
+	@Bean
+	public EvaluationResultQueries evaluationResultQueries() {
+		return new EvaluationResultQueries();
+	}
+	
+	@Bean
+	public EvaluationResultMutations evaluationResultMutations() {
+		return new EvaluationResultMutations();
 	}
 }

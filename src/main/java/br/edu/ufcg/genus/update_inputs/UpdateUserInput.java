@@ -9,6 +9,10 @@ public class UpdateUserInput {
     @Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "USERNAME_INVALID_MIN_LENGTH")
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "USERNAME_INVALID_MAX_LENGTH")
 	private String username;
+    
+	private byte[] photo;
+	
+	private String mimeType;
 	
     public String getUsername() {
         return username;
@@ -18,7 +22,23 @@ public class UpdateUserInput {
         this.username = username;
     }
 
-    @Override
+    public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null || getClass() != o.getClass()) return false;

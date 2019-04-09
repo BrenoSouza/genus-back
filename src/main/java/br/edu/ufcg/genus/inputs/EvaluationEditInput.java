@@ -1,28 +1,27 @@
 package br.edu.ufcg.genus.inputs;
 
-public class EvaluationCreationInput {
+public class EvaluationEditInput {
 	
-	private Long subjectId;
+	private long evaluationId;
 	private String name;
 	private Double weight;
-	private Iterable<CreateEvaluationResultInput> resultInputs;
 	
-	public EvaluationCreationInput () {
+	public EvaluationEditInput() {
 		
 	}
 	
-	public EvaluationCreationInput(Long subjectId, String name, Double weight) {
-		this.subjectId = subjectId;
+	public EvaluationEditInput(long evaluationId, String name, Double weight) {
+		this.evaluationId = evaluationId;
 		this.name = name;
 		this.weight = weight;
 	}
 
-	public Long getSubjectId() {
-		return subjectId;
+	public long getEvaluationId() {
+		return evaluationId;
 	}
 
-	public void setSubjectId(Long subjectId) {
-		this.subjectId = subjectId;
+	public void setEvaluationId(long evaluationId) {
+		this.evaluationId = evaluationId;
 	}
 
 	public String getName() {
@@ -41,20 +40,12 @@ public class EvaluationCreationInput {
 		this.weight = weight;
 	}
 
-	public Iterable<CreateEvaluationResultInput> getResultInputs() {
-		return resultInputs;
-	}
-
-	public void setResultInputs(Iterable<CreateEvaluationResultInput> resultInputs) {
-		this.resultInputs = resultInputs;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (int) (evaluationId ^ (evaluationId >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((subjectId == null) ? 0 : subjectId.hashCode());
 		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		return result;
 	}
@@ -67,16 +58,13 @@ public class EvaluationCreationInput {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EvaluationCreationInput other = (EvaluationCreationInput) obj;
+		EvaluationEditInput other = (EvaluationEditInput) obj;
+		if (evaluationId != other.evaluationId)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (subjectId == null) {
-			if (other.subjectId != null)
-				return false;
-		} else if (!subjectId.equals(other.subjectId))
 			return false;
 		if (weight == null) {
 			if (other.weight != null)
@@ -85,8 +73,8 @@ public class EvaluationCreationInput {
 			return false;
 		return true;
 	}
+	
+	
+	
 
-	
-	
-	
 }

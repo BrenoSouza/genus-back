@@ -16,7 +16,6 @@ import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
 import br.edu.ufcg.genus.inputs.RemoveUserFromInstitutionInput;
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
-import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.models.UserInstitution;
 import br.edu.ufcg.genus.models.UserRole;
@@ -102,6 +101,9 @@ public class InstitutionService {
 		
 		User toBeRemoved = userService.findUserById(input.getToBeRemovedId());
 		
+		toBeRemoved.setLastInstitutionId(-1);
+		userService.saveUserInRepository(toBeRemoved);
+		
 		boolean result = false;
 		if (user.equals(toBeRemoved)) {
 			result = removeSelfFromInstitution(user, institution);
@@ -168,6 +170,11 @@ public class InstitutionService {
 		if (input.getPhone() != null) {
             institution.setPhone(input.getPhone());
         }
+		
+		if (input.getMimeType() != null && input.getPhoto() != null) {
+			institution.setMimeType(input.getMimeType());
+			institution.setPhoto(input.getPhoto());
+		}
 
         return institutionRepository.save(institution);
     }

@@ -3,6 +3,7 @@ package br.edu.ufcg.genus.graphql.mutations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 
 import br.edu.ufcg.genus.exception.InvalidAttributesException;
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
+import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.services.SubjectService;
 import br.edu.ufcg.genus.services.UserService;
@@ -48,6 +50,10 @@ public class SubjectMutations implements GraphQLMutationResolver {
     public Subject addStudentToSubject(Long subjectId, Long studentId) {
 		return this.subjectService.addStudent(subjectId, studentId, userService.findLoggedUser());
 	}
+    
+    public Subject addStudentsToSubject(Long subjectId, Collection<Long> studentsIds) {
+		return this.subjectService.addStudents(subjectId, studentsIds, userService.findLoggedUser());
+	}
 
 	public Subject updateSubject(UpdateSubjectInput input) {
 
@@ -71,6 +77,10 @@ public class SubjectMutations implements GraphQLMutationResolver {
 		return this.subjectService.addStudentToSubjectsInGrade(gradeId, studentId, userService.findLoggedUser());
 	}
 	
+	public Grade addStudentsToSubjectsInGrade(Long gradeId, Collection<Long> studentsIds) {
+		return this.subjectService.addStudentsToSubjectsInGrade(gradeId, studentsIds, userService.findLoggedUser());
+	}
+	
 	public boolean removeInstitutionSubjectsFromUser(Long institutionId, Long studentId) {
 		return this.subjectService.removeInstitutionSubjectsFromUser(institutionId, studentId, userService.findLoggedUser());
 	}
@@ -81,6 +91,14 @@ public class SubjectMutations implements GraphQLMutationResolver {
 	
 	public boolean removeTeacherFromSubject(Long subjectId, Long teacherId) {
 		return this.subjectService.removeTeacherFromSubject(subjectId, teacherId, userService.findLoggedUser());
+	}
+	
+	public boolean removeEveryStudentFromSubject(Long subjectId) {
+		return this.subjectService.removeEveryStudentFromSubject(subjectId, userService.findLoggedUser());
+	}
+	
+	public Subject copyStudentsFromSubject(Long fromId, Long toId) {
+		return this.subjectService.copyStudentsFromSubject(fromId, toId, userService.findLoggedUser());
 	}
 
 }

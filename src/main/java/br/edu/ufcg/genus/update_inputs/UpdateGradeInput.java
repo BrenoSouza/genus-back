@@ -1,5 +1,6 @@
 package br.edu.ufcg.genus.update_inputs;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -13,6 +14,10 @@ public class UpdateGradeInput {
 	@Size(min = ServerConstants.MIN_LOGIN_FIELD, message = "NAME_INVALID_MIN_LENGTH")
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "NAME_INVALID_MAX_LENGTH")
 	private String name;
+	
+	private byte[] photo;
+	
+	private String mimeType;
 
 	public UpdateGradeInput () {
         
@@ -33,6 +38,22 @@ public class UpdateGradeInput {
 	public void setGradeId(Long gradeId) {
         this.gradeId = gradeId;
     }
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

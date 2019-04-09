@@ -5,6 +5,9 @@ type Subject {
   teachers: [ User! ]!
   students: [ User! ]!
   forum: [Discussion!]!
+  evaluations: [Evaluation!]!
+  mimeType: String
+  photo: String
 }
 
 input SubjectCreationInput {
@@ -15,6 +18,8 @@ input SubjectCreationInput {
 input UpdateSubjectInput {
   subjectId: ID!
   name: String
+  mimeType: String
+  photo: String
 }
 
 extend type Query {
@@ -27,8 +32,12 @@ extend type Mutation {
   removeSubject (subjectId: ID!) : Boolean 
   addTeacherToSubject (subjectId: ID!, teacherId: ID!) : Subject
   addStudentToSubject (subjectId: ID!, studentId: ID!) : Subject
+  addStudentsToSubject (subjectId: ID!, studentsIds: [ID!]!) : Subject
   addStudentToSubjectsInGrade (gradeId: ID!, studentId: ID!) : [Subject]
+  addStudentsToSubjectsInGrade (gradeId: ID!, studentsIds: [ID!]!) : Grade
   removeInstitutionSubjectsFromUser (institutionId: ID!, studentId: ID!) : Boolean
   removeStudentFromSubject (subjectId: ID!, studentId: ID!) : Boolean
   removeTeacherFromSubject (subjectId: ID!, teacherId: ID!) : Boolean
+  removeEveryStudentFromSubject(subjectId: ID!) : Boolean
+  copyStudentsFromSubject(fromId: ID!, toId: ID!) : Subject
 }

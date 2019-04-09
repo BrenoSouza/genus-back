@@ -39,6 +39,16 @@ public class UserService {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		return this.userRepository.save(newUser);
 	}
+	
+	public User changeLastInstitution(Long lastInstitutionId) {
+		User user = findLoggedUser();
+		user.setLastInstitutionId(lastInstitutionId);
+		return this.userRepository.save(user);
+	}
+	
+	public void saveUsers(Iterable<User> users) {
+		this.userRepository.saveAll(users);
+	}
 
 	public String login (AuthenticationInput input) {
         String email = input.getEmail();
@@ -101,6 +111,11 @@ public class UserService {
         if (input.getUsername() != null) {
             user.setUsername(input.getUsername());
         }
+        
+        if (input.getMimeType() != null && input.getPhoto() != null) {
+			user.setMimeType(input.getMimeType());
+			user.setPhoto(input.getPhoto());
+		}
 
         return userRepository.save(user);
     }

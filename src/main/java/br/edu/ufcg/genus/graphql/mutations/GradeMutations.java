@@ -56,4 +56,8 @@ public class GradeMutations implements GraphQLMutationResolver {
 	public boolean removeGrade(long gradeId) {
 		return this.gradeService.removeGrade(gradeId, userService.findLoggedUser());
 	}
+	
+	public boolean removeEveryStudentFromGrade(long gradeId) {
+		return this.gradeService.removeEveryStudentFromGrade(gradeId, userService.findLoggedUser());
+	}
 }

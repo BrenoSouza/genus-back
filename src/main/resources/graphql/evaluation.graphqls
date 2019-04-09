@@ -1,15 +1,21 @@
 type Evaluation {
   id: ID!
   name: String!
-  result: Float!
   weight: Float!
+  subject: Subject!
+  evaluationResults : [EvaluationResult!]!
 }
 
 input EvaluationCreationInput {
-  userId: ID!
   subjectId: ID!
   name: String!
-  result: Float!
+  weight: Float!
+  resultInputs: [CreateEvaluationResultInput]
+}
+
+input EvaluationEditInput {
+  evaluationId: ID!
+  name: String!
   weight: Float!
 }
 
@@ -19,4 +25,5 @@ extend type Query {
 
 extend type Mutation {
   createEvaluation (input: EvaluationCreationInput!) : Evaluation!
+  editEvaluation (input: EvaluationEditInput!) : Evaluation!
 }
