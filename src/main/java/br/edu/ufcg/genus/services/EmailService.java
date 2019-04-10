@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import br.edu.ufcg.genus.models.Grade;
 import br.edu.ufcg.genus.models.Institution;
-import br.edu.ufcg.genus.models.Notification;
 import br.edu.ufcg.genus.models.StudentSubject;
 import br.edu.ufcg.genus.models.Subject;
 import br.edu.ufcg.genus.models.User;

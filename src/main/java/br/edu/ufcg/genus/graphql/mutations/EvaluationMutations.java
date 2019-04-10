@@ -1,7 +1,5 @@
 package br.edu.ufcg.genus.graphql.mutations;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
