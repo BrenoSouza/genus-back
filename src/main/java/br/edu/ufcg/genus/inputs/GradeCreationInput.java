@@ -11,6 +11,10 @@ public class GradeCreationInput {
 	
 	private Long institutionId;
 	
+	private byte[] photo;
+	
+	private String mimeType;
+	
 	public GradeCreationInput() {
 		
 	}
@@ -34,6 +38,26 @@ public class GradeCreationInput {
 
 	public void setInstituitionId(Long instituitionId) {
 		this.institutionId = instituitionId;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	public void setInstitutionId(Long institutionId) {
+		this.institutionId = institutionId;
 	}
 
 	@Override
