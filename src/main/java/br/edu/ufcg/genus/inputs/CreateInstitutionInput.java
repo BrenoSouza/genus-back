@@ -30,6 +30,10 @@ public class CreateInstitutionInput {
 	@Size(max = ServerConstants.MAX_LOGIN_FIELD, message = "PHONE_INVALID_MAX_LENGTH")
 	@NotBlank(message="PHONE_INVALID_BLANK")
 	private String phone;
+	
+	private byte[] photo;
+	
+	private String mimeType;
 
 	public CreateInstitutionInput () {
 		
@@ -65,6 +69,22 @@ public class CreateInstitutionInput {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@Override

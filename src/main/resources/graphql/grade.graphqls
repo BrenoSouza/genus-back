@@ -14,6 +14,8 @@ type Grade {
 input GradeCreationInput {
   institutionId: ID!
   name: String!
+  mimeType: String
+  photo: String
 }
 
 input UpdateGradeInput {

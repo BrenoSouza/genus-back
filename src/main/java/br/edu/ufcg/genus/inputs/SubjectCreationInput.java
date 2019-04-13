@@ -11,6 +11,10 @@ public class SubjectCreationInput {
 	
 	private Long gradeId;
 	
+	private byte[] photo;
+	
+	private String mimeType;
+	
 	public SubjectCreationInput() {
 		
 	}
@@ -34,6 +38,22 @@ public class SubjectCreationInput {
 
 	public void setGradeId(Long gradeId) {
 		this.gradeId = gradeId;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@Override

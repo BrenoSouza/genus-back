@@ -37,6 +37,10 @@ public class UserService {
 	
 	public User createUser (CreateUserInput input) {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
+		if (input.getMimeType() != null && input.getPhoto() != null) {
+			newUser.setMimeType(input.getMimeType());
+			newUser.setPhoto(input.getPhoto());
+		}
 		return this.userRepository.save(newUser);
 	}
 	

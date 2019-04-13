@@ -46,6 +46,10 @@ public class InstitutionService {
 
     public Institution createInstitution(CreateInstitutionInput input, User owner) {
         Institution institution = new Institution(input.getName(), input.getAddress(), input.getPhone(), input.getEmail());
+        if (input.getMimeType() != null && input.getPhoto() != null) {
+			institution.setMimeType(input.getMimeType());
+			institution.setPhoto(input.getPhoto());
+		}
         institutionRepository.save(institution);
         addUserToInstitution(owner, institution, UserRole.ADMIN); // calls save
         return institution;
