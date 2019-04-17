@@ -37,9 +37,9 @@ public class InstitutionResolver implements GraphQLResolver<Institution> {
     	return this.institutionService.getUsersFromInstitutionByRole(input);
     }
     
-    public String getPhoto(User user) {
+    public String getPhoto(Institution institution) {
     	String result = null;
-    	if (user.getPhoto() != null) result = DatatypeConverter.printBase64Binary(user.getPhoto());
+    	if (institution.getPhoto() != null) result = DatatypeConverter.printBase64Binary(institution.getPhoto());
         return result;
     }
 }
