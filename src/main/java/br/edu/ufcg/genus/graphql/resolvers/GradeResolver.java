@@ -35,9 +35,9 @@ public class GradeResolver implements GraphQLResolver<Grade> {
     	return grade.getStudents().size();
     }
     
-    public String getPhoto(User user) {
+    public String getPhoto(Grade grade) {
     	String result = null;
-    	if (user.getPhoto() != null) result = DatatypeConverter.printBase64Binary(user.getPhoto());
+    	if (grade.getPhoto() != null) result = DatatypeConverter.printBase64Binary(grade.getPhoto());
         return result;
     }
 }

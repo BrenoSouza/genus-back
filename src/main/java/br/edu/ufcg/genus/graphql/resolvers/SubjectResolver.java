@@ -27,9 +27,9 @@ public class SubjectResolver implements GraphQLResolver<Subject> {
     	return subject.getStudents();
     }
     
-    public String getPhoto(User user) {
+    public String getPhoto(Subject subject) {
     	String result = null;
-    	if (user.getPhoto() != null) result = DatatypeConverter.printBase64Binary(user.getPhoto());
+    	if (subject.getPhoto() != null) result = DatatypeConverter.printBase64Binary(subject.getPhoto());
         return result;
     }
 }
