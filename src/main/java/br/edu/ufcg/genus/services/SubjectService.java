@@ -58,6 +58,10 @@ public class SubjectService {
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
 		Subject newSubject = new Subject(grade, input.getName());
+		if (input.getMimeType() != null && input.getPhoto() != null) {
+			newSubject.setMimeType(input.getMimeType());
+			newSubject.setPhoto(input.getPhoto());
+		}
 		subjectRepository.save(newSubject);
 		return newSubject;
 	}

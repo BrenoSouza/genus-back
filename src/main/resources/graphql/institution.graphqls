@@ -17,6 +17,8 @@ input CreateInstitutionInput {
   email: String!
   phone: String!
   address: String!
+  mimeType: String
+  photo: String
 }
 
 input UpdateInstitutionInput {

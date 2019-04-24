@@ -24,6 +24,10 @@ public class CreateUserInput {
 	@NotBlank(message="PASSWORD_INVALID_BLANK")
 	private String password;
 	
+	private byte[] photo;
+	
+	private String mimeType;
+	
 	public CreateUserInput () {
 		
 	}
@@ -56,6 +60,22 @@ public class CreateUserInput {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@Override

@@ -35,6 +35,10 @@ public class GradeService {
 		permitedRoles.add(UserRole.ADMIN);
 		PermissionChecker.checkPermission(user, institution.getId(), permitedRoles);
 		Grade newGrade = new Grade(input.getName(), institution);
+		if (input.getMimeType() != null && input.getPhoto() != null) {
+			newGrade.setMimeType(input.getMimeType());
+			newGrade.setPhoto(input.getPhoto());
+		}
 		this.gradeRepository.save(newGrade);
 		return newGrade;		
 	}
