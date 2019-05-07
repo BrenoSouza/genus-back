@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
 import br.edu.ufcg.genus.inputs.CreateInstitutionInput;
 import br.edu.ufcg.genus.inputs.GetUsersFromInstitutionByRoleInput;
@@ -44,6 +45,7 @@ public class InstitutionService {
         		.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", id));
     }
 
+	@Transactional
     public Institution createInstitution(CreateInstitutionInput input, User owner) {
         Institution institution = new Institution(input.getName(), input.getAddress(), input.getPhone(), input.getEmail());
         if (input.getMimeType() != null && input.getPhoto() != null) {
@@ -156,6 +158,7 @@ public class InstitutionService {
 		this.subjectService.removeInstitutionSubjectsFromUser(institution.getId(), user.getId(), loggedUser);
 	}
 
+	@Transactional
 	public Institution updateInstitution(UpdateInstitutionInput input, User user) {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
 import br.edu.ufcg.genus.inputs.GradeCreationInput;
 import br.edu.ufcg.genus.exception.InvalidIDException;
@@ -29,6 +30,7 @@ public class GradeService {
 	@Autowired
 	private SubjectService subjectService;
 	
+	@Transactional
 	public Grade createGrade(GradeCreationInput input, User user) {
 		Institution institution = this.institutionService.findById(input.getInstitutionId());
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
@@ -66,6 +68,7 @@ public class GradeService {
         return institution.getGrades();
 	}
 
+	@Transactional
 	public Grade updateGrade(UpdateGradeInput input, User user) {
 		Grade grade = findGradeById(input.getGradeId());
 		checkAdminPermission(grade, user);

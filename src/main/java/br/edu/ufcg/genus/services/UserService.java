@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
@@ -35,6 +36,7 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 	
+    @Transactional
 	public User createUser (CreateUserInput input) {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		if (input.getMimeType() != null && input.getPhoto() != null) {
@@ -108,6 +110,7 @@ public class UserService {
 		return user.getRole(institutionId);
     }
     
+    @Transactional
     public User updateUser(UpdateUserInput input) {
 
         User user = findLoggedUser();

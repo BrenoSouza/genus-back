@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.exception.InvalidIDException;
@@ -50,7 +51,7 @@ public class SubjectService {
 	@Autowired
 	private EvaluationResultService evaluationResultService;
 	
-	
+	@Transactional
 	public Subject createSubject(SubjectCreationInput input, User user) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
 		Institution institution = this.institutionService.findById(grade.getInstitution().getId());
@@ -128,6 +129,7 @@ public class SubjectService {
     	return findSubjectById(subjectId);
     }
 
+	@Transactional
 	public Subject updateSubject(UpdateSubjectInput input, User user) {
 		Subject subject = findSubjectById(input.getSubjectId());
 		checkAdminPermission(subject, user);
