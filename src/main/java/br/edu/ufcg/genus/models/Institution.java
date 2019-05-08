@@ -42,7 +42,7 @@ public class Institution {
 	private Set<UserInstitution> users;
 	
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
+	@Basic(fetch = FetchType.EAGER)
 	@Column(name="photo", nullable=true)
 	private byte[] photo;
 	

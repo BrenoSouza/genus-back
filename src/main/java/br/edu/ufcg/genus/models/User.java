@@ -76,7 +76,7 @@ public class User {
 	private Set<EvaluationResult> evaluationResults;
 	
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
+	@Basic(fetch = FetchType.EAGER)
 	@Column(name="photo", nullable=true)
 	private byte[] photo;
 	

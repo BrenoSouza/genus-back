@@ -59,7 +59,7 @@ public class Grade {
 	private Institution institution;
 	
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
+	@Basic(fetch = FetchType.EAGER)
 	@Column(name="photo", nullable=true)
 	private byte[] photo;
 	
