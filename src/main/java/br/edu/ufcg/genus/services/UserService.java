@@ -46,14 +46,16 @@ public class UserService {
 			newUser.setPhoto(input.getPhoto());
 		}
 		return this.userRepository.save(newUser);
-	}
-	
+    }
+    
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public User changeLastInstitution(Long lastInstitutionId) {
 		User user = findLoggedUser();
 		user.setLastInstitutionId(lastInstitutionId);
 		return this.userRepository.save(user);
 	}
-	
+    
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveUsers(Iterable<User> users) {
 		this.userRepository.saveAll(users);
 	}
@@ -100,6 +102,7 @@ public class UserService {
         return userRepository.findByEmail(email);
 	}
     
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void saveUserInRepository(User user) {
     	userRepository.save(user);
     }
@@ -129,6 +132,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateUserPassword(String password, String newPassword) {
         User user = findLoggedUser();
         if (!this.passwordMatch(user, password)) throw new InvalidCredentialsException("Invalid Password");
