@@ -8,7 +8,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 import br.edu.ufcg.genus.inputs.AuthenticationInput;
 import br.edu.ufcg.genus.inputs.CreateUserInput;
@@ -23,6 +24,7 @@ import br.edu.ufcg.genus.security.JwtTokenProvider;
 import br.edu.ufcg.genus.update_inputs.UpdateUserInput;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 	
 	@Autowired
@@ -36,7 +38,7 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 	
-    @Transactional
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public User createUser (CreateUserInput input) {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		if (input.getMimeType() != null && input.getPhoto() != null) {
@@ -110,7 +112,7 @@ public class UserService {
 		return user.getRole(institutionId);
     }
     
-    @Transactional
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public User updateUser(UpdateUserInput input) {
 
         User user = findLoggedUser();
