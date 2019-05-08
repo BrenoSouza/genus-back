@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 import br.edu.ufcg.genus.inputs.GradeCreationInput;
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.models.Grade;
