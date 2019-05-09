@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 import br.edu.ufcg.genus.inputs.SubjectCreationInput;
 import br.edu.ufcg.genus.exception.InvalidIDException;
@@ -24,6 +26,7 @@ import br.edu.ufcg.genus.update_inputs.UpdateSubjectInput;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
+@Transactional(readOnly = true)
 public class SubjectService {
 	
 	@Autowired
@@ -50,7 +53,7 @@ public class SubjectService {
 	@Autowired
 	private EvaluationResultService evaluationResultService;
 	
-	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Subject createSubject(SubjectCreationInput input, User user) {
 		Grade grade = this.gradeService.findGradeById(input.getGradeId());
 		Institution institution = this.institutionService.findById(grade.getInstitution().getId());
@@ -75,6 +78,7 @@ public class SubjectService {
 		return grade.getSubjects();
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Subject addTeacher(Long subjectId, Long teacherId, User user) {
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
 		permittedRolesOwner.add(UserRole.ADMIN);
@@ -96,6 +100,7 @@ public class SubjectService {
         return findSubjectById(subjectId);
     }
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Subject addStudent(Long subjectId, Long studentId, User user) {
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
 		permittedRolesOwner.add(UserRole.ADMIN);
@@ -120,7 +125,8 @@ public class SubjectService {
         fillEvaluationResults(student, subject, user);
         return findSubjectById(subjectId);
     }
-    
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Subject addStudents(Long subjectId, Collection<Long> studentsIds, User user) {
     	for(Long studentId: studentsIds) {
     		addStudent(subjectId, studentId, user);
@@ -128,6 +134,7 @@ public class SubjectService {
     	return findSubjectById(subjectId);
     }
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Subject updateSubject(UpdateSubjectInput input, User user) {
 		Subject subject = findSubjectById(input.getSubjectId());
 		checkAdminPermission(subject, user);
@@ -143,6 +150,7 @@ public class SubjectService {
         return subjectRepository.save(subject);
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeSubject(long id, User owner) {
 		Subject subject = findSubjectById(id);
 		checkAdminPermission(subject, owner);
@@ -161,6 +169,7 @@ public class SubjectService {
 		PermissionChecker.checkPermission(user, institutionId, permitedRoles);
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public List<Subject> addStudentToSubjectsInGrade(Long gradeId, Long studentId, User user) {
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
 		permittedRolesOwner.add(UserRole.ADMIN);
@@ -194,8 +203,9 @@ public class SubjectService {
         }
     
         return addedSubjects;
-    }
+	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Grade addStudentsToSubjectsInGrade(Long gradeId, Collection<Long> studentsIds, User user) {
 		for(Long studentId: studentsIds) {
 			addStudentToSubjectsInGrade(gradeId, studentId, user);
@@ -203,6 +213,7 @@ public class SubjectService {
     	return gradeService.findGradeById(gradeId);
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeInstitutionSubjectsFromUser(Long institutionId, Long studentId, User user) {
 		boolean result = false;
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
@@ -225,6 +236,7 @@ public class SubjectService {
 		return result;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeTeacherFromInstitutionSubjects(Long institutionId, Long teacherId, User user) {
 		boolean result = false;
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
@@ -250,6 +262,7 @@ public class SubjectService {
 		return result;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeStudentFromSubject(Long subjectId, Long studentId, User user) {
 		boolean result = false;
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
@@ -267,6 +280,7 @@ public class SubjectService {
 		return result;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeEveryStudentFromSubject(Long subjectId, User user) {
 		boolean result = true;
 		Subject subject = findSubjectById(subjectId);
@@ -276,6 +290,7 @@ public class SubjectService {
 		return result;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeTeacherFromSubject(Long subjectId, Long teacherId, User user) {
 		boolean result = false;
 		List<UserRole> permittedRolesOwner = new ArrayList<>();
@@ -300,6 +315,7 @@ public class SubjectService {
 		return result;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Subject copyStudentsFromSubject(Long fromId, Long toId, User user) {
 		Subject sub = findSubjectById(fromId);
 		for (StudentSubject studSub: sub.getStudents()) {
@@ -308,10 +324,12 @@ public class SubjectService {
 		return findSubjectById(toId);
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveSubjectInRepository(Subject subject) {
 		this.subjectRepository.save(subject);
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	private void fillEvaluationResults(User student, Subject subject, User user) {
 		this.evaluationResultService.addSubjectEvaluationResults(student, subject, user);
 	}

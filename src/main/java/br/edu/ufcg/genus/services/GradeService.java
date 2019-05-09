@@ -51,14 +51,17 @@ public class GradeService {
 				.orElseThrow(() -> new InvalidIDException("Grade with passed ID was not found", id));
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveGradeInRepository(Grade grade) {
 		this.gradeRepository.save(grade);
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveGradresInRepository(Iterable<Grade> grades) {
 		this.gradeRepository.saveAll(grades);
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void addSubjectToGrade(Grade grade, Subject newSubject) {
 		grade.addSubject(newSubject);
 		this.gradeRepository.save(grade);
@@ -95,6 +98,7 @@ public class GradeService {
 		return true;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeEveryStudentFromGrade(long gradeId, User user) {
 		Grade grade = findGradeById(gradeId);
 		boolean result = true;
