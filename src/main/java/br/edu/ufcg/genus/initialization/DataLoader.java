@@ -56,18 +56,18 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
 		CreateUserInput adminInput = new CreateUserInput("Julio Silva", "julio_silva@genus.com", "123456");
-		CreateUserInput prof1Input = new CreateUserInput("Samuel Gomes", "samuel_gomes@genus.com", "123456");
-		CreateUserInput prof2Input = new CreateUserInput("Bianca Alves", "bianca_alves@genus.com", "123456");
-		CreateUserInput prof3Input = new CreateUserInput("Marina Lima", "marina_lima@genus.com", "123456");
-		CreateUserInput stud1Input = new CreateUserInput("Thiago Pinto", "thiago_pinto@genus.com", "123456");
-		CreateUserInput stud2Input = new CreateUserInput("Amanda Martins", "amanda_martins@genus.com", "123456");
+		// CreateUserInput prof1Input = new CreateUserInput("Samuel Gomes", "samuel_gomes@genus.com", "123456");
+		// CreateUserInput prof2Input = new CreateUserInput("Bianca Alves", "bianca_alves@genus.com", "123456");
+		// CreateUserInput prof3Input = new CreateUserInput("Marina Lima", "marina_lima@genus.com", "123456");
+		// CreateUserInput stud1Input = new CreateUserInput("Thiago Pinto", "thiago_pinto@genus.com", "123456");
+		// CreateUserInput stud2Input = new CreateUserInput("Amanda Martins", "amanda_martins@genus.com", "123456");
 
 		User admin = userService.createUser(adminInput);
-		User prof1 = userService.createUser(prof1Input);
-		User prof2 = userService.createUser(prof2Input);
-		User prof3 = userService.createUser(prof3Input);
-		User stud1 = userService.createUser(stud1Input);
-		User stud2 = userService.createUser(stud2Input);
+		// User prof1 = userService.createUser(prof1Input);
+		// User prof2 = userService.createUser(prof2Input);
+		// User prof3 = userService.createUser(prof3Input);
+		// User stud1 = userService.createUser(stud1Input);
+		// User stud2 = userService.createUser(stud2Input);
 		
 		
 		Institution institution = new Institution("Escola Álvaro Cardoso", "Rua Julio Santos", "8333229851", "escola_alvaro_cardoso@genus.com" );
@@ -80,26 +80,26 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		institutionRepository.save(institution);
 		userService.saveUserInRepository(admin);
 
-		institutionService.addUserToInstitution(prof1, institution, UserRole.TEACHER);
-		institutionService.addUserToInstitution(prof2, institution, UserRole.TEACHER);
-		institutionService.addUserToInstitution(prof3, institution, UserRole.TEACHER);
-		institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
-		institutionService.addUserToInstitution(stud1, institution, UserRole.STUDENT);
+		// institutionService.addUserToInstitution(prof1, institution, UserRole.TEACHER);
+		// institutionService.addUserToInstitution(prof2, institution, UserRole.TEACHER);
+		// institutionService.addUserToInstitution(prof3, institution, UserRole.TEACHER);
+		// institutionService.addUserToInstitution(stud2, institution, UserRole.STUDENT);
+		// institutionService.addUserToInstitution(stud1, institution, UserRole.STUDENT);
 
 		Grade grade1 = gradeService.createGrade(new GradeCreationInput("1ª Série", institution.getId()), admin);
 		Subject subject = subjectService.createSubject(new SubjectCreationInput("Matemática", grade1.getId()), admin);
 		Subject subject2 = subjectService.createSubject(new SubjectCreationInput("Português", grade1.getId()), admin);
 		
-		subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
-		subjectService.addTeacher(subject2.getId(), prof1.getId(), admin);
-		subjectService.addTeacher(subject2.getId(), prof2.getId(), admin);
+		// subjectService.addTeacher(subject.getId(), prof1.getId(), admin);
+		// subjectService.addTeacher(subject2.getId(), prof1.getId(), admin);
+		// subjectService.addTeacher(subject2.getId(), prof2.getId(), admin);
 		
-		subjectService.addStudent(subject.getId(), stud1.getId(), admin);
-		subjectService.addStudent(subject2.getId(), stud1.getId(), admin);
-		subjectService.addStudent(subject2.getId(), stud2.getId(), admin);
+		// subjectService.addStudent(subject.getId(), stud1.getId(), admin);
+		// subjectService.addStudent(subject2.getId(), stud1.getId(), admin);
+		// subjectService.addStudent(subject2.getId(), stud2.getId(), admin);
 		
-		Grade grade2 = gradeService.createGrade(new GradeCreationInput("2ª Série", institution.getId()), admin);
-		Subject subject3 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade2.getId()), admin);
+		// Grade grade2 = gradeService.createGrade(new GradeCreationInput("2ª Série", institution.getId()), admin);
+		// Subject subject3 = subjectService.createSubject(new SubjectCreationInput("Geometria", grade2.getId()), admin);
 		
 		
 		// CreateUserInput admin2Input = new CreateUserInput("Lucia Cardoso", "lucia_cardoso@genus.com", "123456");
@@ -139,9 +139,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		// institutionService.addUserToInstitution(stud10, institution, UserRole.STUDENT);
 		
 		//grade1
-		Subject subject4 = subjectService.createSubject(new SubjectCreationInput("História", grade1.getId()), admin);
-		Subject subject5 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade1.getId()), admin);
-		Subject subject6 = subjectService.createSubject(new SubjectCreationInput("Ciência", grade1.getId()), admin);
+		// Subject subject4 = subjectService.createSubject(new SubjectCreationInput("História", grade1.getId()), admin);
+		// Subject subject5 = subjectService.createSubject(new SubjectCreationInput("Geografia", grade1.getId()), admin);
+		// Subject subject6 = subjectService.createSubject(new SubjectCreationInput("Ciência", grade1.getId()), admin);
 		
 		//grade2
 		// Subject subject7 = subjectService.createSubject(new SubjectCreationInput("Álgebra", grade2.getId()), admin);
@@ -172,12 +172,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		Subject subject26 = subjectService.createSubject(new SubjectCreationInput("Filosofia", grade4.getId()), admin);*/
 		
 		//prof1
-		subjectService.addTeacher(subject4.getId(), prof1.getId(), admin);
-		subjectService.addTeacher(subject5.getId(), prof1.getId(), admin);
-		subjectService.addTeacher(subject6.getId(), prof1.getId(), admin);
+		// subjectService.addTeacher(subject4.getId(), prof1.getId(), admin);
+		// subjectService.addTeacher(subject5.getId(), prof1.getId(), admin);
+		// subjectService.addTeacher(subject6.getId(), prof1.getId(), admin);
 		
 		//prof2
-		subjectService.addTeacher(subject3.getId(), prof2.getId(), admin);
+		// subjectService.addTeacher(subject3.getId(), prof2.getId(), admin);
 		// subjectService.addTeacher(subject7.getId(), prof2.getId(), admin);
 		/*subjectService.addTeacher(subject16.getId(), prof2.getId(), admin);
 		subjectService.addTeacher(subject17.getId(), prof2.getId(), admin);
@@ -185,7 +185,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 		subjectService.addTeacher(subject21.getId(), prof2.getId(), admin);*/
 		
 		//prof3
-		subjectService.addTeacher(subject3.getId(), prof3.getId(), admin);
+		// subjectService.addTeacher(subject3.getId(), prof3.getId(), admin);
 		// subjectService.addTeacher(subject7.getId(), prof3.getId(), admin);
 		// subjectService.addTeacher(subject8.getId(), prof3.getId(), admin);
 		// subjectService.addTeacher(subject9.getId(), prof3.getId(), admin);
