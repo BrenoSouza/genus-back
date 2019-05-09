@@ -19,28 +19,8 @@ public class NotificationService {
 	@Autowired
 	private NotificationRepository notificationRepository;
 	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
-	@Autowired
 	private EmailService emailService;
 	
-	
-	/**
-	 * Send notification to users subscribed on channel "/user/queue/notify".
-	 *
-	 * The message will be sent only to the user with the given username.
-	 * 
-	 * @param notification The notification message.
-	 * @param username The username for the user to send notification.
-	 */
-	public void notify(NotificationMessage notification, String username) {
-	  messagingTemplate.convertAndSendToUser(
-		username, 
-		"/queue/notify", 
-		notification
-	  );
-	  
-	  return;
-	}
 
 	public Notification findNotificationById(Long id) {
 		return notificationRepository.findById(id)
