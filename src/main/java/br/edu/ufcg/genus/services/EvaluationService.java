@@ -16,7 +16,7 @@ import br.edu.ufcg.genus.repositories.EvaluationRepository;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class EvaluationService {
 	
 	@Autowired
@@ -33,12 +33,10 @@ public class EvaluationService {
 				.orElseThrow(() -> new InvalidIDException("Evaluation with passed ID was not found", id));
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveEvaluations(Iterable<Evaluation> evaluations) {
 		this.evaluationRepository.saveAll(evaluations);
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Evaluation createEvaluation(EvaluationCreationInput input ,User user) {
 		Subject subject = subjectService.findSubjectById(input.getSubjectId());
 		PermissionChecker.checkEvaluationPermission(subject, user);
@@ -50,7 +48,6 @@ public class EvaluationService {
 		return findEvaluation(eval.getId());
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Evaluation editEvaluation(EvaluationEditInput input, User user) {
 		Evaluation eval = findEvaluation(input.getEvaluationId());
 		PermissionChecker.checkEvaluationPermission(eval.getSubject(), user);

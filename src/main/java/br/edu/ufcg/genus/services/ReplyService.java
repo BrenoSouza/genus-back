@@ -21,7 +21,7 @@ import br.edu.ufcg.genus.utils.PermissionChecker;
 import br.edu.ufcg.genus.utils.ServerConstants;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ReplyService {
 	
 	@Autowired
@@ -38,7 +38,6 @@ public class ReplyService {
 			.orElseThrow(() -> new InvalidIDException("Reply with passed ID was not found", id));
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)	
 	private Reply replyToDiscussion(String content, Long discussionId, User user) {
 		Discussion discussion = discussionService.findDiscussionById(discussionId);
 
@@ -63,7 +62,6 @@ public class ReplyService {
 		return reply;		
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)	
 	public Reply createReply(ReplyCreationInput input, User user) {
 		Reply reply;
 		if (input.getParentId() == null) {
@@ -74,7 +72,6 @@ public class ReplyService {
 		return reply;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)	
 	private Reply replyToReply(String content, Long parentId, User user) {
 		Reply parent = findReplyById(parentId);
 		Discussion discussion = parent.getDiscussion();
@@ -105,7 +102,6 @@ public class ReplyService {
 		return replyRepository.findByDiscussionId(PageRequest.of(page, size), id);
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)	
 	public Boolean removeReply(Long replyId, User user) {
 		Reply reply = findReplyById(replyId);
 		PermissionChecker.checkReplyPermission(user, reply);
@@ -121,7 +117,6 @@ public class ReplyService {
 		return true;
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)	
 	public Reply updateReply(UpdateReplyInput input, User user) {
 		Reply reply = findReplyById(input.getReplyId());
 		Discussion discussion = reply.getDiscussion();

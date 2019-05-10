@@ -26,7 +26,7 @@ import br.edu.ufcg.genus.repositories.UserInstitutionRepository;
 import br.edu.ufcg.genus.update_inputs.UpdateInstitutionInput;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class InstitutionService {
 	
@@ -47,7 +47,6 @@ public class InstitutionService {
         		.orElseThrow(() -> new InvalidIDException("Institution with passed ID was not found", id));
     }
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Institution createInstitution(CreateInstitutionInput input, User owner) {
         Institution institution = new Institution(input.getName(), input.getAddress(), input.getPhone(), input.getEmail());
         if (input.getMimeType() != null && input.getPhoto() != null) {
@@ -59,7 +58,6 @@ public class InstitutionService {
         return institution;
     }
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void addGradeToInstitution(Institution institution, Grade newGrade) {
 		institution.addGrade(newGrade);
 		institutionRepository.save(institution);
@@ -69,7 +67,6 @@ public class InstitutionService {
 		return user.findInstitutions();
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void addUserToInstitution(User user, Institution institution, UserRole role) {
 		UserInstitution userInstitution = institution.addUser(user, role);
 		this.userInstitutionRepository.save(userInstitution);
@@ -99,7 +96,6 @@ public class InstitutionService {
 		return result;
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeUserFromInstitution (RemoveUserFromInstitutionInput input, User user) {
 		if (!this.userService.passwordMatch(user, input.getPassword())) {
 			throw new InvalidCredentialsException("Invalid email or password");
@@ -124,7 +120,6 @@ public class InstitutionService {
 		return result;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	private boolean removeSelfFromInstitution(User user, Institution institution) {
 		boolean result = removeUserInstitution(user, institution);
 		if (institution.getUsers().isEmpty()) {
@@ -133,7 +128,6 @@ public class InstitutionService {
 		return result;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	private boolean removeOtherFromInstitution(User user, Institution institution, User toBeRemoved) {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);
@@ -142,7 +136,6 @@ public class InstitutionService {
 		return removeUserInstitution(toBeRemoved, institution);		
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	private boolean removeUserInstitution (User user, Institution institution) {
 		boolean result = false;
 		removeSubjectsFromUser(user, institution);
@@ -160,14 +153,12 @@ public class InstitutionService {
 		return result;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	private void removeSubjectsFromUser(User user, Institution institution) {
 		User loggedUser = userService.findLoggedUser();
 		this.subjectService.removeTeacherFromInstitutionSubjects(institution.getId(), user.getId(), loggedUser);
 		this.subjectService.removeInstitutionSubjectsFromUser(institution.getId(), user.getId(), loggedUser);
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Institution updateInstitution(UpdateInstitutionInput input, User user) {
 		List<UserRole> permittedRoles = new ArrayList<>();
 		permittedRoles.add(UserRole.ADMIN);

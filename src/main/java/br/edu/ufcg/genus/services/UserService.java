@@ -24,7 +24,7 @@ import br.edu.ufcg.genus.security.JwtTokenProvider;
 import br.edu.ufcg.genus.update_inputs.UpdateUserInput;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class UserService {
 	
 	@Autowired
@@ -38,7 +38,6 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public User createUser (CreateUserInput input) {
 		User newUser = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
 		if (input.getMimeType() != null && input.getPhoto() != null) {
@@ -48,14 +47,12 @@ public class UserService {
 		return this.userRepository.save(newUser);
     }
     
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public User changeLastInstitution(Long lastInstitutionId) {
 		User user = findLoggedUser();
 		user.setLastInstitutionId(lastInstitutionId);
 		return this.userRepository.save(user);
 	}
     
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveUsers(Iterable<User> users) {
 		this.userRepository.saveAll(users);
 	}
@@ -102,7 +99,6 @@ public class UserService {
         return userRepository.findByEmail(email);
 	}
     
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void saveUserInRepository(User user) {
     	userRepository.save(user);
     }
@@ -115,7 +111,6 @@ public class UserService {
 		return user.getRole(institutionId);
     }
     
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public User updateUser(UpdateUserInput input) {
 
         User user = findLoggedUser();
@@ -132,7 +127,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateUserPassword(String password, String newPassword) {
         User user = findLoggedUser();
         if (!this.passwordMatch(user, password)) throw new InvalidCredentialsException("Invalid Password");

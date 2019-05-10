@@ -19,7 +19,7 @@ import br.edu.ufcg.genus.update_inputs.UpdateGradeInput;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class GradeService {
 	
 	@Autowired
@@ -31,7 +31,6 @@ public class GradeService {
 	@Autowired
 	private SubjectService subjectService;
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Grade createGrade(GradeCreationInput input, User user) {
 		Institution institution = this.institutionService.findById(input.getInstitutionId());
 		ArrayList<UserRole> permitedRoles = new ArrayList<>();
@@ -51,17 +50,14 @@ public class GradeService {
 				.orElseThrow(() -> new InvalidIDException("Grade with passed ID was not found", id));
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveGradeInRepository(Grade grade) {
 		this.gradeRepository.save(grade);
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveGradresInRepository(Iterable<Grade> grades) {
 		this.gradeRepository.saveAll(grades);
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void addSubjectToGrade(Grade grade, Subject newSubject) {
 		grade.addSubject(newSubject);
 		this.gradeRepository.save(grade);
@@ -72,7 +68,6 @@ public class GradeService {
         return institution.getGrades();
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Grade updateGrade(UpdateGradeInput input, User user) {
 		Grade grade = findGradeById(input.getGradeId());
 		checkAdminPermission(grade, user);
@@ -98,7 +93,6 @@ public class GradeService {
 		return true;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean removeEveryStudentFromGrade(long gradeId, User user) {
 		Grade grade = findGradeById(gradeId);
 		boolean result = true;

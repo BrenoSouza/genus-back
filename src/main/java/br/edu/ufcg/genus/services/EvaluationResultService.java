@@ -22,7 +22,7 @@ import br.edu.ufcg.genus.update_inputs.UpdateEvaluationResult;
 import br.edu.ufcg.genus.utils.PermissionChecker;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class EvaluationResultService {
 	
 	@Autowired
@@ -40,7 +40,6 @@ public class EvaluationResultService {
 				.orElseThrow(() -> new InvalidIDException("EvaluationResult with passed ID was not found", id));
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public List<EvaluationResult> createEvaluationResults(Collection<CreateEvaluationResultInput> inputs, User user) {
 		List<EvaluationResult> results = new ArrayList<>();
 		Set<User> usersToUpdate = new HashSet<>();
@@ -64,7 +63,6 @@ public class EvaluationResultService {
 		return results;
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	private EvaluationResult createEvaluationResult(User student, Evaluation eval, Double result, User user) {
 		PermissionChecker.checkEvaluationPermission(eval.getSubject(), user);
 		PermissionChecker.checkIsSubjectStudent(eval.getSubject(), student);
@@ -74,7 +72,6 @@ public class EvaluationResultService {
 		return evaluationResult;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Collection<EvaluationResult> updateEvaluationResults(Collection<UpdateEvaluationResult> inputs, User user) {
 		List<EvaluationResult> results = new ArrayList<>();
 		for(UpdateEvaluationResult input : inputs) {
@@ -83,7 +80,6 @@ public class EvaluationResultService {
 		return results;
 	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	private EvaluationResult updateEvaluationResult(UpdateEvaluationResult input, User user) {
 		EvaluationResult eval = findEvaluationResult(input.getResultId());
 		PermissionChecker.checkEvaluationPermission(eval.getEvaluation().getSubject(), user);
@@ -92,7 +88,6 @@ public class EvaluationResultService {
 		return eval;
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void fillEvaluation(Evaluation eval, Iterable<CreateEvaluationResultInput> iterable, User user) {
 		List<CreateEvaluationResultInput> inputs = new ArrayList<>();
 		for(CreateEvaluationResultInput idlessInput : iterable) {
@@ -102,7 +97,6 @@ public class EvaluationResultService {
 		
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void addSubjectEvaluationResults(User student, Subject subject, User user) {
 		List<EvaluationResult> results = new ArrayList<>();
 		for(Evaluation eval : subject.getEvaluations()) {

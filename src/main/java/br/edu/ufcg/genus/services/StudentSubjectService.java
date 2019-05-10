@@ -13,7 +13,7 @@ import br.edu.ufcg.genus.models.StudentSubjectId;
 import br.edu.ufcg.genus.repositories.StudentSubjectRepository;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class StudentSubjectService {
 	
 	@Autowired
@@ -26,7 +26,6 @@ public class StudentSubjectService {
 		return studentSubject;
 	}
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)	
 	public StudentSubject saveStudentSubject(StudentSubject studentSubject) {
 		return this.studentSubjectRepository.save(studentSubject);
 	}

@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.genus.exception.InvalidIDException;
 import br.edu.ufcg.genus.models.Notification;
-import br.edu.ufcg.genus.models.NotificationMessage;
 import br.edu.ufcg.genus.models.User;
 import br.edu.ufcg.genus.repositories.NotificationRepository;
 
